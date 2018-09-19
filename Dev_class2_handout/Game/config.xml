@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <config>
-	<app>
-		<name>Development XML</name>
-	</app>
+  <window>
+    <fullscreen value="false"/>
+    <resizable value="true"/>
+    <borderless value="false"/>
+    <fullscreen_window value="false"/>
+    <title value="Development XML"/>
+    <width value="1024"/>
+    <height value="768"/>
+    <scale value="1"/>
+  </window>
+
+  <renderer>
+    <vsync value="true"/>
+  </renderer>
+
+  <volume>
+    <music value="5"/>
+  </volume>
+
 </config>

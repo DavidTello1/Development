@@ -51,6 +51,8 @@ bool j1Audio::Awake(pugi::xml_node* nod)
 		ret = true;
 	}
 
+	Mix_VolumeMusic(nod->child("volume").attribute("music").as_int());
+
 	return ret;
 }
 
