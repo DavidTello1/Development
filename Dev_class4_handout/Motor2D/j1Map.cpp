@@ -70,7 +70,7 @@ bool j1Map::Load(const char* file_name)
 		// all your map data
 		pugi::xml_node node;
 
-		node = map_file.child("map").child("map_load");
+		node = map_file.child(file_name).child("map");
 		map_info.version = node.child("map_version").attribute("value").as_float();
 		map_info.orientation_var = node.child("orientation").attribute("value").as_int(); //*
 		map_info.renderorder_var = node.child("renderorder").attribute("value").as_int(); //*
