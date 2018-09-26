@@ -10,7 +10,7 @@
 // Ignore Terrain Types and Tile Types for now, but we want the image!
 // ----------------------------------------------------
 struct tileset {
-	unsigned int fristgid = 0,
+	unsigned int firstgid = 0,
 		tilewidth = 0, 
 		tileheight = 0,
 		spacing = 0, 
@@ -63,6 +63,8 @@ private:
 public:
 
 	// TODO 1: Add your struct for map info as public for now
+	map				map_info;
+	tileset			tileset_info;
 
 private:
 

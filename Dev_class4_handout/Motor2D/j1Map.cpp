@@ -68,10 +68,32 @@ bool j1Map::Load(const char* file_name)
 	{
 		// TODO 3: Create and call a private function to load and fill
 		// all your map data
+		pugi::xml_node node;
+
+		node = map_file.child("map").child("map_load");
+		map_info.version = node.child("map_version").attribute("value").as_float();
+		map_info.orientation_var = node.child("orientation").attribute("value").as_int(); //*
+		map_info.renderorder_var = node.child("renderorder").attribute("value").as_int(); //*
+		map_info.width = node.child("width").attribute("value").as_uint();
+		map_info.height = node.child("height").attribute("value").as_uint();
+		map_info.tilewidth = node.child("tilewidth").attribute("value").as_uint();
+		map_info.tileheight = node.child("tileheight").attribute("value").as_uint();
+		map_info.nextobjectid = node.child("nextobjectid").attribute("value").as_uint();
 	}
 
 	// TODO 4: Create and call a private function to load a tileset
 	// remember to support more any number of tilesets!
+	for (pugi::xml_node tileset = map_file.child("map").child("tileset"); tileset; tileset = tileset.next_sibling("tileset")) {
+		tileset_info.firstgid = tileset.child("firstgid").attribute("value").as_uint();
+		tileset_info.name = tileset.child("name").attribute("value").as_string();  //*
+		tileset_info.tilewidth = tileset.child("tilewidth").attribute("value").as_uint();
+		tileset_info.tileheight = tileset.child("tileheight").attribute("value").as_uint();
+		tileset_info.spacing = tileset.child("spacing").attribute("value").as_uint();
+		tileset_info.margin = tileset.child("margin").attribute("value").as_uint();
+		tileset_info.image_source = tileset.child("image").attribute("source").as_string(); //*
+		tileset_info.image_width = tileset.child("image").attribute("width").as_uint();
+		tileset_info.image_height = tileset.child("image").attribute("height").as_uint();
+	}
 	
 
 	if(ret == true)

@@ -1,0 +1,23 @@
+<!-- Map loading for the game -->
+
+<map_values>
+	<map_load>
+		<map_version ="1.0"/>
+		<orientation="orthogonal"/>
+		<renderorder="right_down"/>
+		<width="50"/>
+		<heigth="15"/>
+		<tilewidth="32"/>
+		<tileheight="32"/>
+		<nextobjectid="1"/>
+	</map_load>
+
+	<tileset_load>
+		<firstgid="1"/>
+		<name="Desert"/>
+		<tilewidth="32"/>
+		<tileheight="32"/>
+		<spacing="1"/>
+		<margin="1"/>
+	<tileset_load/>
+<map_values/>
