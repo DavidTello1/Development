@@ -19,11 +19,15 @@ struct MapLayer
 			delete data;
 		}
 	}
+
+	inline uint GetXY(uint x, uint y) const
+	{
+		return x + y*width;
+	}
 };
 // ----------------------------------------------------
 
 	// TODO 6: Short function to get the value of x,y
-
 
 
 // ----------------------------------------------------
@@ -99,21 +103,8 @@ private:
 	bool LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
 	// TODO 3: Create a method that loads a single layer
-	bool LoadLayer(pugi::xml_node& node, MapLayer* layer) 
-	{
-		bool ret = true;
-		layer->name = node.attribute("name").as_string();
-		LOG("layer name %s", layer->name.GetString());
-
-		layer->width = node.attribute("width").as_uint();
-		LOG("layer width %i", layer->width);
-
-		layer->height = node.attribute("height").as_uint();
-		LOG("layer height %i", layer->height);
-
-		layer->data
-	}
-
+	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
+	
 public:
 
 	MapData data;
@@ -125,4 +116,4 @@ private:
 	bool				map_loaded;
 };
 
-#endif // __j1MAP_H__
+#endif __j1MAP_H__
