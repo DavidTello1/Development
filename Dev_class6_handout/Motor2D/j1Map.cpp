@@ -35,14 +35,17 @@ void j1Map::Draw()
 	MapLayer* layer = data.layers.start->data; // for now we just use the first layer and tileset
 	TileSet* tileset = data.tilesets.start->data;
 
-	for (int x = 0; x < data.tilesets.count(); x++)
+	for (int y = 0; y < data.height; ++y)
 	{
-		for (uint j = 0; j < data.height; j++) {
-			for (uint i = 0; i < data.width; i++) {
-				App->render->Blit(data.tilesets[x]->texture,
-					i*data.tile_width,
-					j*data.tile_height,
-					&data.tilesets[x]->GetTileRect(data.layers[x]->data[data.layers[x]->Get(i, j)]));
+		for (int x = 0; x < data.width; ++x)
+		{
+			int tile_id = layer->Get(x, y);
+			if (tile_id > 0)
+			{
+				SDL_Rect rect = tileset->GetTileRect(tile_id);
+				iPoint pos = MapToWorld(x, y);
+
+				App->render->Blit(tileset->texture, pos.x, pos.y, &rect);
 			}
 		}
 	}
@@ -64,6 +67,7 @@ iPoint j1Map::MapToWorld(int x, int y) const
 	{
 		ret.x = (x - y) * (data.tile_width * 0.5f);
 		ret.y = (x + y) * (data.tile_height * 0.5f);
+
 	}
 
 	return ret;
@@ -82,8 +86,8 @@ iPoint j1Map::WorldToMap(int x, int y) const
 	// TODO 3: Add the case for isometric maps to WorldToMap
 	if (data.type == MAPTYPE_ISOMETRIC) 
 	{
-		ret.x = 2 * data.width / (x - y);
-		ret.y = 2 * data.height / (x + y);
+		ret.x = x / data.tile_width + y / data.tile_height;
+		ret.y = y / data.tile_height - x / data.tile_width;
 	}
 
 	return ret;
