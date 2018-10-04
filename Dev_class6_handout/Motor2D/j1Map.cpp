@@ -80,8 +80,8 @@ iPoint j1Map::WorldToMap(int x, int y) const
 	// TODO 2: Add orthographic world to map coordinates
 	if (data.type == MAPTYPE_ORTHOGONAL) 
 	{
-		ret.x = data.width / x;
-		ret.y = data.height / y;
+		ret.x = x / data.tile_width;
+		ret.y = y / data.tile_height;
 	}
 	// TODO 3: Add the case for isometric maps to WorldToMap
 	if (data.type == MAPTYPE_ISOMETRIC) 
