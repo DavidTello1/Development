@@ -339,7 +339,7 @@ bool j1App::SavegameNow() const
 
 	LOG("Saving Game State to %s...", save_game.GetString());
 
-	// xml object were we will store all data
+	// xml object where we will store all data
 	pugi::xml_document data;
 	pugi::xml_node root;
 	
@@ -359,7 +359,7 @@ bool j1App::SavegameNow() const
 		data.save(stream);
 
 		// we are done, so write data to disk
-//		fs->Save(save_game.GetString(), stream.str().c_str(), stream.str().length());
+	//	fs->Save(save_game.GetString(), stream.str().c_str(), stream.str().length());
 		LOG("... finished saving", save_game.GetString());
 	}
 	else

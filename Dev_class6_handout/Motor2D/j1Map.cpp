@@ -32,24 +32,25 @@ void j1Map::Draw()
 		return;
 
 	// TODO 5(old): Prepare the loop to draw all tilesets + Blit
-	MapLayer* layer = data.layers.start->data; // for now we just use the first layer and tileset
-	TileSet* tileset = data.tilesets.start->data;
-
-	for (int y = 0; y < data.height; ++y)
+	for (int sets = 0; sets < data.tilesets.count(); sets++)
 	{
-		for (int x = 0; x < data.width; ++x)
+		for (uint lays = 0; lays < data.layers.count(); lays++)
 		{
-			int tile_id = layer->Get(x, y);
-			if (tile_id > 0)
+			for (int y = 0; y < data.height; ++y)
 			{
-				SDL_Rect rect = tileset->GetTileRect(tile_id);
-				iPoint pos = MapToWorld(x, y);
+				for (int x = 0; x < data.width; ++x)
+				{
+					iPoint pos = MapToWorld(x, y);
 
-				App->render->Blit(tileset->texture, pos.x, pos.y, &rect);
+					App->render->Blit(data.tilesets[sets]->texture,
+						pos.x,
+						pos.y,
+						&data.tilesets[sets]->GetTileRect(data.layers[lays]->data[data.layers[lays]->Get(x, y)]));
+				}
+
 			}
 		}
 	}
-
 	// TODO 10(old): Complete the draw function
 }
 
@@ -144,7 +145,7 @@ bool j1Map::Load(const char* file_name)
 	bool ret = true;
 	p2SString tmp("%s%s", folder.GetString(), file_name);
 
-	pugi::xml_parse_result result = map_file.load_file(file_name);
+	pugi::xml_parse_result result = map_file.load_file(tmp.GetString());
 
 	if(result == NULL)
 	{
@@ -168,12 +169,10 @@ bool j1Map::Load(const char* file_name)
 		{
 			ret = LoadTilesetDetails(tileset, set);
 		}
-
-		if(ret == true)
+		if (ret == true)
 		{
 			ret = LoadTilesetImage(tileset, set);
 		}
-
 		data.tilesets.add(set);
 	}
 
