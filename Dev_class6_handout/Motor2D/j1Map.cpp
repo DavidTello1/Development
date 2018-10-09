@@ -4,7 +4,7 @@
 #include "j1Render.h"
 #include "j1Textures.h"
 #include "j1Map.h"
-#include <math.h>
+#include "j1Scene.h"
 
 j1Map::j1Map() : j1Module(), map_loaded(false)
 {
@@ -31,23 +31,50 @@ void j1Map::Draw()
 	if(map_loaded == false)
 		return;
 
-	// TODO 5(old): Prepare the loop to draw all tilesets + Blit
-	for (int sets = 0; sets < data.tilesets.count(); sets++)
+	if (rotation == true)
 	{
-		for (uint lays = 0; lays < data.layers.count(); lays++)
+		int i = 18, j = 18;
+		for (uint sets = 0; sets < data.tilesets.count(); sets++)
 		{
-			for (int y = 0; y < data.height; ++y)
+			for (uint lays = 0; lays < data.layers.count(); lays++)
 			{
-				for (int x = 0; x < data.width; ++x)
+				for (int y = 0; y < 18; y++)
 				{
-					iPoint pos = MapToWorld(x, y);
-
-					App->render->Blit(data.tilesets[sets]->texture,
-						pos.x,
-						pos.y,
-						&data.tilesets[sets]->GetTileRect(data.layers[lays]->data[data.layers[lays]->Get(x, y)]));
+					j--;
+					i = 18;
+					for (int x = 0; x < 18; x++)
+					{
+						i--;
+						iPoint pos = MapToWorld(i, j);
+						App->render->Blit(data.tilesets[sets]->texture,
+							pos.x,
+							pos.y,
+							&data.tilesets[sets]->GetTileRect(data.layers[lays]->data[data.layers[lays]->Get(x, y)]),
+							1.0f, 180.0f);
+					}
 				}
+			}
+		}
+	}
+	else 
+	{
+		// TODO 5(old): Prepare the loop to draw all tilesets + Blit
+		for (uint sets = 0; sets < data.tilesets.count(); sets++)
+		{
+			for (uint lays = 0; lays < data.layers.count(); lays++)
+			{
+				for (int y = 0; y < data.height; ++y)
+				{
+					for (int x = 0; x < data.width; ++x)
+					{
+						iPoint pos = MapToWorld(x, y);
+						App->render->Blit(data.tilesets[sets]->texture,
+							pos.x,
+							pos.y,
+							&data.tilesets[sets]->GetTileRect(data.layers[lays]->data[data.layers[lays]->Get(x, y)]));
+					}
 
+				}
 			}
 		}
 	}

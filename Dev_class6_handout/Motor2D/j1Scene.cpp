@@ -30,8 +30,8 @@ bool j1Scene::Awake()
 // Called before the first frame
 bool j1Scene::Start()
 {
-	//App->map->Load("hello2.tmx");
-	 App->map->Load("iso.tmx");
+	App->map->Load("test_map.tmx");
+	// App->map->Load("iso.tmx");
 	
 	return true;
 }
@@ -62,6 +62,18 @@ bool j1Scene::Update(float dt)
 
 	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		App->render->camera.x -= 1;
+
+	if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN)
+		App->map->rotation = true;
+	//	App->render->camera.y -= 17;
+	//	App->render->camera.x -= 17;
+
+	if (App->input->GetKey(SDL_SCANCODE_X) == KEY_DOWN)
+		App->map->rotation = false;
+	//	App->render->camera.y += 18;
+	//	App->render->camera.x += 18;
+
+
 
 	App->map->Draw();
 

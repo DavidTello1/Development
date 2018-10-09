@@ -105,12 +105,15 @@ private:
 public:
 
 	MapData data;
+	bool rotation;
 
 private:
 
 	pugi::xml_document	map_file;
 	p2SString			folder;
 	bool				map_loaded;
+	float				angle;
+
 };
 
 #endif // __j1MAP_H__
