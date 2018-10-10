@@ -31,7 +31,6 @@ bool j1Scene::Awake()
 bool j1Scene::Start()
 {
 	App->map->Load("test_map.tmx");
-	// App->map->Load("iso.tmx");
 	
 	return true;
 }
@@ -52,27 +51,19 @@ bool j1Scene::Update(float dt)
 		App->SaveGame("save_game.xml");
 
 	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		App->render->camera.y += 16;
+		App->render->camera.y += 1;
 
 	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		App->render->camera.y -= 16;
+		App->render->camera.y -= 1;
 
 	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		App->render->camera.x += 16;
+		App->render->camera.x += 1;
 
 	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		App->render->camera.x -= 16;
+		App->render->camera.x -= 1;
 
-	if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN)
-		App->map->rotation = true;
-	//	App->render->camera.y -= 17;
-	//	App->render->camera.x -= 17;
-
-	if (App->input->GetKey(SDL_SCANCODE_X) == KEY_DOWN)
-		App->map->rotation = false;
-	//	App->render->camera.y += 18;
-	//	App->render->camera.x += 18;
-
+//	if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
+//		App->map->layer->properties.Get(App->map->layer->name.GetString(), App->map->layer->properties.Get);
 
 
 	App->map->Draw();

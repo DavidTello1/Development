@@ -6,6 +6,37 @@
 #include "p2Point.h"
 #include "j1Module.h"
 
+// TODO 5: Create a generic structure to hold properties
+// TODO 7: Our custom properties should have one method
+// to ask for the value of a custom property
+// ----------------------------------------------------
+struct Properties
+{
+	struct Property
+	{
+		p2SString name;
+		int value;
+	};
+
+	~Properties()
+	{
+		p2List_item<Property*>* item;
+		item = list.start;
+
+		while (item != NULL)
+		{
+			RELEASE(item->data);
+			item = item->next;
+		}
+
+		list.clear();
+	}
+
+	int Get(const char* name, int default_value = 0) const;
+
+	p2List<Property*>	list;
+};
+
 // ----------------------------------------------------
 struct MapLayer
 {
@@ -13,6 +44,8 @@ struct MapLayer
 	int			width;
 	int			height;
 	uint*		data;
+	Properties	properties;
+	float		parallaxSpeed;
 
 	MapLayer() : data(NULL)
 	{}
@@ -22,12 +55,29 @@ struct MapLayer
 		RELEASE(data);
 	}
 
-	// TODO 6 (old): Short function to get the value of x,y
 	inline uint Get(int x, int y) const
 	{
-		return x + y*width;
+		return data[(y*width) + x];
 	}
 };
+
+struct ObjectsData
+{
+	p2SString	name;
+	int			x;
+	int			y;
+	uint		width;
+	uint		height;
+
+};
+
+struct ObjectsGroup
+{
+	p2SString				name;
+	p2List<ObjectsData*>	objects;
+	~ObjectsGroup();
+};
+
 
 // ----------------------------------------------------
 struct TileSet
@@ -59,14 +109,15 @@ enum MapTypes
 // ----------------------------------------------------
 struct MapData
 {
-	int					width;
-	int					height;
-	int					tile_width;
-	int					tile_height;
-	SDL_Color			background_color;
-	MapTypes			type;
-	p2List<TileSet*>	tilesets;
-	p2List<MapLayer*>	layers;
+	int						width;
+	int						height;
+	int						tile_width;
+	int						tile_height;
+	SDL_Color				background_color;
+	MapTypes				type;
+	p2List<TileSet*>		tilesets;
+	p2List<MapLayer*>		layers;
+	p2List<ObjectsGroup*>	objLayers;
 };
 
 // ----------------------------------------------------
@@ -91,7 +142,6 @@ public:
 	// Load new map
 	bool Load(const char* path);
 
-	// Coordinate translation methods
 	iPoint MapToWorld(int x, int y) const;
 	iPoint WorldToMap(int x, int y) const;
 
@@ -101,22 +151,21 @@ private:
 	bool LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
+	bool LoadProperties(pugi::xml_node& node, Properties& properties);
+	bool LoadObjectLayers(pugi::xml_node& node, ObjectsGroup* group);
+
+	TileSet* GetTilesetFromTileId(int id) const;
 
 public:
 
 	MapData data;
-	bool rotation;
+	MapLayer* layer;
 
 private:
 
 	pugi::xml_document	map_file;
 	p2SString			folder;
 	bool				map_loaded;
-	bool				rotated;
-	float				angle;
-	int					i, j;
-
-
 };
 
 #endif // __j1MAP_H__

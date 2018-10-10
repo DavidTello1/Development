@@ -4,7 +4,8 @@
 #include "j1Render.h"
 #include "j1Textures.h"
 #include "j1Map.h"
-#include "j1Scene.h"
+#include <math.h>
+
 
 j1Map::j1Map() : j1Module(), map_loaded(false)
 {
@@ -30,125 +31,115 @@ void j1Map::Draw()
 {
 	if(map_loaded == false)
 		return;
-	if (rotated == true)
-	{
-		i = data.width, j = data.height;
-		for (uint sets = 0; sets < data.tilesets.count(); sets++)
-		{
-			for (uint lays = 0; lays < data.layers.count(); lays++)
-			{
-				for (int y = 0; y < data.height; y++)
-				{
-					j--;
-					i = data.width;
-					for (int x = 0; x < data.width; x++)
-					{
-						i--;
-						iPoint pos = MapToWorld(i, j);
-						App->render->Blit(data.tilesets[sets]->texture,
-							pos.x,
-							pos.y,
-							&data.tilesets[sets]->GetTileRect(data.layers[lays]->data[data.layers[lays]->Get(x, y)]),
-							1.0f, 180.0f);
-					}
-				}
-			}
-		}
-	}
-	else if (rotation == true)
-	{
-		if (angle < 180.0f)
-		{
-			for (uint sets = 0; sets < data.tilesets.count(); sets++)
-			{
-				for (uint lays = 0; lays < data.layers.count(); lays++)
-				{
-					for (int y = 0; y < data.height; y++)
-					{
-						j--;
-						i = data.width;
-						for (int x = 0; x < data.width; x++)
-						{
-							i--;
-							angle += 10.0f;
-							iPoint pos = MapToWorld(i, j);
-							App->render->Blit(data.tilesets[sets]->texture,
-								pos.x *cos(angle),
-								pos.y *sin(angle),
-								&data.tilesets[sets]->GetTileRect(data.layers[lays]->data[data.layers[lays]->Get(x, y)]),
-								1.0f, angle);
-						}
-					}
-				}
-			}
-		}
-		if (angle == 180.0f) 
-		{
-			rotated = true;
-			rotation = false;
-		}
-	}
-	else
-	{
-		// TODO 5(old): Prepare the loop to draw all tilesets + Blit
-		for (uint sets = 0; sets < data.tilesets.count(); sets++)
-		{
-			for (uint lays = 0; lays < data.layers.count(); lays++)
-			{
-				for (int y = 0; y < data.height; ++y)
-				{
-					for (int x = 0; x < data.width; ++x)
-					{
-						iPoint pos = MapToWorld(x, y);
-						App->render->Blit(data.tilesets[sets]->texture,
-							pos.x,
-							pos.y,
-							&data.tilesets[sets]->GetTileRect(data.layers[lays]->data[data.layers[lays]->Get(x, y)]));
-					}
 
+	// TODO 4: Make sure we draw all the layers and not just the first one
+	p2List_item<MapLayer*>* item = data.layers.start;
+
+	for (; item != NULL; item = item->next)
+	{
+		layer = item->data;
+
+		if (layer->properties.Get("Nodraw") != 0)
+			continue;
+
+		for (int y = 0; y < data.height; ++y)
+		{
+			for (int x = 0; x < data.width; ++x)
+			{
+				int tile_id = layer->Get(x, y);
+				if (tile_id > 0)
+				{
+					TileSet* tileset = GetTilesetFromTileId(tile_id);
+
+					SDL_Rect r = tileset->GetTileRect(tile_id);
+					iPoint pos = MapToWorld(x, y);
+
+					App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 				}
 			}
 		}
-		rotated = false;
 	}
-	// TODO 10(old): Complete the draw function
+}
+
+int Properties::Get(const char* value, int default_value) const
+{
+	p2List_item<Property*>* item = list.start;
+
+	while (item)
+	{
+		if (item->data->name == value)
+			return item->data->value;
+		item = item->next;
+	}
+
+	return default_value;
+}
+
+TileSet* j1Map::GetTilesetFromTileId(int id) const
+{
+	// TODO 3: Complete this method so we pick the right
+	// Tileset based on a tile id
+	p2List_item<TileSet*>* item = data.tilesets.start;
+	TileSet* set = item->data;
+
+	while (item)
+	{
+		if (id < item->data->firstgid)
+		{
+			set = item->prev->data;
+			break;
+		}
+		set = item->data;
+		item = item->next;
+	}
+
+	return set;
 }
 
 iPoint j1Map::MapToWorld(int x, int y) const
 {
-	iPoint ret(0,0);
-	// TODO 8(old): Create a method that translates x,y coordinates from map positions to world positions
-	if (data.type == MAPTYPE_ORTHOGONAL)
+	iPoint ret;
+
+	if(data.type == MAPTYPE_ORTHOGONAL)
 	{
 		ret.x = x * data.tile_width;
 		ret.y = y * data.tile_height;
 	}
-	// TODO 1: Add isometric map to world coordinates
-	if (data.type == MAPTYPE_ISOMETRIC)
+	else if(data.type == MAPTYPE_ISOMETRIC)
 	{
 		ret.x = (x - y) * (data.tile_width * 0.5f);
 		ret.y = (x + y) * (data.tile_height * 0.5f);
-
+	}
+	else
+	{
+		LOG("Unknown map type");
+		ret.x = x; ret.y = y;
 	}
 
 	return ret;
 }
 
-
 iPoint j1Map::WorldToMap(int x, int y) const
 {
 	iPoint ret(0,0);
-	// TODO 2: Add orthographic world to map coordinates
-	if (data.type == MAPTYPE_ORTHOGONAL) 
+
+	if(data.type == MAPTYPE_ORTHOGONAL)
 	{
 		ret.x = x / data.tile_width;
 		ret.y = y / data.tile_height;
 	}
-	// TODO 3: Add the case for isometric maps to WorldToMap
-	if (data.type == MAPTYPE_ISOMETRIC) 
+	else if(data.type == MAPTYPE_ISOMETRIC)
 	{
-		ret.x = x / data.tile_width + y / data.tile_height;
-		ret.y = y / data.tile_height - x / data.tile_width;
+		
+		float half_width = data.tile_width * 0.5f;
+		float half_height = data.tile_height * 0.5f;
+		ret.x = int( (x / half_width + y / half_height) / 2);
+		ret.y = int( (y / half_height - (x / half_width)) / 2);
+	}
+	else
+	{
+		LOG("Unknown map type");
+		ret.x = x; ret.y = y;
 	}
 
 	return ret;
@@ -156,9 +147,8 @@ iPoint j1Map::WorldToMap(int x, int y) const
 
 SDL_Rect TileSet::GetTileRect(int id) const
 {
-	SDL_Rect rect = {0, 0, 0, 0};
-	// TODO 7(old): Create a method that receives a tile id and returns it's Rect
 	int relative_id = id - firstgid;
+	SDL_Rect rect;
 	rect.w = tile_width;
 	rect.h = tile_height;
 	rect.x = margin + ((rect.w + spacing) * (relative_id % num_tiles_width));
@@ -229,10 +219,12 @@ bool j1Map::Load(const char* file_name)
 		{
 			ret = LoadTilesetDetails(tileset, set);
 		}
-		if (ret == true)
+
+		if(ret == true)
 		{
 			ret = LoadTilesetImage(tileset, set);
 		}
+
 		data.tilesets.add(set);
 	}
 
@@ -247,6 +239,20 @@ bool j1Map::Load(const char* file_name)
 		if(ret == true)
 			data.layers.add(lay);
 	}
+
+	//Load objects info
+	pugi::xml_node group;
+	for (group = map_file.child("map").child("objectgroup"); group && ret; group = group.next_sibling("objectgroup"))
+	{
+		ObjectsGroup* set = new ObjectsGroup();
+
+		if (ret == true)
+		{
+			ret = LoadObjectLayers(group, set);
+		}
+		data.objLayers.add(set);
+	}
+
 
 	if(ret == true)
 	{
@@ -274,6 +280,17 @@ bool j1Map::Load(const char* file_name)
 			LOG("tile width: %d tile height: %d", l->width, l->height);
 			item_layer = item_layer->next;
 		}
+
+		p2List_item<ObjectsGroup*>* obj_layer = data.objLayers.start;
+		while (obj_layer != NULL)
+		{
+			ObjectsGroup* o = obj_layer->data;
+			LOG("Group ----");
+			LOG("name: %s", o->name.GetString());
+
+			obj_layer = obj_layer->next;
+		}
+
 	}
 
 	map_loaded = ret;
@@ -415,6 +432,7 @@ bool j1Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	layer->name = node.attribute("name").as_string();
 	layer->width = node.attribute("width").as_int();
 	layer->height = node.attribute("height").as_int();
+	LoadProperties(node, layer->properties);
 	pugi::xml_node layer_data = node.child("data");
 
 	if(layer_data == NULL)
@@ -432,6 +450,55 @@ bool j1Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 		for(pugi::xml_node tile = layer_data.child("tile"); tile; tile = tile.next_sibling("tile"))
 		{
 			layer->data[i++] = tile.attribute("gid").as_int(0);
+		}
+	}
+
+	return ret;
+}
+
+bool j1Map::LoadObjectLayers(pugi::xml_node & node, ObjectsGroup * group)
+{
+	bool ret = true;
+
+	group->name = node.attribute("name").as_string();
+
+	for (pugi::xml_node& obj = node.child("object"); obj && ret; obj = obj.next_sibling("object"))
+	{
+		ObjectsData* data = new ObjectsData;
+
+		data->height = obj.attribute("height").as_uint();
+		data->width = obj.attribute("width").as_uint();
+		data->x = obj.attribute("x").as_uint();
+		data->y = obj.attribute("y").as_uint();
+		data->name = obj.attribute("name").as_uint();
+
+		group->objects.add(data);
+	}
+
+	return ret;
+}
+
+// Load a group of properties from a node and fill a list with it
+bool j1Map::LoadProperties(pugi::xml_node& node, Properties& properties)
+{
+	// TODO 6: Fill in the method to fill the custom properties from 
+	// an xml_node
+	bool ret = false;
+
+	pugi::xml_node data = node.child("properties");
+
+	if (data != NULL)
+	{
+		pugi::xml_node prop;
+
+		for (prop = data.child("property"); prop; prop = prop.next_sibling("property"))
+		{
+			Properties::Property* p = new Properties::Property();
+
+			p->name = prop.attribute("name").as_string();
+			p->value = prop.attribute("value").as_int();
+
+			properties.list.add(p);
 		}
 	}
 
