@@ -1,4 +1,4 @@
-#ifndef __j1COLLIDERS_H__
+/*#ifndef __j1COLLIDERS_H__
 #define __j1COLLIDERS_H__
 
 #include "p2Point.h"
@@ -78,3 +78,4 @@ public:
 };
 
 #endif
+*/

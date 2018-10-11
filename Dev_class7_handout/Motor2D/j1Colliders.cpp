@@ -1,4 +1,4 @@
-#include "p2Defs.h"
+/*#include "p2Defs.h"
 #include "p2Log.h"
 #include "j1App.h"
 #include "j1Render.h"
@@ -80,7 +80,7 @@ fPoint Colliders::Collider_Overlay(fPoint vector)
 
 
 	return newvector;
-}
+}*/
 /*
 fPoint Colliders::AvoidCollision(fPoint newvector, const SDL_Rect result, p2List_item<ObjectsData*>* objectdata)
 {
@@ -168,7 +168,7 @@ fPoint Colliders::AvoidCollision(fPoint newvector, const SDL_Rect result, p2List
 
 	return newvector;
 }*/
-
+/*
 SDL_Rect Colliders::CreateRect_FromObjectData(ObjectsData * data)
 {
 	SDL_Rect ret;
@@ -199,3 +199,4 @@ void Colliders::PositionCollider()
 
 	}
 }
+*/

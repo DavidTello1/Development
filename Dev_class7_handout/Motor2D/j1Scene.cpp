@@ -61,7 +61,7 @@ bool j1Scene::Update(float dt)
 
 	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		App->render->camera.x -= 1;
-
+		
 //	if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
 //		App->map->layer->properties.Get(App->map->layer->name.GetString(), App->map->layer->properties.Get);
 
