@@ -26,4 +26,14 @@
     <folder>maps/</folder>
   </map>
 
+  <player>
+    <position x="0" y="0"/>
+    <gravity value="10"/>
+    <speed x="2" y="2"/>
+    <grounded value ="false"/>
+    <sliding value="false"/>
+    <jumping value="false"/>
+    <grid value="false"/>
+  </player>
+
 </config>
