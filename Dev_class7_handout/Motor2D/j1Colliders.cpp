@@ -50,8 +50,9 @@ fPoint Colliders::Collider_Overlay(fPoint vector)
 					if (objectdata->data->name == "Wall")
 					{
 						//speed.x = 0;
-						//speed.y /= 2;
-						//sliding = true;
+						//if (!grounded){
+						//	speed.y /= 2;
+						//	sliding = true;}
 					}
 					else if (objectdata->data->name == "Floor")
 					{
