@@ -13,8 +13,8 @@ private:
 public:
 	//constructors
 	vec3();
-	vec3(Type _x, Type _y, Type _z);
-	vec3(const vec3 &vec);
+	vec3(const Type &x, const Type &y, const Type &z) : x(x), y(y), z(z) {}
+	vec3(const vec3 &vec) { this->x = vec.x, this->y = vec.y, this->z; }
 
 	~vec3() {}
 
@@ -25,16 +25,16 @@ public:
 	Type distance_to(const vec3 &vec);
 
 	//operators
-	vec3 op+ (Type sum);
-	vec3 op+ (const vec3 &vec);
+	vec3 op + (const vec3 &vec)const {
+		return vec3(x + vec.x, y + vec.y, z + vec.z);
+	}
 
-	vec3 op- (Type sum);
-	vec3 op- (const vec3 &vec);
+	vec3 op - (const vec3 &vec)const {
 
-	void op+= (Type sum);
+	}
+
 	void op+= (const vec3 &vec);
 
-	void op-= (Type sum);
 	void op-= (const vec3 &vec);
 
 	void op= (const vec3 &vec);

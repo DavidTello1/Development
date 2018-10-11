@@ -49,7 +49,9 @@ fPoint Colliders::Collider_Overlay(fPoint vector)
 				{
 					if (objectdata->data->name == "Wall")
 					{
-						//newvector = AvoidCollision(newvector, result, objectdata);
+						//speed.x = 0;
+						//speed.y /= 2;
+						//sliding = true;
 					}
 					else if (objectdata->data->name == "Floor")
 					{
@@ -70,10 +72,6 @@ fPoint Colliders::Collider_Overlay(fPoint vector)
 						//speed.y = speed.x = 0;
 						//grid = true;
 					}
-
-					//The new trajectory of the player is adjousted for the next collision check
-					Collider_new.x -= (vector.x - newvector.x);
-					Collider_new.y -= (vector.y - newvector.y);
 				}
 			}
 		}
