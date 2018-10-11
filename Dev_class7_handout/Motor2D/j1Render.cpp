@@ -117,6 +117,11 @@ void j1Render::SetViewPort(const SDL_Rect& rect)
 	SDL_RenderSetViewport(renderer, &rect);
 }
 
+void j1Render::GetViewPort(SDL_Rect& rect)
+{
+	SDL_RenderGetViewport(renderer, &rect);
+}
+
 void j1Render::ResetViewPort()
 {
 	SDL_RenderSetViewport(renderer, &viewport);

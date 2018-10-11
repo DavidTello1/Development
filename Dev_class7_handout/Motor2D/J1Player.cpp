@@ -25,13 +25,14 @@ bool j1Player::Awake(pugi::xml_node & config)
 	// Player starting point
 	playerPos.x = config.child("position").attribute("x").as_int();
 	playerPos.y = config.child("position").attribute("y").as_int();
-	speed.x = config.child("speed").attribute("x").as_int();
-	speed.y = config.child("speed").attribute("y").as_int();
+	playerSpeed.x = config.child("speed").attribute("x").as_int();
+	playerSpeed.y = config.child("speed").attribute("y").as_int();
+	playerSize.w = config.child("size").attribute("width").as_int();
+	playerSize.h = config.child("size").attribute("height").as_int();
 	LOG("pos.x : %d, pos.y: %d, speed.x: %d, speed.y: %d", playerPos.x, playerPos.y);
 
-	
-	playerRect.h = 64;
-	playerRect.w = 64;
+	playerRect.h = playerSize.w;
+	playerRect.w = playerSize.h;
 
 	return ret;
 }
@@ -74,17 +75,19 @@ bool j1Player::Update(float dt)
 {
 
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
-		App->player->playerPos.y -= speed.y;
+		App->player->playerPos.y -= playerSpeed.y;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
-		App->player->playerPos.y += speed.y;
+		App->player->playerPos.y += playerSpeed.y;
 
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-		App->player->playerPos.x -= speed.x;
+		App->player->playerPos.x -= playerSpeed.x;
 
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-		App->player->playerPos.x += speed.x;
+		App->player->playerPos.x += playerSpeed.x;
+
+	CameraOnPlayer();
 
 	return true;
 }
@@ -95,7 +98,6 @@ bool j1Player::PostUpdate()
 
 	App->render->Blit(graph, playerPos.x, playerPos.y, &playerRect);
 	LOG("Drawing Player");
-	//CameraOnPlayer();
 
 	return true;
 }
@@ -120,23 +122,28 @@ bool j1Player::Save(pugi::xml_node& data) const
 
 
 
-/*
-
 bool j1Player::CameraOnPlayer()
 {
 	uint winWidth, winHeight;
 	winWidth = 0;
 	winHeight = 0;
-	App->win->GetWindowSize(winWidth, winHeight);
+	App->win->GetWindowSize(winWidth, winHeight); // h = 768, w = 1024
+	SDL_Rect mapSize;
+	App->render->GetViewPort(mapSize);
 	
-	App->render->camera.x = playerPos.x - App->render->camera.w / 3;
-	if (App->render->camera.x < 0)App->render->camera.x = 0;
-	App->render->camera.y = playerPos.y - App->render->camera.h / 2;
-	if (App->render->camera.y + winHeight > App->map->data.height*App->map->data.tile_height)App->render->camera.y = App->map->data.height*App->map->data.tile_height - winWidth;
+	if ((App->render->camera.x + App->render->camera.w) <= winWidth) {
+		App->render->camera.x = App->win->screen_surface->w / 2 - playerPos.x - playerRect.w / 2;
+		if (App->render->camera.x > mapSize.x) App->render->camera.x = mapSize.x;
+	}
+	
+	if ((App->render->camera.y + App->render->camera.h) <= mapSize.h) {
+		App->render->camera.y = App->win->screen_surface->h / 2 - playerPos.y - playerRect.h / 2;
+		if (App->render->camera.y > mapSize.y) App->render->camera.y = mapSize.y;
+	}
+	
+
 	return true;
 }
-
-*/
 
 bool j1Player::CleanUp()
 {

@@ -5,6 +5,7 @@
 #include "p2Point.h"
 #include "j1Module.h"
 #include "SDL/include/SDL_rect.h"
+#include "SDL/include/SDL_surface.h"
 
 struct SDL_Texture;
 struct ObjectsData;
@@ -38,12 +39,12 @@ public:
 	bool CleanUp();
 
 
-	//Positions the player in the start of the current level
-	void Restart();
+	// Positions the player in the start of the current level
+	// void Restart();
 
 
-	//Centers the camera on the player
-	//bool CameraOnPlayer();
+	// Centers the camera on the player
+	bool CameraOnPlayer();
 
 private:
 
@@ -61,7 +62,10 @@ private:
 	iPoint playerPos;
 
 	// Player speed
-	iPoint speed;
+	iPoint playerSpeed;
+
+	// Player size
+	SDL_Surface playerSize;
 
 	p2SString playerFile;
 
