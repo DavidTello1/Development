@@ -46,23 +46,26 @@ public:
 	// Centers the camera on the player
 	bool CameraOnPlayer();
 
-private:
+	iPoint playerPos;
+	iPoint playerSpeed;
+	float gravity;
+	bool grounded;
+	bool jumping;
+	bool dead;
+	bool grid;
+	bool sliding;
 
-public:
-
-
-private:
+	bool up;
+	bool down;
+	bool left;
+	bool right;
 
 	SDL_Rect playerRect;
 
+private:
+
 	// Player graphs
 	SDL_Texture* graph = nullptr;
-
-	// Player position
-	iPoint playerPos;
-
-	// Player speed
-	iPoint playerSpeed;
 
 	// Player size
 	SDL_Surface playerSize;
@@ -70,6 +73,8 @@ private:
 	p2SString playerFile;
 
 	pugi::xml_document	player_file;
+
+	int speed_x, speed_y;
 
 };
 

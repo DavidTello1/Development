@@ -28,7 +28,7 @@
 
   <player>
     <size width="32" height="32"/>
-    <position x="64" y="0"/>
+    <position x="64" y="500"/>
     <gravity value="10"/>
     <speed x="4" y="4"/>
     <grounded value ="false"/>

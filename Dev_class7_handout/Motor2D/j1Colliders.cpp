@@ -1,202 +1,129 @@
-/*#include "p2Defs.h"
+#include "p2Defs.h"
 #include "p2Log.h"
 #include "j1App.h"
 #include "j1Render.h"
 #include "j1Textures.h"
 #include "j1Map.h"
+#include "j1Player.h"
 #include "j1Colliders.h"
 
 
-Colliders::Colliders()
+j1Colliders::j1Colliders()
 {
 }
 
-Colliders::Colliders(ColliderType type) : type(type)
+j1Colliders::j1Colliders(ColliderType type) : type(type)
 {
 }
 
-Colliders::~Colliders()
+j1Colliders::~j1Colliders()
 {
 }
 
-void Colliders::Draw(float dt)
+bool j1Colliders::Awake(pugi::xml_node& config)
 {
-	//if (flip)
-	//	App->render->Blit(App->entitycontroller->texture, position.x, position.y, &(Current_Animation->GetCurrentFrame(dt)), SDL_FLIP_HORIZONTAL, -1.0);
-	//else
-	//	App->render->Blit(App->entitycontroller->texture, position.x, position.y, &(Current_Animation->GetCurrentFrame(dt)), SDL_FLIP_NONE, -1.0);
+	bool ret = true;
+
+	return ret;
 }
 
-
-fPoint Colliders::Collider_Overlay(fPoint vector)
+bool j1Colliders::Update(float dt) //Draws the colliders
 {
+	bool ret = true;
 
-	SDL_Rect Collider_new;
-	Collider_new = Collider;
-	Collider_new.x += vector.x;
-	Collider_new.y += vector.y;
-
-	SDL_Rect result;
-
-	fPoint newvector = vector;
 	for (p2List_item<ObjectsGroup*>* object = App->map->data.objLayers.start; object; object = object->next)
 	{
-		if (object->data->name == ("Collisions"))
+		if (object->data->name == ("Collision"))
 		{
 			for (p2List_item<ObjectsData*>* objectdata = object->data->objects.start; objectdata; objectdata = objectdata->next)
 			{
-				if (SDL_IntersectRect(&Collider_new, &CreateRect_FromObjectData(objectdata->data), &result))
+				SDL_Rect Collider_new;
+				Collider_new = Collider;
+				Collider_new.x = objectdata->data->x;
+				Collider_new.y = objectdata->data->y;
+				Collider_new.w = objectdata->data->width;
+				Collider_new.h = objectdata->data->height;
+			}
+		}
+	}
+
+	return ret;
+}
+
+
+bool j1Colliders::Collider_Overlay()
+{
+	bool ret = true;
+	SDL_Rect ObjectRect;
+
+	p2List_item<ObjectsGroup*>* object;
+	p2List_item<ObjectsData*>* objectdata;
+
+	for (object = App->map->data.objLayers.start; object; object = object->next)
+	{
+		if (object->data->name == ("Collision"))
+		{
+			for (objectdata = object->data->objects.start; objectdata; objectdata = objectdata->next)
+			{
+				ObjectRect.x = objectdata->data->x;
+				ObjectRect.y = objectdata->data->y;
+				ObjectRect.w = objectdata->data->width;
+				ObjectRect.h = objectdata->data->height;
+
+				if (OnCollision(App->player->playerRect, ObjectRect) == true)
 				{
 					if (objectdata->data->name == "Wall")
 					{
-						//speed.x = 0;
-						//if (!grounded){
-						//	speed.y /= 2;
-						//	sliding = true;}
+						App->player->playerSpeed.x = 0;
+						if (!App->player->grounded)
+						{
+							if (objectdata->data->type == "Wall_left" && App->player->left == true
+								|| objectdata->data->type == "Wall_right" && App->player->right == true)
+							{
+								App->player->playerSpeed.y /= 2;
+								App->player->sliding = true;
+							}
+						}
 					}
 					else if (objectdata->data->name == "Floor")
 					{
-						//if (position.y + Collider.h <= objectdata->data->y)
-						//	if (result.h <= result.w || position.x + Collider.w + ColliderOffset.x >= objectdata->data->x)
-						//		newvector.y -= result.h, BecomeGrounded();
+						App->player->playerSpeed.y = 0;
+						App->player->grounded = true;
 					}
 					else if (objectdata->data->name == "Spikes")
 					{
-						dead = true;
+						App->player->dead = true;
 					}
 					else if (objectdata->data->name == "Ceiling")
 					{
-						//speed.y = 0;
+						App->player->playerSpeed.y = 0;
 					}
 					else if (objectdata->data->name == "Grid")
 					{
-						//speed.y = speed.x = 0;
-						//grid = true;
+						App->player->playerSpeed.x = 0;
+						App->player->playerSpeed.y = 0;
+						App->player->grid = true;
 					}
 				}
 			}
 		}
 	}
-
-
-	return newvector;
-}*/
-/*
-fPoint Colliders::AvoidCollision(fPoint newvector, const SDL_Rect result, p2List_item<ObjectsData*>* objectdata)
-{
-	if (type == PLAYER)
-	{
-		type = PLAYER;
-	}
-	if (newvector.y > 0)
-	{
-		if (position.y + Collider.h + ColliderOffset.y <= objectdata->data->y)
-		{
-			if (newvector.x > 0)
-			{
-				if (result.h <= result.w || position.x + Collider.w + ColliderOffset.x > objectdata->data->x)
-					newvector.y -= result.h, BecomeGrounded();
-				else
-					newvector.x -= result.w;
-			}
-			else if (newvector.x < 0)
-			{
-				if (result.h <= result.w || position.x + ColliderOffset.x > objectdata->data->x + objectdata->data->width)
-					newvector.y -= result.h, BecomeGrounded();
-				else
-					newvector.x += result.w;
-			}
-			else
-				newvector.y -= result.h, BecomeGrounded();
-		}
-		else
-		{
-			if (newvector.x > 0)
-				newvector.x -= result.w;
-			else
-				newvector.x += result.w;
-		}
-
-	}
-	else if (newvector.y < 0)
-	{
-		if (position.y + ColliderOffset.y >= objectdata->data->y + objectdata->data->height)
-		{
-			if (newvector.x > 0)
-			{
-				if (result.h <= result.w || position.x + Collider.w + ColliderOffset.x >= objectdata->data->x)
-					newvector.y += result.h;
-				else
-					newvector.x -= result.w;
-			}
-			else if (newvector.x < 0)
-			{
-				if (result.h <= result.w || position.x + ColliderOffset.x <= objectdata->data->x + objectdata->data->width)
-					newvector.y += result.h;
-				else
-					newvector.x += result.w;
-			}
-			else
-				newvector.y += result.h;
-		}
-		else
-		{
-			if (newvector.x > 0)
-				newvector.x -= result.w;
-			else if (newvector.x < 0)
-				newvector.x += result.w;
-			else
-				newvector.y += result.h;
-		}
-	}
-	else
-	{
-		if (newvector.x > 0)
-			newvector.x -= result.w;
-		else if (newvector.x < 0)
-			newvector.x += result.w;
-	}
-
-	if (newvector.y < 1 && newvector.y > -1)
-	{
-		newvector.y = 0;
-	}
-	if (newvector.x < 1 && newvector.x > -1)
-	{
-		newvector.x = 0;
-	}
-
-	return newvector;
-}*/
-/*
-SDL_Rect Colliders::CreateRect_FromObjectData(ObjectsData * data)
-{
-	SDL_Rect ret;
-	ret.x = data->x;
-	ret.y = data->y;
-	ret.h = data->height;
-	ret.w = data->width;
 	return ret;
 }
 
-
-void Colliders::PositionCollider()
+bool j1Colliders::CleanUp()
 {
-	Collider.x = position.x + ColliderOffset.x;
-	Collider.y = position.y + ColliderOffset.y;
-	if (type != PLAYER)
-	{
-		if (direction_x == 1)
-		{
-			SightCollider.x = position.x - SightOffset.x;
-			SightCollider.y = position.y - SightOffset.y;
-		}
-		else
-		{
-			SightCollider.x = position.x - SightCollider.w + SightOffset.x;
-			SightCollider.y = position.y - SightOffset.y;
-		}
+	LOG("Unloading colliders");
 
-	}
+	return true;
 }
-*/
+
+bool j1Colliders::OnCollision(SDL_Rect rect1, SDL_Rect rect2)
+{
+	bool ret = false;
+	if (rect2.x <= rect1.x + rect1.w && rect2.x >= rect1.x && rect2.y <= rect1.y + rect1.h && rect2.y >= rect1.y) 
+	{
+		ret = true;
+	}
+	return ret;
+}

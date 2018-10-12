@@ -63,7 +63,8 @@ struct MapLayer
 
 struct ObjectsData
 {
-	p2SString	name;
+	p2SString	name;	
+	p2SString	type;
 	int			x;
 	int			y;
 	uint		width;
@@ -75,7 +76,19 @@ struct ObjectsGroup
 {
 	p2SString				name;
 	p2List<ObjectsData*>	objects;
-	~ObjectsGroup();
+	~ObjectsGroup()
+	{
+		p2List_item<ObjectsData*>* item;
+		item = objects.start;
+
+		while (item != NULL)
+		{
+			RELEASE(item->data);
+			item = item->next;
+		}
+
+		objects.clear();
+	}
 };
 
 
@@ -154,12 +167,13 @@ private:
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
 	bool LoadObjectLayers(pugi::xml_node& node, ObjectsGroup* group);
 
-	TileSet* GetTilesetFromTileId(int id) const;
-
 public:
 
 	MapData data;
 	MapLayer* layer;
+	TileSet* GetTilesetFromTileId(int id) const;
+	ObjectsData objectsdata;
+
 
 private:
 

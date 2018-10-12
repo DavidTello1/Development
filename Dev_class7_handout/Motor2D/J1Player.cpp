@@ -6,6 +6,7 @@
 #include "j1Textures.h"
 #include "j1Input.h"
 #include "j1Scene.h"
+#include "j1Colliders.h"
 #include "p2Log.h"
 
 
@@ -29,63 +30,99 @@ bool j1Player::Awake(pugi::xml_node & config)
 	playerSpeed.y = config.child("speed").attribute("y").as_int();
 	playerSize.w = config.child("size").attribute("width").as_int();
 	playerSize.h = config.child("size").attribute("height").as_int();
-	LOG("pos.x : %d, pos.y: %d, speed.x: %d, speed.y: %d", playerPos.x, playerPos.y);
+	LOG("pos.x : %d, pos.y: %d, speed.x: %d, speed.y: %d", playerPos.x, playerPos.y, playerSpeed.x, playerSpeed.y);
+	
+	playerRect.h = playerSize.h;
+	playerRect.w = playerSize.w;
 
-	playerRect.h = playerSize.w;
-	playerRect.w = playerSize.h;
+	speed_x = playerSpeed.x;
+	speed_y = playerSpeed.y;
 
 	return ret;
 }
 
 bool j1Player::Start()
 {
-
 	graph = App->tex->Load("textures/penguin_player.png");
 	
-
-	/*
 	//Sets the player in the start position
 	for (p2List_item<ObjectsGroup*>* obj = App->map->data.objLayers.start; obj; obj = obj->next)
 	{
-		if (obj->data->name == ("Collisions"))
+		if (obj->data->name == ("Collision"))
 		{
-			for (p2List_item<ObjectsData*>* objdata = obj->data->objects.start; objdata; objdata = objdata->next)
+			for (p2List_item<ObjectsData*>* objectdata = obj->data->objects.start; objectdata; objectdata = objectdata->next)
 			{
-				if (objdata->data->name == 6)
+				if (objectdata->data->name == "StartPosition")
 				{
-					Collider.h = objdata->data->height;
-					Collider.w = objdata->data->width;
-					Collider.x = objdata->data->x;
-					Collider.y = objdata->data->y;
-				}
-				else if (objdata->data->name == 4)
-				{
-					position = { objdata->data->x, objdata->data->y };
-					Collider.x = position.x + colOffset.x;
-					Collider.y = position.y + colOffset.y;
+					playerPos.x = objectdata->data->x;
+					playerPos.y = objectdata->data->y;
+
+					playerRect.x = playerPos.x;
+					playerRect.y = playerPos.y;
 				}
 			}
 		}
 	}
-	*/
+
 	return true;
 }
 
 bool j1Player::Update(float dt)
 {
 
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
-		App->player->playerPos.y -= playerSpeed.y;
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) //up
+	{
+		up = true;
+		if (playerPos.y - playerSpeed.y <= 0) {
+			playerPos.y = 0;
+		}
+		else 
+		{
+			playerPos.y -= playerSpeed.y;
+		}
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
-		App->player->playerPos.y += playerSpeed.y;
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) //down
+	{
+		down = true;
+		if (playerPos.y + playerSpeed.y >= App->map->data.height*32) {
+			playerPos.y = App->map->data.height*32;
+		}
+		else
+		{
+			playerPos.y += playerSpeed.y;
+		}
+	}
 
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-		App->player->playerPos.x -= playerSpeed.x;
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) //left
+	{
+		left = true;
+		if (playerPos.x - playerSpeed.x <= 0) {
+			playerPos.y = 0;
+		}
+		else
+		{
+			playerPos.x -= playerSpeed.x;
+		}
+	}
 
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-		App->player->playerPos.x += playerSpeed.x;
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) //right
+	{
+		right = true;
+		if (playerPos.x + playerSpeed.x >= App->map->data.width*32) {
+			playerPos.x = App->map->data.width*32;
+		}
+		else
+		{
+			playerPos.x += playerSpeed.x;
+		}
+	}
+	playerRect.x = playerPos.x;
+	playerRect.y = playerPos.y;
+	App->collider->Collider_Overlay();
+
+	playerSpeed.x = speed_x;
+	playerSpeed.y = speed_y;
 
 	CameraOnPlayer();
 
@@ -95,7 +132,6 @@ bool j1Player::Update(float dt)
 
 bool j1Player::PostUpdate()
 {
-
 	App->render->Blit(graph, playerPos.x, playerPos.y, &playerRect);
 	LOG("Drawing Player");
 
@@ -121,7 +157,6 @@ bool j1Player::Save(pugi::xml_node& data) const
 }
 
 
-
 bool j1Player::CameraOnPlayer()
 {
 	uint winWidth, winHeight;
@@ -141,7 +176,6 @@ bool j1Player::CameraOnPlayer()
 		if (App->render->camera.y > mapSize.y) App->render->camera.y = mapSize.y;
 	}
 	
-
 	return true;
 }
 

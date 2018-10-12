@@ -4,7 +4,7 @@
 #include "j1Render.h"
 #include "j1Textures.h"
 #include "j1Map.h"
-#include <math.h>
+#include <cmath>
 
 
 j1Map::j1Map() : j1Module(), map_loaded(false)
@@ -32,7 +32,6 @@ void j1Map::Draw()
 	if(map_loaded == false)
 		return;
 
-	// TODO 4: Make sure we draw all the layers and not just the first one
 	p2List_item<MapLayer*>* item = data.layers.start;
 
 	for (; item != NULL; item = item->next)
@@ -470,7 +469,8 @@ bool j1Map::LoadObjectLayers(pugi::xml_node & node, ObjectsGroup * group)
 		data->width = obj.attribute("width").as_uint();
 		data->x = obj.attribute("x").as_uint();
 		data->y = obj.attribute("y").as_uint();
-		data->name = obj.attribute("name").as_uint();
+		data->name = obj.attribute("name").as_string();
+		data->type = obj.attribute("type").as_string();
 
 		group->objects.add(data);
 	}
