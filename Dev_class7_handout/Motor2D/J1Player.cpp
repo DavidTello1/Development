@@ -31,7 +31,9 @@ bool j1Player::Awake(pugi::xml_node & config)
 	playerSize.w = config.child("size").attribute("width").as_int();
 	playerSize.h = config.child("size").attribute("height").as_int();
 	LOG("pos.x : %d, pos.y: %d, speed.x: %d, speed.y: %d", playerPos.x, playerPos.y, playerSpeed.x, playerSpeed.y);
-	
+
+	playerRect.x = 0;
+	playerRect.y = 0;
 	playerRect.h = playerSize.h;
 	playerRect.w = playerSize.w;
 
@@ -56,9 +58,6 @@ bool j1Player::Start()
 				{
 					playerPos.x = objectdata->data->x;
 					playerPos.y = objectdata->data->y;
-
-					playerRect.x = playerPos.x;
-					playerRect.y = playerPos.y;
 				}
 			}
 		}
@@ -69,6 +68,8 @@ bool j1Player::Start()
 
 bool j1Player::Update(float dt)
 {
+	playerSpeed.x = speed_x;
+	playerSpeed.y = speed_y;
 
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) //up
 	{
@@ -85,8 +86,8 @@ bool j1Player::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) //down
 	{
 		down = true;
-		if (playerPos.y + playerSpeed.y >= App->map->data.height*32) {
-			playerPos.y = App->map->data.height*32;
+		if (playerPos.y + playerSpeed.y >= (App->map->data.height -1) * App->map->data.tile_height) {
+			playerPos.y = (App->map->data.height -1) * App->map->data.tile_height;
 		}
 		else
 		{
@@ -98,7 +99,7 @@ bool j1Player::Update(float dt)
 	{
 		left = true;
 		if (playerPos.x - playerSpeed.x <= 0) {
-			playerPos.y = 0;
+			playerPos.x = 0;
 		}
 		else
 		{
@@ -109,31 +110,25 @@ bool j1Player::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) //right
 	{
 		right = true;
-		if (playerPos.x + playerSpeed.x >= App->map->data.width*32) {
-			playerPos.x = App->map->data.width*32;
+		if (playerPos.x + playerSpeed.x >= (App->map->data.width -1) * App->map->data.tile_width) {
+			playerPos.x = (App->map->data.width -1) * App->map->data.tile_width;
 		}
 		else
 		{
 			playerPos.x += playerSpeed.x;
 		}
 	}
-	playerRect.x = playerPos.x;
-	playerRect.y = playerPos.y;
 	App->collider->Collider_Overlay();
 
-	playerSpeed.x = speed_x;
-	playerSpeed.y = speed_y;
-
 	CameraOnPlayer();
-
 	return true;
 }
 
 
 bool j1Player::PostUpdate()
 {
-	App->render->Blit(graph, playerPos.x, playerPos.y, &playerRect);
 	LOG("Drawing Player");
+	App->render->Blit(graph, playerPos.x, playerPos.y, &playerRect);
 
 	return true;
 }
