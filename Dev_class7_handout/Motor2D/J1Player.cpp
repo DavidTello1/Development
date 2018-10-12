@@ -37,9 +37,6 @@ bool j1Player::Awake(pugi::xml_node & config)
 	playerRect.h = playerSize.h;
 	playerRect.w = playerSize.w;
 
-	speed_x = playerSpeed.x;
-	speed_y = playerSpeed.y;
-
 	return ret;
 }
 
@@ -68,32 +65,49 @@ bool j1Player::Start()
 
 bool j1Player::Update(float dt)
 {
-	playerSpeed.x = speed_x;
-	playerSpeed.y = speed_y;
 
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) //up
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) //up
 	{
-		up = true;
-		if (playerPos.y - playerSpeed.y <= 0) {
-			playerPos.y = 0;
+		if (jumping == false) {
+			jumping = true;
+			speed_y = 22;
 		}
-		else 
-		{
-			playerPos.y -= playerSpeed.y;
+		
+	}
+	if (jumping == true)
+	{
+		playerPos.y -= speed_y;
+		speed_y -= 2;
+		if (speed_y <= -24) {
+			speed_y = 0;
+			jumping = false;
 		}
 	}
+	
 
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) //down
-	{
-		down = true;
-		if (playerPos.y + playerSpeed.y >= (App->map->data.height -1) * App->map->data.tile_height) {
-			playerPos.y = (App->map->data.height -1) * App->map->data.tile_height;
-		}
-		else
-		{
-			playerPos.y += playerSpeed.y;
-		}
-	}
+	//if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) //up
+	//{
+	//	up = true;
+	//	if (playerPos.y - playerSpeed.y <= 0) {
+	//		playerPos.y = 0;
+	//	}
+	//	else 
+	//	{
+	//		playerPos.y -= playerSpeed.y;
+	//	}
+	//}
+
+	//if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) //down
+	//{
+	//	down = true;
+	//	if (playerPos.y + playerSpeed.y >= (App->map->data.height -1) * App->map->data.tile_height) {
+	//		playerPos.y = (App->map->data.height -1) * App->map->data.tile_height;
+	//	}
+	//	else
+	//	{
+	//		playerPos.y += playerSpeed.y;
+	//	}
+	//}
 
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) //left
 	{
@@ -127,7 +141,6 @@ bool j1Player::Update(float dt)
 
 bool j1Player::PostUpdate()
 {
-	LOG("Drawing Player");
 	App->render->Blit(graph, playerPos.x, playerPos.y, &playerRect);
 
 	return true;
@@ -154,23 +167,22 @@ bool j1Player::Save(pugi::xml_node& data) const
 
 bool j1Player::CameraOnPlayer()
 {
-	uint winWidth, winHeight;
-	winWidth = 0;
-	winHeight = 0;
-	App->win->GetWindowSize(winWidth, winHeight); // h = 768, w = 1024
-	SDL_Rect mapSize;
-	App->render->GetViewPort(mapSize);
+	// Camera Position Update
+	App->render->camera.x = App->win->screen_surface->w / 2 - playerPos.x - playerRect.w / 2;
+	App->render->camera.y = App->win->screen_surface->h / 2 - playerPos.y - playerRect.h / 2;
+
+	// Left Limit
+	if (App->render->camera.x > 0) App->render->camera.x = 0;
 	
-	if ((App->render->camera.x + App->render->camera.w) <= winWidth) {
-		App->render->camera.x = App->win->screen_surface->w / 2 - playerPos.x - playerRect.w / 2;
-		if (App->render->camera.x > mapSize.x) App->render->camera.x = mapSize.x;
-	}
+	// Top Limit
+	if (App->render->camera.y > 0) App->render->camera.y = 0;
 	
-	if ((App->render->camera.y + App->render->camera.h) <= mapSize.h) {
-		App->render->camera.y = App->win->screen_surface->h / 2 - playerPos.y - playerRect.h / 2;
-		if (App->render->camera.y > mapSize.y) App->render->camera.y = mapSize.y;
-	}
-	
+	// Right Limit
+
+
+	//Bottom Limit
+
+
 	return true;
 }
 

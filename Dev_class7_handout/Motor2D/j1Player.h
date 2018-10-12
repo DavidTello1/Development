@@ -46,6 +46,8 @@ public:
 	// Centers the camera on the player
 	bool CameraOnPlayer();
 
+public: 
+
 	iPoint playerPos;
 	iPoint playerSpeed;
 	float gravity;
