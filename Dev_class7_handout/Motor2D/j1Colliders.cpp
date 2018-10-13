@@ -12,10 +12,6 @@ j1Colliders::j1Colliders()
 {
 }
 
-j1Colliders::j1Colliders(ColliderType type) : type(type)
-{
-}
-
 j1Colliders::~j1Colliders()
 {
 }
@@ -70,24 +66,30 @@ bool j1Colliders::Collider_Overlay()
 				ObjectRect.w = objectdata->data->width;
 				ObjectRect.h = objectdata->data->height;
 
-				if (OnCollision(App->player->playerRect, ObjectRect) == true)
+				if (OnCollision(ObjectRect, App->player->playerCollider) == true)
 				{
 					if (objectdata->data->name == "Wall")
 					{
-						App->player->playerSpeed.x = 0;
-						if (!App->player->grounded)
+						if (objectdata->data->type == "Wall_left")
 						{
-							if (objectdata->data->type == "Wall_left" && App->player->left == true
-								|| objectdata->data->type == "Wall_right" && App->player->right == true)
+							App->player->wall_left = true;
+							if (App->player->left == true && App->player->grounded == false)
 							{
-								App->player->playerSpeed.y /= 2;
+								App->player->sliding = true;
+							}
+						}
+						if (objectdata->data->type == "Wall_right")
+						{
+							App->player->wall_right = true;
+							if (App->player->right == true && App->player->grounded == false)
+							{
 								App->player->sliding = true;
 							}
 						}
 					}
-					else if (objectdata->data->name == "Floor")
+					else if (objectdata->data->name == "Floor") //
 					{
-						App->player->playerSpeed.y = 0;
+						Collider_floor = ObjectRect;
 						App->player->grounded = true;
 					}
 					else if (objectdata->data->name == "Spikes")
@@ -96,13 +98,11 @@ bool j1Colliders::Collider_Overlay()
 					}
 					else if (objectdata->data->name == "Ceiling")
 					{
-						App->player->playerSpeed.y = 0;
+ 						App->player->jumpSpeed.y = 0;
 					}
 					else if (objectdata->data->name == "Grid")
 					{
-						App->player->playerSpeed.x = 0;
-						App->player->playerSpeed.y = 0;
-						App->player->grid = true;
+						//App->player->grid = true;
 					}
 				}
 			}
@@ -118,10 +118,16 @@ bool j1Colliders::CleanUp()
 	return true;
 }
 
-bool j1Colliders::OnCollision(SDL_Rect rect1, SDL_Rect rect2)
+bool j1Colliders::OnCollision(SDL_Rect cldr, SDL_Rect cldr_player)
 {
 	bool ret = false;
-	if (rect2.x <= rect1.x + rect1.w && rect2.x >= rect1.x && rect2.y <= rect1.y + rect1.h && rect2.y >= rect1.y) 
+	if (cldr_player.x <= cldr.x + cldr.w && cldr_player.x >= cldr.x
+		&&cldr_player.y <= cldr.y + cldr.h && cldr_player.y >= cldr.y)
+	{
+		ret = true;
+	}
+	if (cldr_player.x + cldr_player.w <= cldr.x + cldr.w && cldr_player.x + cldr_player.w >= cldr.x
+		&&cldr_player.y <= cldr.y + cldr.h && cldr_player.y >= cldr.y)
 	{
 		ret = true;
 	}

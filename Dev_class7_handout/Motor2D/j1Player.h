@@ -50,34 +50,36 @@ public:
 
 	iPoint playerPos;
 	iPoint playerSpeed;
-	float gravity;
-	bool grounded;
-	bool jumping;
-	bool dead;
-	bool grid;
-	bool sliding;
+	SDL_Surface playerSize;
+	iPoint speed;
+	iPoint jumpSpeed;
+	int gravity;
 
-	bool up;
-	bool down;
 	bool left;
 	bool right;
 
-	SDL_Rect playerRect;
+	bool grounded;
+	bool dead;
+	bool jumping;
+	bool grid;
+	bool sliding;
+	bool wall_left, wall_right;
+	bool bounce_left, bounce_right;
+	bool gravity_active;
+
+	SDL_Rect playerCollider;
 
 private:
 
 	// Player graphs
 	SDL_Texture* graph = nullptr;
 
-	// Player size
-	SDL_Surface playerSize;
-
+	SDL_Rect playerRect;
 	p2SString playerFile;
 
 	pugi::xml_document	player_file;
 
-	int speed_x, speed_y;
-
+	int new_speed_x, new_speed_y;
 };
 
 #endif // !__J1PLAYER_H__

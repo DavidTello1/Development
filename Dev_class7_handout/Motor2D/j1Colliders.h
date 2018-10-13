@@ -39,7 +39,7 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	bool OnCollision(SDL_Rect rect1, SDL_Rect rect2);
+	bool OnCollision(SDL_Rect cldr, SDL_Rect cldr_player);
 
 	void PositionCollider();
 
@@ -49,7 +49,7 @@ public:
 	iPoint ColliderOffset;
 	iPoint SightOffset;
 	SDL_Rect Collider;
-	SDL_Rect SightCollider;
+	SDL_Rect Collider_floor;
 };
 
 #endif

@@ -29,12 +29,13 @@
   <player>
     <size width="32" height="32"/>
     <position x="64" y="500"/>
-    <gravity value="10"/>
-    <speed x="4" y="4"/>
+    <gravity value="8"/>
+    <speed x="4" y="24"/>
     <grounded value ="false"/>
     <sliding value="false"/>
     <jumping value="false"/>
     <grid value="false"/>
+    <gravity_active value="true"/>
   </player>
 
 </config>

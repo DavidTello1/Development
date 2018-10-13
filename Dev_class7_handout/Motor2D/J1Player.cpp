@@ -30,6 +30,8 @@ bool j1Player::Awake(pugi::xml_node & config)
 	playerSpeed.y = config.child("speed").attribute("y").as_int();
 	playerSize.w = config.child("size").attribute("width").as_int();
 	playerSize.h = config.child("size").attribute("height").as_int();
+	gravity = config.child("gravity").attribute("value").as_int();
+	gravity_active = config.child("gravity_active").attribute("value").as_bool();
 	LOG("pos.x : %d, pos.y: %d, speed.x: %d, speed.y: %d", playerPos.x, playerPos.y, playerSpeed.x, playerSpeed.y);
 
 	playerRect.x = 0;
@@ -37,6 +39,8 @@ bool j1Player::Awake(pugi::xml_node & config)
 	playerRect.h = playerSize.h;
 	playerRect.w = playerSize.w;
 
+	speed.x = playerSpeed.x;
+	speed.y = playerSpeed.y;	
 	return ret;
 }
 
@@ -66,52 +70,33 @@ bool j1Player::Start()
 bool j1Player::Update(float dt)
 {
 
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) //up
-	{
-		if (jumping == false) {
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) //space
+	{	
+		if (jumping == false)
+		{
 			jumping = true;
-			speed_y = 22;
-		}
-		
-	}
-	if (jumping == true)
-	{
-		playerPos.y -= speed_y;
-		speed_y -= 2;
-		if (speed_y <= -24) {
-			speed_y = 0;
-			jumping = false;
-		}
-	}
-	
+			grounded = false;
+			jumpSpeed.x = speed.y;
+			jumpSpeed.y = speed.y;
 
-	//if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) //up
-	//{
-	//	up = true;
-	//	if (playerPos.y - playerSpeed.y <= 0) {
-	//		playerPos.y = 0;
-	//	}
-	//	else 
-	//	{
-	//		playerPos.y -= playerSpeed.y;
-	//	}
-	//}
-
-	//if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) //down
-	//{
-	//	down = true;
-	//	if (playerPos.y + playerSpeed.y >= (App->map->data.height -1) * App->map->data.tile_height) {
-	//		playerPos.y = (App->map->data.height -1) * App->map->data.tile_height;
-	//	}
-	//	else
-	//	{
-	//		playerPos.y += playerSpeed.y;
-	//	}
-	//}
+		}
+		if (wall_left == true && sliding == true)
+		{
+			jumping = true;
+			bounce_right = true;
+		}
+		if (wall_right == true && sliding == true)
+		{
+			jumping = true;
+			bounce_left = true;
+		}
+	} 
 
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) //left
 	{
 		left = true;
+		playerSpeed.x = speed.x;
+
 		if (playerPos.x - playerSpeed.x <= 0) {
 			playerPos.x = 0;
 		}
@@ -119,22 +104,154 @@ bool j1Player::Update(float dt)
 		{
 			playerPos.x -= playerSpeed.x;
 		}
+		if (wall_left == true && grounded == false) {
+			sliding = true;
+		}
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) //right
 	{
 		right = true;
-		if (playerPos.x + playerSpeed.x >= (App->map->data.width -1) * App->map->data.tile_width) {
-			playerPos.x = (App->map->data.width -1) * App->map->data.tile_width;
+		playerSpeed.x = speed.x;
+
+		if (playerPos.x + playerSpeed.x >= (App->map->data.width - 1) * App->map->data.tile_width) {
+			playerPos.x = (App->map->data.width - 1) * App->map->data.tile_width;
 		}
 		else
 		{
 			playerPos.x += playerSpeed.x;
 		}
+		if (wall_right == true && grounded == false) {
+			sliding = true;
+		}
 	}
+
+	//if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) //&& grid == true) {} //up
+	//{
+	//	jumping = false;
+	//}
+	//if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && grid == true) //down
+	//{
+	//	playerPos.y += playerSpeed.y;
+	//} 
+	//if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && grid == true) //left
+	//{
+	//	playerPos.x -= playerSpeed.x;
+	//} 
+	//if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && grid == true) //right
+	//{
+	//	playerPos.x += playerSpeed.x;
+	//}
+
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP) //left release
+	{ 
+		left = false;
+		sliding = false;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP) //right release
+	{
+		right = false;
+		sliding = false;
+	}
+
+	//----------------	
+	if (grounded == true) //grounded
+	{
+		if (playerPos.y + playerCollider.h >= App->collider->Collider_floor.y)
+		{
+			playerPos.y = App->collider->Collider_floor.y - playerCollider.h;
+		}
+		jumping = false;
+		sliding = false;
+	}
+
+	if (jumping == true) //jumping
+	{
+		if (playerPos.y - jumpSpeed.y <= 0)
+		{
+			playerPos.y = 0;
+		}
+		if (jumpSpeed.y > 0)
+		{
+			jumpSpeed.y--;
+			playerPos.y -= jumpSpeed.y;
+		}
+	}
+
+	if (wall_left == true) {
+		playerPos.x += playerSpeed.x;
+		wall_left = false;
+	}
+	if (wall_right == true) {
+		playerPos.x -= playerSpeed.x;
+		wall_right = false;
+	}
+
+	if (gravity_active == true) //gravity
+	{
+		if (playerPos.y + gravity >= (App->map->data.height - 1) * App->map->data.tile_height) {
+			playerPos.y = (App->map->data.height - 1) * App->map->data.tile_height;
+		}
+		else
+		{
+			if (grounded == false)
+			{
+				if (sliding == true) {
+					playerPos.y += gravity / 4;
+				}
+				else if (grid == false && sliding == false)
+				{
+					playerPos.y += gravity;
+				}
+			}
+		}
+	}
+
+	if (bounce_left == true) //bounce left
+	{
+		if (jumpSpeed.x > 0)
+		{
+			jumpSpeed.x--;
+			playerPos.x -= jumpSpeed.x;
+		}
+		else
+		{
+			bounce_left = false;
+		}
+	}
+
+	if (bounce_right == true) //bounce right
+	{
+		if (jumpSpeed.x > 0)
+		{
+			jumpSpeed.x--;
+			playerPos.x += jumpSpeed.x;
+		}
+		else
+		{
+			bounce_right = false;
+		}
+	}
+
+	//if (grid == true)
+	//{
+	//	gravity_active = false;
+	//}
+
+	playerCollider.x = playerPos.x;
+	playerCollider.y = playerPos.y;
+	playerCollider.w = playerSize.w;
+	playerCollider.h = playerSize.h;
+	playerSpeed.x = speed.x;
+	playerSpeed.y = speed.y;
+
 	App->collider->Collider_Overlay();
 
 	CameraOnPlayer();
+
+	//sliding = false;
+	//grid = false;
+	//gravity_active = true;
 	return true;
 }
 
@@ -167,21 +284,31 @@ bool j1Player::Save(pugi::xml_node& data) const
 
 bool j1Player::CameraOnPlayer()
 {
-	// Camera Position Update
-	App->render->camera.x = App->win->screen_surface->w / 2 - playerPos.x - playerRect.w / 2;
-	App->render->camera.y = App->win->screen_surface->h / 2 - playerPos.y - playerRect.h / 2;
+	uint winWidth = 0, winHeight = 0;
+	App->win->GetWindowSize(winWidth, winHeight); // w = 1024, h = 768
+	SDL_Rect mapSize;
+	App->render->GetViewPort(mapSize);
 
-	// Left Limit
-	if (App->render->camera.x > 0) App->render->camera.x = 0;
-	
-	// Top Limit
-	if (App->render->camera.y > 0) App->render->camera.y = 0;
-	
-	// Right Limit
+	App->render->camera.x = playerPos.x - winWidth / 2 + playerRect.w / 2;
+	App->render->camera.y = playerPos.y - winHeight / 2 + playerRect.h / 2;
 
+	if (App->render->camera.x < mapSize.x) // left limit
+	{ 
+		App->render->camera.x = mapSize.x;
+	}
+	if (App->render->camera.x + mapSize.w > (App->map->data.width) * App->map->data.tile_width) //right limit
+	{
+		App->render->camera.x = App->map->data.width * App->map->data.tile_width - mapSize.w;
+	}
 
-	//Bottom Limit
-
+	if (App->render->camera.y < mapSize.y) //up limit
+	{
+		App->render->camera.y = mapSize.y;
+	}	
+	if (App->render->camera.y + mapSize.h > (App->map->data.height) * App->map->data.tile_height) //down limit
+	{
+		App->render->camera.y = App->map->data.height * App->map->data.tile_height - mapSize.h;
+	}
 
 	return true;
 }
