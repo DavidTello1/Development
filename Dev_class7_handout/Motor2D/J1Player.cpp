@@ -232,17 +232,47 @@ bool j1Player::PostUpdate()
 
 bool j1Player::Load(pugi::xml_node& data)
 {
-	return false;
+	bool ret = true;
+
+	// Player starting point
+	playerPos.x = data.child("position").attribute("x").as_int();
+	playerPos.y = data.child("position").attribute("y").as_int();
+	playerSpeed.x = data.child("speed").attribute("x").as_int();
+	playerSpeed.y = data.child("speed").attribute("y").as_int();
+	playerSize.w = data.child("size").attribute("width").as_int();
+	playerSize.h = data.child("size").attribute("height").as_int();
+	gravity = data.child("gravity").attribute("value").as_int();
+	gravity_active = data.child("gravity_active").attribute("value").as_bool();
+	LOG("pos.x : %d, pos.y: %d, speed.x: %d, speed.y: %d", playerPos.x, playerPos.y, playerSpeed.x, playerSpeed.y);
+
+	playerRect.x = 0;
+	playerRect.y = 0;
+	playerRect.h = playerSize.h;
+	playerRect.w = playerSize.w;
+
+	speed.x = playerSpeed.x;
+	speed.y = playerSpeed.y;
+	return ret;
 }
 
 // Save Game State
 bool j1Player::Save(pugi::xml_node& data) const
 {
-	data.append_child("player");
+	//pugi::xml_node player = data.append_child("player");
+	data.child("position").attribute("x") = playerPos.x;
+	data.child("position").attribute("y") = playerPos.y;
 
-	data.child("player").append_child("position").append_attribute("x") = playerPos.x;
-	data.child("player").child("position").append_attribute("y") = playerPos.y;
-	
+	data.child("gravity").attribute("value") = gravity;
+	data.child("gravity_active").attribute("value") = gravity_active;
+
+	data.child("speed").attribute("x") = speed.x;
+	data.child("speed").attribute("y") = speed.y;
+
+	data.child("grounded").attribute("value") = grounded;
+	data.child("sliding").attribute("value") = sliding;
+	data.child("jumping").attribute("value") = jumping;
+	data.child("grid").attribute("value") = grid;
+
 	return true;
 }
 
