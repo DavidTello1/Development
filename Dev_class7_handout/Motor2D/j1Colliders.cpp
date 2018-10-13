@@ -105,7 +105,7 @@ bool j1Colliders::Collider_Overlay()
 					}
 					else if (objectdata->data->name == "Grid")
 					{
-						//App->player->grid = true;
+						App->player->grid_collision = true;
 					}
 				}
 			}
@@ -119,19 +119,4 @@ bool j1Colliders::CleanUp()
 	LOG("Unloading colliders");
 
 	return true;
-}
-
-bool j1Colliders::OnCollision(SDL_Rect cldr, SDL_Rect cldr_player)
-{
-	bool ret = false;
-
-	if (  cldr_player.x <= cldr.x + cldr.w && cldr_player.x >= cldr.x
-		&&cldr_player.y <= cldr.y + cldr.h && cldr_player.y >= cldr.y
-		||cldr_player.x + cldr_player.w <= cldr.x + cldr.w && cldr_player.x + cldr_player.w >= cldr.x
-		&&cldr_player.y + cldr_player.h <= cldr.y + cldr.h && cldr_player.y + cldr_player.h >= cldr.y)
-	{
-		ret = true;
-	}
-
-	return ret;
 }

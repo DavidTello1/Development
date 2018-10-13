@@ -27,8 +27,6 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	bool OnCollision(SDL_Rect cldr, SDL_Rect cldr_player);
-
 public:
 	int points;
 	SDL_Rect Collider;

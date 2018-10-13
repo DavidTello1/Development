@@ -51,7 +51,6 @@ public:
 	iPoint playerPos;
 	iPoint playerSpeed;
 	SDL_Surface playerSize;
-	iPoint speed;
 	iPoint jumpSpeed;
 	int gravity;
 
@@ -67,6 +66,7 @@ public:
 
 	bool wall_left, wall_right;
 	bool gravity_active;
+	bool grid_collision;
 
 	SDL_Rect playerCollider;
 
@@ -79,8 +79,6 @@ private:
 	p2SString playerFile;
 
 	pugi::xml_document	player_file;
-
-	int new_speed_x, new_speed_y;
 };
 
 #endif // !__J1PLAYER_H__
