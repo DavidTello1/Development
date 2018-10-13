@@ -58,13 +58,14 @@ public:
 	bool left;
 	bool right;
 
-	bool grounded;
 	bool dead;
+
+	bool grounded;
 	bool jumping;
-	bool grid;
 	bool sliding;
+	bool grid;
+
 	bool wall_left, wall_right;
-	bool bounce_left, bounce_right;
 	bool gravity_active;
 
 	SDL_Rect playerCollider;

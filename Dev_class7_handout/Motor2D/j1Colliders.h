@@ -8,21 +8,9 @@
 
 class j1Colliders :public j1Module
 {
-public:
-	enum ColliderType
-	{
-		NO_TYPE,
-		PLAYER,
-		SPIKES,
-		FLOOR,
-		CEILING,
-		WALL,
-		GRID
-	};
 
 public:
 	j1Colliders();
-	j1Colliders(ColliderType type);
 
 	// Destructor
 	virtual ~j1Colliders();
@@ -41,15 +29,9 @@ public:
 
 	bool OnCollision(SDL_Rect cldr, SDL_Rect cldr_player);
 
-	void PositionCollider();
-
 public:
 	int points;
-	ColliderType type;
-	iPoint ColliderOffset;
-	iPoint SightOffset;
 	SDL_Rect Collider;
-	SDL_Rect Collider_floor;
 };
 
 #endif

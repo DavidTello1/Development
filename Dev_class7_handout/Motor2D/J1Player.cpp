@@ -69,6 +69,14 @@ bool j1Player::Start()
 
 bool j1Player::Update(float dt)
 {
+	playerCollider.x = playerPos.x;
+	playerCollider.y = playerPos.y;
+	playerCollider.w = playerSize.w;
+	playerCollider.h = playerSize.h;
+	playerSpeed.x = speed.x;
+	playerSpeed.y = speed.y;
+
+	App->collider->Collider_Overlay();
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) //space
 	{	
@@ -76,19 +84,7 @@ bool j1Player::Update(float dt)
 		{
 			jumping = true;
 			grounded = false;
-			jumpSpeed.x = speed.y;
 			jumpSpeed.y = speed.y;
-
-		}
-		if (wall_left == true && sliding == true)
-		{
-			jumping = true;
-			bounce_right = true;
-		}
-		if (wall_right == true && sliding == true)
-		{
-			jumping = true;
-			bounce_left = true;
 		}
 	} 
 
@@ -124,6 +120,8 @@ bool j1Player::Update(float dt)
 		if (wall_right == true && grounded == false) {
 			sliding = true;
 		}
+//		grounded = false;
+
 	}
 
 	//if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) //&& grid == true) {} //up
@@ -157,16 +155,19 @@ bool j1Player::Update(float dt)
 	//----------------	
 	if (grounded == true) //grounded
 	{
-		if (playerPos.y + playerCollider.h >= App->collider->Collider_floor.y)
-		{
-			playerPos.y = App->collider->Collider_floor.y - playerCollider.h;
-		}
 		jumping = false;
 		sliding = false;
 	}
 
+	if (sliding == true)
+	{
+		jumpSpeed.y = 0;
+		grounded = false;
+	}
+
 	if (jumping == true) //jumping
 	{
+		gravity_active = true;
 		if (playerPos.y - jumpSpeed.y <= 0)
 		{
 			playerPos.y = 0;
@@ -196,10 +197,11 @@ bool j1Player::Update(float dt)
 		{
 			if (grounded == false)
 			{
-				if (sliding == true) {
+				if (sliding == true)
+				{
 					playerPos.y += gravity / 4;
 				}
-				else if (grid == false && sliding == false)
+				if (grid == false && sliding == false)
 				{
 					playerPos.y += gravity;
 				}
@@ -207,51 +209,14 @@ bool j1Player::Update(float dt)
 		}
 	}
 
-	if (bounce_left == true) //bounce left
-	{
-		if (jumpSpeed.x > 0)
-		{
-			jumpSpeed.x--;
-			playerPos.x -= jumpSpeed.x;
-		}
-		else
-		{
-			bounce_left = false;
-		}
-	}
-
-	if (bounce_right == true) //bounce right
-	{
-		if (jumpSpeed.x > 0)
-		{
-			jumpSpeed.x--;
-			playerPos.x += jumpSpeed.x;
-		}
-		else
-		{
-			bounce_right = false;
-		}
-	}
-
 	//if (grid == true)
 	//{
 	//	gravity_active = false;
 	//}
-
-	playerCollider.x = playerPos.x;
-	playerCollider.y = playerPos.y;
-	playerCollider.w = playerSize.w;
-	playerCollider.h = playerSize.h;
-	playerSpeed.x = speed.x;
-	playerSpeed.y = speed.y;
-
-	App->collider->Collider_Overlay();
-
+	sliding = false;
+	grounded = false;
 	CameraOnPlayer();
 
-	//sliding = false;
-	//grid = false;
-	//gravity_active = true;
 	return true;
 }
 

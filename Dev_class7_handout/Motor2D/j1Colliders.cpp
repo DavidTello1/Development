@@ -51,6 +51,7 @@ bool j1Colliders::Collider_Overlay()
 {
 	bool ret = true;
 	SDL_Rect ObjectRect;
+	SDL_Rect result;
 
 	p2List_item<ObjectsGroup*>* object;
 	p2List_item<ObjectsData*>* objectdata;
@@ -66,31 +67,33 @@ bool j1Colliders::Collider_Overlay()
 				ObjectRect.w = objectdata->data->width;
 				ObjectRect.h = objectdata->data->height;
 
-				if (OnCollision(ObjectRect, App->player->playerCollider) == true)
+				if (SDL_IntersectRect(&ObjectRect, &App->player->playerCollider, &result))
 				{
 					if (objectdata->data->name == "Wall")
 					{
 						if (objectdata->data->type == "Wall_left")
 						{
 							App->player->wall_left = true;
-							if (App->player->left == true && App->player->grounded == false)
-							{
-								App->player->sliding = true;
-							}
 						}
 						if (objectdata->data->type == "Wall_right")
 						{
 							App->player->wall_right = true;
-							if (App->player->right == true && App->player->grounded == false)
-							{
-								App->player->sliding = true;
-							}
 						}
 					}
 					else if (objectdata->data->name == "Floor") //
 					{
-						Collider_floor = ObjectRect;
-						App->player->grounded = true;
+						if (App->player->playerPos.y + App->player->playerCollider.h - App->player->gravity <= ObjectRect.y)
+						{
+							if (result.h <= result.w || App->player->playerPos.x + App->player->playerCollider.w >= ObjectRect.x)
+							{
+								App->player->playerPos.y -= result.h - 1;
+								App->player->grounded = true;
+							}
+						}
+						else 
+						{
+							App->player->jumpSpeed.y = 0;
+						}
 					}
 					else if (objectdata->data->name == "Spikes")
 					{
@@ -121,15 +124,14 @@ bool j1Colliders::CleanUp()
 bool j1Colliders::OnCollision(SDL_Rect cldr, SDL_Rect cldr_player)
 {
 	bool ret = false;
-	if (cldr_player.x <= cldr.x + cldr.w && cldr_player.x >= cldr.x
-		&&cldr_player.y <= cldr.y + cldr.h && cldr_player.y >= cldr.y)
+
+	if (  cldr_player.x <= cldr.x + cldr.w && cldr_player.x >= cldr.x
+		&&cldr_player.y <= cldr.y + cldr.h && cldr_player.y >= cldr.y
+		||cldr_player.x + cldr_player.w <= cldr.x + cldr.w && cldr_player.x + cldr_player.w >= cldr.x
+		&&cldr_player.y + cldr_player.h <= cldr.y + cldr.h && cldr_player.y + cldr_player.h >= cldr.y)
 	{
 		ret = true;
 	}
-	if (cldr_player.x + cldr_player.w <= cldr.x + cldr.w && cldr_player.x + cldr_player.w >= cldr.x
-		&&cldr_player.y <= cldr.y + cldr.h && cldr_player.y >= cldr.y)
-	{
-		ret = true;
-	}
+
 	return ret;
 }

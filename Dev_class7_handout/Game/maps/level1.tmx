@@ -5549,7 +5549,7 @@
   <properties>
    <property name="Nodraw" type="int" value="0"/>
   </properties>
-  <object id="1" name="StartPosition" x="64" y="1152" width="32" height="32"/>
+  <object id="1" name="StartPosition" x="64" y="960" width="32" height="32"/>
   <object id="4" name="Floor" x="32" y="1184" width="224" height="32"/>
   <object id="7" name="Spikes" x="256" y="1184" width="160" height="32"/>
   <object id="10" name="Wall" type="Wall_left" x="478" y="1136" width="32" height="80"/>
