@@ -15,6 +15,7 @@ class j1Scene;
 class j1Map;
 class j1Player;
 class j1Colliders;
+class j1SceneChange;
 
 class j1App
 {
@@ -51,10 +52,10 @@ public:
 	void SaveGame() const;
 	void GetSaveGames(p2List<p2SString>& list_to_fill) const;
 
-private:
-
 	// Load config file
 	pugi::xml_node LoadConfig(pugi::xml_document&) const;
+
+private:
 
 	// Call modules before each loop iteration
 	void PrepareUpdate();
@@ -87,6 +88,7 @@ public:
 	j1Map*				map;
 	j1Player*			player;
 	j1Colliders*		collider;
+	j1SceneChange*		scenechange;
 
 private:
 

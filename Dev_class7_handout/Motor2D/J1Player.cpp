@@ -7,6 +7,7 @@
 #include "j1Input.h"
 #include "j1Scene.h"
 #include "j1Colliders.h"
+#include "j1SceneChange.h"
 #include "p2Log.h"
 
 
@@ -21,6 +22,7 @@ j1Player::~j1Player()
 
 bool j1Player::Awake(pugi::xml_node & config)
 {
+	LOG("Loading Player");
 	bool ret = true;
 
 	// Player starting point
@@ -67,177 +69,182 @@ bool j1Player::Start()
 
 bool j1Player::Update(float dt)
 {
-	playerCollider.x = playerPos.x;
-	playerCollider.y = playerPos.y;
-	playerCollider.w = playerSize.w;
-	playerCollider.h = playerSize.h;
-
-	App->collider->Collider_Overlay();
-
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) //space
-	{	
-		if (jumping == false)
-		{
-			jumping = true;
-			grounded = false;
-			grid = false;
-			jumpSpeed.y = playerSpeed.y;
-		}
-	} 
-
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) //left
+	if (!dead)
 	{
-		if (grid == true)
-		{
-			playerPos.x -= playerSpeed.x / 2;
-		}
-		left = true;
-		if (playerPos.x - playerSpeed.x <= 0) {
-			playerPos.x = 0;
-		}
-		else
-		{
-			playerPos.x -= playerSpeed.x;
-		}
-		if (wall_left == true && grounded == false) {
-			sliding = true;
-		}
-	}
+		playerCollider.x = playerPos.x;
+		playerCollider.y = playerPos.y;
+		playerCollider.w = playerSize.w;
+		playerCollider.h = playerSize.h;
 
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) //right
-	{
-		if (grid == true) {
-			playerPos.x += playerSpeed.x / 2;
-		}
-		else
-		{
-			right = true;
-			playerSpeed.x = playerSpeed.x;
+		App->collider->Collider_Overlay();
 
-			if (playerPos.x + playerSpeed.x >= (App->map->data.width - 1) * App->map->data.tile_width) {
-				playerPos.x = (App->map->data.width - 1) * App->map->data.tile_width;
+		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) //space
+		{
+			if (jumping == false)
+			{
+				jumping = true;
+				grounded = false;
+				grid = false;
+				jumpSpeed.y = playerSpeed.y;
+			}
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) //left
+		{
+			if (grid == true)
+			{
+				playerPos.x -= playerSpeed.x / 2;
 			}
 			else
 			{
-				playerPos.x += playerSpeed.x;
-			}
-			if (wall_right == true && grounded == false) {
-				sliding = true;
-			}
-		}
-	}
-
-
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP) //left release
-	{ 
-		left = false;
-		sliding = false;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP) //right release
-	{
-		right = false;
-		sliding = false;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) //up
-	{
-		if (grid_collision == true) 
-		{
-			if (grid == false)
-			{
-				grid = true;
-			}
-		}
-		if (grid == true)
-		{
-			playerPos.y -= playerSpeed.x / 2;
-		}
-	}
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) //down
-	{
-		if (grid == true)
-		{
-			playerPos.y += playerSpeed.x / 2;
-		}
-	} 
-
-
-
-	//----------------	
-	if (grounded == true) //grounded
-	{
-		jumping = false;
-		sliding = false;
-	}
-
-	if (grid_collision == false)
-	{
-		grid = false;
-		gravity_active = true;
-	}
-
-	if (grid == true)
-	{
-		gravity_active = false;
-		grounded = false;
-		sliding = false;
-		jumping = false;
-	}
-
-	if (sliding == true)
-	{
-		jumpSpeed.y = 0;
-		grounded = false;
-		grid = false;
-	}
-
-	if (jumping == true) //jumping
-	{
-		gravity_active = true;
-		if (playerPos.y - jumpSpeed.y <= 0)
-		{
-			playerPos.y = 0;
-		}
-		if (jumpSpeed.y > 0)
-		{
-			jumpSpeed.y--;
-			playerPos.y -= jumpSpeed.y;
-		}
-	}
-
-	if (wall_left == true) {
-		playerPos.x += playerSpeed.x;
-		wall_left = false;
-	}
-	if (wall_right == true) {
-		playerPos.x -= playerSpeed.x;
-		wall_right = false;
-	}
-
-	if (gravity_active == true) //gravity
-	{
-		if (playerPos.y + gravity >= (App->map->data.height - 1) * App->map->data.tile_height) {
-			playerPos.y = (App->map->data.height - 1) * App->map->data.tile_height;
-		}
-		else
-		{
-			if (grounded == false && grid == false)
-			{
-				if (sliding == true)
-				{
-					playerPos.y += gravity / 4;
+				left = true;
+				if (playerPos.x - playerSpeed.x <= 0) {
+					playerPos.x = 0;
 				}
-				if (sliding == false)
+				else
 				{
-					playerPos.y += gravity;
+					playerPos.x -= playerSpeed.x;
+				}
+				if (wall_left == true && grounded == false) {
+					sliding = true;
 				}
 			}
 		}
-	}
 
-	sliding = false;
-	grounded = false;
-	grid_collision = false;
-	CameraOnPlayer();
+		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) //right
+		{
+			if (grid == true) {
+				playerPos.x += playerSpeed.x / 2;
+			}
+			else
+			{
+				right = true;
+				playerSpeed.x = playerSpeed.x;
+
+				if (playerPos.x + playerSpeed.x >= (App->map->data.width - 1) * App->map->data.tile_width) {
+					playerPos.x = (App->map->data.width - 1) * App->map->data.tile_width;
+				}
+				else
+				{
+					playerPos.x += playerSpeed.x;
+				}
+				if (wall_right == true && grounded == false) {
+					sliding = true;
+				}
+			}
+		}
+
+
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP) //left release
+		{
+			left = false;
+			sliding = false;
+		}
+		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP) //right release
+		{
+			right = false;
+			sliding = false;
+		}
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) //up
+		{
+			if (grid_collision == true)
+			{
+				if (grid == false)
+				{
+					grid = true;
+					jumping = false;
+				}
+			}
+			if (grid == true)
+			{
+				playerPos.y -= playerSpeed.x / 2;
+			}
+		}
+		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) //down
+		{
+			if (grid == true)
+			{
+				playerPos.y += playerSpeed.x / 2;
+			}
+		}
+
+
+
+		//----------------	
+		if (grounded == true) //grounded
+		{
+			jumping = false;
+			sliding = false;
+		}
+
+		if (grid_collision == false)
+		{
+			grid = false;
+			gravity_active = true;
+		}
+
+		if (grid == true)
+		{
+			gravity_active = false;
+			grounded = false;
+			sliding = false;
+		}
+
+		if (sliding == true)
+		{
+			jumpSpeed.y = 0;
+			grounded = false;
+			grid = false;
+		}
+
+		if (jumping == true) //jumping
+		{
+			gravity_active = true;
+			if (playerPos.y - jumpSpeed.y <= 0)
+			{
+				playerPos.y = 0;
+			}
+			if (jumpSpeed.y > 0)
+			{
+				jumpSpeed.y--;
+				playerPos.y -= jumpSpeed.y;
+			}
+		}
+
+		if (wall_left == true) {
+			playerPos.x += playerSpeed.x;
+			wall_left = false;
+		}
+		if (wall_right == true) {
+			playerPos.x -= playerSpeed.x;
+			wall_right = false;
+		}
+
+		if (gravity_active == true) //gravity
+		{
+			if (playerPos.y + gravity >= (App->map->data.height - 1) * App->map->data.tile_height) {
+				playerPos.y = (App->map->data.height - 1) * App->map->data.tile_height;
+			}
+			else
+			{
+				if (grounded == false && grid == false)
+				{
+					if (sliding == true)
+					{
+						playerPos.y += gravity / 4;
+					}
+					if (sliding == false)
+					{
+						playerPos.y += gravity;
+					}
+				}
+			}
+		}
+
+		sliding = false;
+		grounded = false;
+		grid_collision = false;
+	}
 
 	return true;
 }
@@ -245,7 +252,13 @@ bool j1Player::Update(float dt)
 
 bool j1Player::PostUpdate()
 {
+	if (dead && !App->scenechange->IsChanging())
+	{
+		App->scenechange->ChangeMap(App->scene->currentMap, App->scene->fade_time);
+	}
+
 	App->render->Blit(graph, playerPos.x, playerPos.y, &playerRect);
+	CameraOnPlayer();
 
 	return true;
 }
@@ -339,4 +352,23 @@ bool j1Player::CleanUp()
 
 	return true;
 
+}
+
+void j1Player::Restart()
+{
+	for (p2List_item<ObjectsGroup*>* obj = App->map->data.objLayers.start; obj; obj = obj->next)
+	{
+		if (obj->data->name == ("Collision"))
+		{
+			for (p2List_item<ObjectsData*>* objectdata = obj->data->objects.start; objectdata; objectdata = objectdata->next)
+			{
+				if (objectdata->data->name == "StartPosition")
+				{
+					playerPos.x = objectdata->data->x;
+					playerPos.y = objectdata->data->y;
+				}
+			}
+		}
+	}
+	dead = false;
 }

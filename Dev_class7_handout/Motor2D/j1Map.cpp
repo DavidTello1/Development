@@ -4,6 +4,7 @@
 #include "j1Render.h"
 #include "j1Textures.h"
 #include "j1Map.h"
+#include "j1Scene.h"
 #include <cmath>
 
 
@@ -29,8 +30,45 @@ bool j1Map::Awake(pugi::xml_node& config)
 
 void j1Map::Draw()
 {
-	if(map_loaded == false)
+	if (map_loaded == false)
 		return;
+
+	//SDL_Rect camera = App->render->camera;
+	//for (uint lay = 0; lay < data.layers.count(); lay++)
+	//{
+	//	if (data.layers[lay]->name != "Meta")
+	//	{
+	//		for (uint set = 0; set < data.tilesets.count(); set++)
+	//		{
+	//			for (int y = 0; y < data.height; y++)
+	//			{
+	//				for (int x = 0; x < data.width; x++)
+	//				{
+	//					int tile_id = data.layers[lay]->Get(x, y);
+
+	//					if (tile_id > 0)
+	//					{
+	//						TileSet* tileset = GetTilesetFromTileId(tile_id);
+	//						SDL_Rect r = tileset->GetTileRect(tile_id);
+	//						iPoint pos = MapToWorld(x, y);
+	//						if (data.layers[lay]->parallaxSpeed == 1)
+	//						{
+	//							if (pos.x >= camera.x - 32 && pos.x <= camera.x + camera.w &&
+	//								pos.y >= camera.y - 32 && pos.y <= camera.y + camera.h)
+	//							{
+	//								App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE, -data.layers[lay]->parallaxSpeed);
+	//							}
+	//						}
+	//						else 
+	//						{
+	//							App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE, -data.layers[lay]->parallaxSpeed);
+	//						}
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
 
 	p2List_item<MapLayer*>* item = data.layers.start;
 
@@ -58,6 +96,7 @@ void j1Map::Draw()
 			}
 		}
 	}
+
 }
 
 int Properties::Get(const char* value, int default_value) const
@@ -76,7 +115,6 @@ int Properties::Get(const char* value, int default_value) const
 
 TileSet* j1Map::GetTilesetFromTileId(int id) const
 {
-	// TODO 3: Complete this method so we pick the right
 	// Tileset based on a tile id
 	p2List_item<TileSet*>* item = data.tilesets.start;
 	TileSet* set = item->data;
@@ -182,6 +220,18 @@ bool j1Map::CleanUp()
 	}
 	data.layers.clear();
 
+	//Remove all object layers
+	p2List_item<ObjectsGroup*>* item3;
+	item3 = data.objLayers.start;
+
+	while (item3 != NULL)
+	{
+		RELEASE(item3->data);
+		item3 = item3->next;
+	}
+	data.objLayers.clear();
+
+
 	// Clean up the pugui tree
 	map_file.reset();
 
@@ -239,7 +289,7 @@ bool j1Map::Load(const char* file_name)
 			data.layers.add(lay);
 	}
 
-	//Load objects info
+	//Load objects info ----------------------------------------------
 	pugi::xml_node group;
 	for (group = map_file.child("map").child("objectgroup"); group && ret; group = group.next_sibling("objectgroup"))
 	{
@@ -432,6 +482,8 @@ bool j1Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	layer->width = node.attribute("width").as_int();
 	layer->height = node.attribute("height").as_int();
 	LoadProperties(node, layer->properties);
+	layer->parallaxSpeed = node.child("properties").child("property").attribute("value").as_float(0.0f);
+
 	pugi::xml_node layer_data = node.child("data");
 
 	if(layer_data == NULL)
@@ -461,46 +513,51 @@ bool j1Map::LoadObjectLayers(pugi::xml_node & node, ObjectsGroup * group)
 
 	group->name = node.attribute("name").as_string();
 
-	for (pugi::xml_node& obj = node.child("object"); obj && ret; obj = obj.next_sibling("object"))
+	for (pugi::xml_node& object = node.child("object"); object && ret; object = object.next_sibling("object"))
 	{
 		ObjectsData* data = new ObjectsData;
 
-		data->height = obj.attribute("height").as_uint();
-		data->width = obj.attribute("width").as_uint();
-		data->x = obj.attribute("x").as_uint();
-		data->y = obj.attribute("y").as_uint();
-		data->name = obj.attribute("name").as_string();
-		data->type = obj.attribute("type").as_string();
+		data->height = object.attribute("height").as_uint();
+		data->width = object.attribute("width").as_uint();
+		data->x = object.attribute("x").as_uint();
+		data->y = object.attribute("y").as_uint();
+		data->name = object.attribute("name").as_string();
+		data->type = object.attribute("type").as_string();
 
 		group->objects.add(data);
 	}
-
 	return ret;
 }
 
 // Load a group of properties from a node and fill a list with it
 bool j1Map::LoadProperties(pugi::xml_node& node, Properties& properties)
 {
-	// TODO 6: Fill in the method to fill the custom properties from 
-	// an xml_node
 	bool ret = false;
 
 	pugi::xml_node data = node.child("properties");
 
 	if (data != NULL)
 	{
-		pugi::xml_node prop;
+		pugi::xml_node properties_node;
 
-		for (prop = data.child("property"); prop; prop = prop.next_sibling("property"))
+		for (properties_node = data.child("property"); properties_node; properties_node = properties_node.next_sibling("property"))
 		{
-			Properties::Property* p = new Properties::Property();
+			Properties::Property* property = new Properties::Property();
 
-			p->name = prop.attribute("name").as_string();
-			p->value = prop.attribute("value").as_int();
+			property->name = properties_node.attribute("name").as_string();
+			property->value = properties_node.attribute("value").as_int();
 
-			properties.list.add(p);
+			properties.list.add(property);
 		}
 	}
-
 	return ret;
+}
+
+bool j1Map::SwitchMaps(p2SString* new_map)
+{
+	CleanUp();
+	App->scene->to_end = false;
+	Load(new_map->GetString());
+
+	return true;
 }

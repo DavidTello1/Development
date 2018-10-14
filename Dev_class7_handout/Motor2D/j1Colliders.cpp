@@ -5,22 +5,17 @@
 #include "j1Textures.h"
 #include "j1Map.h"
 #include "j1Player.h"
+#include "j1Scene.h"
 #include "j1Colliders.h"
 
 
 j1Colliders::j1Colliders()
 {
+	name.create("colliders");
 }
 
 j1Colliders::~j1Colliders()
 {
-}
-
-bool j1Colliders::Awake(pugi::xml_node& config)
-{
-	bool ret = true;
-
-	return ret;
 }
 
 bool j1Colliders::Update(float dt) //Draws the colliders
@@ -98,6 +93,7 @@ bool j1Colliders::Collider_Overlay()
 					else if (objectdata->data->name == "Spikes")
 					{
 						App->player->dead = true;
+
 					}
 					else if (objectdata->data->name == "Ceiling")
 					{
@@ -106,6 +102,10 @@ bool j1Colliders::Collider_Overlay()
 					else if (objectdata->data->name == "Grid")
 					{
 						App->player->grid_collision = true;
+					}
+					else if (objectdata->data->name == "Finish")
+					{
+						App->scene->change = true;
 					}
 				}
 			}
@@ -117,6 +117,5 @@ bool j1Colliders::Collider_Overlay()
 bool j1Colliders::CleanUp()
 {
 	LOG("Unloading colliders");
-
 	return true;
 }

@@ -40,13 +40,14 @@ public:
 
 
 	// Positions the player in the start of the current level
-	// void Restart();
+	 void Restart();
 
 
 	// Centers the camera on the player
 	bool CameraOnPlayer();
 
 public: 
+	bool godmode;
 
 	iPoint playerPos;
 	iPoint playerSpeed;

@@ -6,10 +6,6 @@
 #include "p2Point.h"
 #include "j1Module.h"
 
-// TODO 5: Create a generic structure to hold properties
-// TODO 7: Our custom properties should have one method
-// to ask for the value of a custom property
-// ----------------------------------------------------
 struct Properties
 {
 	struct Property
@@ -78,15 +74,6 @@ struct ObjectsGroup
 	p2List<ObjectsData*>	objects;
 	~ObjectsGroup()
 	{
-		p2List_item<ObjectsData*>* item;
-		item = objects.start;
-
-		while (item != NULL)
-		{
-			RELEASE(item->data);
-			item = item->next;
-		}
-
 		objects.clear();
 	}
 };
@@ -155,6 +142,9 @@ public:
 	// Load new map
 	bool Load(const char* path);
 
+	//Unloads the current map and loads a new one 
+	bool SwitchMaps(p2SString* new_map);
+
 	iPoint MapToWorld(int x, int y) const;
 	iPoint WorldToMap(int x, int y) const;
 
@@ -174,6 +164,7 @@ public:
 	TileSet* GetTilesetFromTileId(int id) const;
 	ObjectsData objectsdata;
 
+	bool debug = false;
 
 private:
 
