@@ -5,6 +5,7 @@
 #include "j1Textures.h"
 #include "j1Map.h"
 #include "j1Scene.h"
+#include "j1Colliders.h"
 #include <cmath>
 
 
@@ -96,6 +97,45 @@ void j1Map::Draw()
 			}
 		}
 	}
+	if (debug == true)
+	{
+		SDL_Rect collisions;
+		for (p2List_item<ObjectsGroup*>* object = App->map->data.objLayers.start; object; object = object->next)
+		{
+			if (object->data->name == ("Collision"))
+			{
+				for (p2List_item<ObjectsData*>* objectdata = object->data->objects.start; objectdata; objectdata = objectdata->next)
+				{
+					if (objectdata->data->name == "Grid")
+					{
+						collisions.h = objectdata->data->height, collisions.w = objectdata->data->width, collisions.x = objectdata->data->x, collisions.y = objectdata->data->y;
+						App->render->DrawQuad(collisions, 0, 0, 255, 50); //blue
+					}
+					else if (objectdata->data->name == "Floor")
+					{
+						collisions.h = objectdata->data->height, collisions.w = objectdata->data->width, collisions.x = objectdata->data->x, collisions.y = objectdata->data->y;
+						App->render->DrawQuad(collisions, 0, 255, 0, 50); //green
+					}
+					else if (objectdata->data->name == "Spikes")
+					{
+						collisions.h = objectdata->data->height, collisions.w = objectdata->data->width, collisions.x = objectdata->data->x, collisions.y = objectdata->data->y;
+						App->render->DrawQuad(collisions, 255, 0, 0, 50); //red
+					}
+					else if (objectdata->data->name == "Ceiling")
+					{
+						collisions.h = objectdata->data->height, collisions.w = objectdata->data->width, collisions.x = objectdata->data->x, collisions.y = objectdata->data->y;
+						App->render->DrawQuad(collisions, 0, 0, 0, 50); //black
+					}
+					else if (objectdata->data->name == "Wall")
+					{
+						collisions.h = objectdata->data->height, collisions.w = objectdata->data->width, collisions.x = objectdata->data->x, collisions.y = objectdata->data->y;
+						App->render->DrawQuad(collisions, 255, 255, 0, 50); //yellow
+					}
+				}
+			}
+		}
+	}
+
 
 }
 
@@ -556,6 +596,7 @@ bool j1Map::LoadProperties(pugi::xml_node& node, Properties& properties)
 
 bool j1Map::SwitchMaps(p2SString* new_map)
 {
+	App->collider->CleanUp();
 	CleanUp();
 	App->scene->to_end = false;
 	Load(new_map->GetString());
