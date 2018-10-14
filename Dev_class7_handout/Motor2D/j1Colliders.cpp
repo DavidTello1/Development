@@ -92,12 +92,14 @@ bool j1Colliders::Collider_Overlay()
 					}
 					else if (objectdata->data->name == "Spikes")
 					{
-						App->player->dead = true;
-
+						if (App->player->godmode == false)
+						{
+							App->player->dead = true;
+						}
 					}
 					else if (objectdata->data->name == "Ceiling")
 					{
- 						App->player->jumpSpeed.y = 0;
+						App->player->ceiling = true;
 					}
 					else if (objectdata->data->name == "Grid")
 					{

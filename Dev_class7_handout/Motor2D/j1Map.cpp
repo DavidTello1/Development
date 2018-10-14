@@ -77,64 +77,86 @@ void j1Map::Draw()
 	{
 		layer = item->data;
 
-		if (layer->properties.Get("Nodraw") != 0)
-			continue;
-
-		for (int y = 0; y < data.height; ++y)
+		if (layer->name != "Meta")
 		{
-			for (int x = 0; x < data.width; ++x)
+			for (int y = 0; y < data.height; ++y)
 			{
-				int tile_id = layer->Get(x, y);
-				if (tile_id > 0)
+				for (int x = 0; x < data.width; ++x)
 				{
-					TileSet* tileset = GetTilesetFromTileId(tile_id);
+					int tile_id = layer->Get(x, y);
+					if (tile_id > 0)
+					{
+						TileSet* tileset = GetTilesetFromTileId(tile_id);
 
-					SDL_Rect r = tileset->GetTileRect(tile_id);
-					iPoint pos = MapToWorld(x, y);
+						SDL_Rect r = tileset->GetTileRect(tile_id);
+						iPoint pos = MapToWorld(x, y);
 
-					App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+						App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE);
+					}
 				}
 			}
 		}
-	}
-	if (debug == true)
-	{
-		SDL_Rect collisions;
-		for (p2List_item<ObjectsGroup*>* object = App->map->data.objLayers.start; object; object = object->next)
+		else
 		{
-			if (object->data->name == ("Collision"))
+			if (debug == true)
 			{
-				for (p2List_item<ObjectsData*>* objectdata = object->data->objects.start; objectdata; objectdata = objectdata->next)
+				for (int y = 0; y < data.height; ++y)
 				{
-					if (objectdata->data->name == "Grid")
+					for (int x = 0; x < data.width; ++x)
 					{
-						collisions.h = objectdata->data->height, collisions.w = objectdata->data->width, collisions.x = objectdata->data->x, collisions.y = objectdata->data->y;
-						App->render->DrawQuad(collisions, 0, 0, 255, 50); //blue
-					}
-					else if (objectdata->data->name == "Floor")
-					{
-						collisions.h = objectdata->data->height, collisions.w = objectdata->data->width, collisions.x = objectdata->data->x, collisions.y = objectdata->data->y;
-						App->render->DrawQuad(collisions, 0, 255, 0, 50); //green
-					}
-					else if (objectdata->data->name == "Spikes")
-					{
-						collisions.h = objectdata->data->height, collisions.w = objectdata->data->width, collisions.x = objectdata->data->x, collisions.y = objectdata->data->y;
-						App->render->DrawQuad(collisions, 255, 0, 0, 50); //red
-					}
-					else if (objectdata->data->name == "Ceiling")
-					{
-						collisions.h = objectdata->data->height, collisions.w = objectdata->data->width, collisions.x = objectdata->data->x, collisions.y = objectdata->data->y;
-						App->render->DrawQuad(collisions, 0, 0, 0, 50); //black
-					}
-					else if (objectdata->data->name == "Wall")
-					{
-						collisions.h = objectdata->data->height, collisions.w = objectdata->data->width, collisions.x = objectdata->data->x, collisions.y = objectdata->data->y;
-						App->render->DrawQuad(collisions, 255, 255, 0, 50); //yellow
+						int tile_id = layer->Get(x, y);
+						if (tile_id > 0)
+						{
+							TileSet* tileset = GetTilesetFromTileId(tile_id);
+
+							SDL_Rect r = tileset->GetTileRect(tile_id);
+							iPoint pos = MapToWorld(x, y);
+
+							App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE);
+						}
 					}
 				}
 			}
 		}
 	}
+	//if (debug == true)
+	//{
+	//	SDL_Rect collisions;
+	//	for (p2List_item<ObjectsGroup*>* object = App->map->data.objLayers.start; object; object = object->next)
+	//	{
+	//		if (object->data->name == ("Collision"))
+	//		{
+	//			for (p2List_item<ObjectsData*>* objectdata = object->data->objects.start; objectdata; objectdata = objectdata->next)
+	//			{
+	//				if (objectdata->data->name == "Grid")
+	//				{
+	//					collisions.h = objectdata->data->height, collisions.w = objectdata->data->width, collisions.x = objectdata->data->x, collisions.y = objectdata->data->y;
+	//					App->render->DrawQuad(collisions, 0, 0, 255, 50); //blue
+	//				}
+	//				else if (objectdata->data->name == "Floor")
+	//				{
+	//					collisions.h = objectdata->data->height, collisions.w = objectdata->data->width, collisions.x = objectdata->data->x, collisions.y = objectdata->data->y;
+	//					App->render->DrawQuad(collisions, 0, 255, 0, 50); //green
+	//				}
+	//				else if (objectdata->data->name == "Spikes")
+	//				{
+	//					collisions.h = objectdata->data->height, collisions.w = objectdata->data->width, collisions.x = objectdata->data->x, collisions.y = objectdata->data->y;
+	//					App->render->DrawQuad(collisions, 255, 0, 0, 50); //red
+	//				}
+	//				else if (objectdata->data->name == "Ceiling")
+	//				{
+	//					collisions.h = objectdata->data->height, collisions.w = objectdata->data->width, collisions.x = objectdata->data->x, collisions.y = objectdata->data->y;
+	//					App->render->DrawQuad(collisions, 0, 0, 0, 50); //black
+	//				}
+	//				else if (objectdata->data->name == "Wall")
+	//				{
+	//					collisions.h = objectdata->data->height, collisions.w = objectdata->data->width, collisions.x = objectdata->data->x, collisions.y = objectdata->data->y;
+	//					App->render->DrawQuad(collisions, 255, 255, 0, 50); //yellow
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
 
 
 }

@@ -87,6 +87,10 @@ bool j1Player::Update(float dt)
 				grid = false;
 				jumpSpeed.y = playerSpeed.y;
 			}
+			if (godmode == true)
+			{
+				jumpSpeed.y = playerSpeed.y;
+			}
 		}
 
 		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) //left
@@ -155,7 +159,7 @@ bool j1Player::Update(float dt)
 					jumping = false;
 				}
 			}
-			if (grid == true)
+			if (grid == true && ceiling == false)
 			{
 				playerPos.y -= playerSpeed.x / 2;
 			}
@@ -177,20 +181,20 @@ bool j1Player::Update(float dt)
 			sliding = false;
 		}
 
-		if (grid_collision == false)
+		if (grid_collision == false) //grid collision
 		{
 			grid = false;
 			gravity_active = true;
 		}
 
-		if (grid == true)
+		if (grid == true) //grid
 		{
 			gravity_active = false;
 			grounded = false;
 			sliding = false;
 		}
 
-		if (sliding == true)
+		if (sliding == true) //sliding
 		{
 			jumpSpeed.y = 0;
 			grounded = false;
@@ -211,11 +215,19 @@ bool j1Player::Update(float dt)
 			}
 		}
 
-		if (wall_left == true) {
+		if (ceiling == true)
+		{
+			App->player->jumpSpeed.y = 0;
+		}
+
+		if (wall_left == true) //wall left
+		{
 			playerPos.x += playerSpeed.x;
 			wall_left = false;
 		}
-		if (wall_right == true) {
+
+		if (wall_right == true) //wall right
+		{
 			playerPos.x -= playerSpeed.x;
 			wall_right = false;
 		}
@@ -244,6 +256,7 @@ bool j1Player::Update(float dt)
 		sliding = false;
 		grounded = false;
 		grid_collision = false;
+		ceiling = false;
 	}
 
 	return true;

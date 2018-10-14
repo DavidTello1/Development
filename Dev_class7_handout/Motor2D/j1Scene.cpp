@@ -96,7 +96,6 @@ bool j1Scene::Update(float dt)
 	{
 		App->player->godmode = !App->player->godmode;
 	}
-
 	App->map->Draw();
 
 	int x, y;
