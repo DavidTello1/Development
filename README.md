@@ -1,4 +1,4 @@
-# Development
+# GRIP OR SLIP
 This is a little game made by two second year students of the Videogame Design and Development degree It's just a small platformer with two levels, where the player can move right and left, jump, and grip. The game has been made using C++, SDL and pugi libraries. The maps have been made using Tiled.
 
 ### Controls
@@ -26,6 +26,7 @@ https://github.com/DavidTello1/Development
 ### Disclosure
 We do not own any of the sprites or tilesets presented in this game.
 
+-Player Texture: http://es.clubpenguin.wikia.com/wiki/Archivo:Penguin_Player_card_look_1222333.png
 
 ## License
 ### MIT License
