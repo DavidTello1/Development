@@ -11,7 +11,7 @@
 
 j1Scene_2::j1Scene_2() : j1Module()
 {
-	name.create("scene");
+	name.create("scene2");
 }
 
 // Destructor
@@ -21,7 +21,7 @@ j1Scene_2::~j1Scene_2()
 // Called before render is available
 bool j1Scene_2::Awake()
 {
-	LOG("Loading Scene");
+	LOG("Loading Scene2");
 	bool ret = true;
 
 	return ret;
@@ -95,7 +95,7 @@ bool j1Scene_2::PostUpdate()
 // Called before quitting
 bool j1Scene_2::CleanUp()
 {
-	LOG("Freeing scene");
+	LOG("Freeing scene2");
 
 	return true;
 }
