@@ -47,7 +47,7 @@ public:
 	bool CameraOnPlayer();
 
 public: 
-	bool godmode;
+	bool godmode = false;
 
 	iPoint playerPos;
 	iPoint playerSpeed;
