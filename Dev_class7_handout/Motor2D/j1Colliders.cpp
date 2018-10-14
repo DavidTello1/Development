@@ -117,5 +117,23 @@ bool j1Colliders::Collider_Overlay()
 bool j1Colliders::CleanUp()
 {
 	LOG("Unloading colliders");
+	p2List_item<ObjectsGroup*>* object;
+	p2List_item<ObjectsData*>* objectdata;
+
+	object = App->map->data.objLayers.start;
+	objectdata = object->data->objects.start;
+
+	while (object != NULL)
+	{
+		while (objectdata != NULL) 
+		{
+			RELEASE(objectdata->data);
+			objectdata = objectdata->next;
+		}
+		RELEASE(object->data);
+		object = object->next;
+	}
+	App->map->data.objLayers.start;
+
 	return true;
 }

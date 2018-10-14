@@ -5,6 +5,9 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "j1Module.h"
+#include "j1Colliders.h"
+
+class j1Colliders;
 
 struct Properties
 {

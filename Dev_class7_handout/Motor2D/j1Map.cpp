@@ -556,6 +556,7 @@ bool j1Map::LoadProperties(pugi::xml_node& node, Properties& properties)
 
 bool j1Map::SwitchMaps(p2SString* new_map)
 {
+	App->collider->CleanUp();
 	CleanUp();
 	App->scene->to_end = false;
 	Load(new_map->GetString());
