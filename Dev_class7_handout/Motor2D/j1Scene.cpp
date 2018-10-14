@@ -80,13 +80,13 @@ bool j1Scene::Update(float dt)
 		Load_level(1);
 		currentMap = 1;
 	}
-	else if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) //Load game state
-	{
-		App->LoadGame();
-	}
-	else if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) //Save game state
+	else if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) //Save game state
 	{
 		App->SaveGame();
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) //Load game state
+	{
+		App->LoadGame();
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) //View colliders
 	{

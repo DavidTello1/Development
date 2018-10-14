@@ -204,6 +204,7 @@ bool j1Map::CleanUp()
 
 	while(item != NULL)
 	{
+		SDL_DestroyTexture(item->data->texture);
 		RELEASE(item->data);
 		item = item->next;
 	}

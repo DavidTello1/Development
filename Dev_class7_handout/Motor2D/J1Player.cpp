@@ -290,19 +290,16 @@ bool j1Player::Save(pugi::xml_node& data) const
 	bool ret = true;
 	// pugi::xml_node position = data.append_child("position");
 
-	int i = data.child("player").child("position").attribute("x").as_int();
-	LOG("var: %d", i);
-
 	data.append_child("position").append_attribute("x") = playerPos.x;
 	data.child("position").append_attribute("y") = playerPos.y;
-	/*data.child("player").append_child("gravity").append_attribute("value") = gravity;
-	data.child("player").append_child("speed").append_attribute("x") = playerSpeed.x;
-	data.child("player").append_child("speed").append_attribute("y") = playerSpeed.y;
-	data.child("player").append_child("grounded").append_attribute("value") = grounded;
-	data.child("player").append_child("sliding").append_attribute("value") = sliding;
-	data.child("player").append_child("jumping").append_attribute("value") = jumping;
-	data.child("player").append_child("grid").append_attribute("value") = grid;
-	data.child("player").append_child("gravity_active").append_attribute("value") = gravity_active;*/
+	data.append_child("gravity").append_attribute("value") = gravity;
+	data.append_child("speed").append_attribute("x") = playerSpeed.x;
+	data.child("speed").append_attribute("y") = playerSpeed.y;
+	data.append_child("grounded").append_attribute("value") = grounded;
+	data.append_child("sliding").append_attribute("value") = sliding;
+	data.append_child("jumping").append_attribute("value") = jumping;
+	data.append_child("grid").append_attribute("value") = grid;
+	data.append_child("gravity_active").append_attribute("value") = gravity_active;
 
 	LOG("---Player Saved");
 	return ret;

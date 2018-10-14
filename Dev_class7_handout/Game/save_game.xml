@@ -4,20 +4,24 @@
 	<window />
 	<textures />
 	<audio />
-	<scene />
+	<scene>
+		<currentMap num="0" />
+	</scene>
 	<map />
-	<player>
-		<position x="64" y="1000" />
-		<gravity value="8" />
-		<speed x="4" y="24" />
-		<grounded value="false" />
-		<sliding value="false" />
-		<jumping value="true" />
-		<grid value="false" />
-    <gravity_active value="true" />
-    <size width="32"  height="32" />
-	</player>
+  <player>
+    <size width="32" height="32"/>
+    <position x="64" y="1000"/>
+    <gravity value="8"/>
+    <speed x="4" y="24"/>
+    <grounded value ="false"/>
+    <sliding value="false"/>
+    <jumping value="true"/>
+    <grid value="false"/>
+    <gravity_active value="true"/>
+  </player>
+	<colliders />
+	<scenechange />
 	<renderer>
-		<camera x="0" y="467" />
+		<camera x="0" y="448" />
 	</renderer>
 </game_state>

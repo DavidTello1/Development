@@ -368,15 +368,17 @@ bool j1App::SavegameNow() const
 
 	while(item != NULL && ret == true)
 	{
-		ret = item->data->Save(root.append_child(item->data->name.GetString()));
+		if (item->data->active)
+		{
+			ret = item->data->Save(root.append_child(item->data->name.GetString()));
+		}
 		item = item->next;
 	}
 
 	if(ret == true)
 	{
-		std::stringstream stream;
-		data.save(stream);
 
+		data.save_file(save_game.GetString());
 		// we are done, so write data to disk
 		//fs->Save(save_game.GetString(), stream.str().c_str(), stream.str().length());
 		LOG("... finished saving", save_game.GetString());
