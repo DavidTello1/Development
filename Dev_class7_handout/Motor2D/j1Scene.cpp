@@ -59,7 +59,7 @@ bool j1Scene::Start()
 // Called each loop iteration
 bool j1Scene::PreUpdate()
 {
-	LOG("IsChanging: %i", App->scenechange->IsChanging());
+	//LOG("IsChanging: %i", App->scenechange->IsChanging());
 	return true;
 }
 
@@ -82,11 +82,11 @@ bool j1Scene::Update(float dt)
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) //Load game state
 	{
-//		App->LoadGame();
+		App->LoadGame();
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) //Save game state
 	{
-//		App->SaveGame();
+		App->SaveGame();
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) //View colliders
 	{

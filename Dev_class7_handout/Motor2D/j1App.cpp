@@ -50,6 +50,9 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(render);
 
 
+	save_game = load_game = "save_game.xml";
+
+
 }
 
 // Destructor
@@ -76,7 +79,6 @@ void j1App::AddModule(j1Module* module)
 // Called before render is available
 bool j1App::Awake()
 {
-	save_game = load_game = "save_game.xml";
 	pugi::xml_document	config_file;
 	pugi::xml_node		config;
 	pugi::xml_node		app_config;

@@ -33,7 +33,7 @@
     <speed x="4" y="24"/>
     <grounded value ="false"/>
     <sliding value="false"/>
-    <jumping value="false"/>
+    <jumping value="true"/>
     <grid value="false"/>
     <gravity_active value="true"/>
   </player>
