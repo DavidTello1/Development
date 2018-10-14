@@ -269,8 +269,6 @@ bool j1Player::Load(pugi::xml_node& data)
 {
 	bool ret = true;
 
-	playerSize.w = data.child("size").attribute("width").as_int();
-	playerSize.h = data.child("size").attribute("height").as_int();
 	playerPos.x = data.child("position").attribute("x").as_int();
 	playerPos.y = data.child("position").attribute("y").as_int();
 	gravity = data.child("gravity").attribute("value").as_int();
@@ -281,12 +279,7 @@ bool j1Player::Load(pugi::xml_node& data)
 	jumping = data.child("jumping").attribute("value").as_bool();
 	grid = data.child("grid").attribute("value").as_bool();
 	gravity_active = data.child("gravity_active").attribute("value").as_bool();
-
-	playerRect.x = 0;
-	playerRect.y = 0;
-	playerRect.h = playerSize.h;
-	playerRect.w = playerSize.w;
-
+	
 	LOG("--- Player Loaded");
 	return ret;
 }
@@ -295,20 +288,21 @@ bool j1Player::Load(pugi::xml_node& data)
 bool j1Player::Save(pugi::xml_node& data) const
 {
 	bool ret = true;
-	data.append_child("player");
+	// pugi::xml_node position = data.append_child("position");
 
-	data.child("player").append_child("size").append_attribute("width") = playerSize.w;
-	data.child("player").append_child("size").append_attribute("height") = playerSize.h;
-	data.child("player").append_child("position").append_attribute("x") = playerPos.x;
-	data.child("player").append_child("position").append_attribute("y") = playerPos.y;
-	data.child("player").append_child("gravity").append_attribute("value") = gravity;
+	int i = data.child("player").child("position").attribute("x").as_int();
+	LOG("var: %d", i);
+
+	data.append_child("position").append_attribute("x") = playerPos.x;
+	data.child("position").append_attribute("y") = playerPos.y;
+	/*data.child("player").append_child("gravity").append_attribute("value") = gravity;
 	data.child("player").append_child("speed").append_attribute("x") = playerSpeed.x;
 	data.child("player").append_child("speed").append_attribute("y") = playerSpeed.y;
 	data.child("player").append_child("grounded").append_attribute("value") = grounded;
 	data.child("player").append_child("sliding").append_attribute("value") = sliding;
 	data.child("player").append_child("jumping").append_attribute("value") = jumping;
 	data.child("player").append_child("grid").append_attribute("value") = grid;
-	data.child("player").append_child("gravity_active").append_attribute("value") = gravity_active;
+	data.child("player").append_child("gravity_active").append_attribute("value") = gravity_active;*/
 
 	LOG("---Player Saved");
 	return ret;

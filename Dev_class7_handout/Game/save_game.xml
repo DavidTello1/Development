@@ -7,22 +7,16 @@
 	<scene />
 	<map />
 	<player>
-		<player>
-			<size width="32" />
-			<size height="32" />
-			<position x="64" />
-			<position y="1153" />
-			<gravity value="8" />
-			<speed x="4" />
-			<speed y="24" />
-			<grounded value="false" />
-			<sliding value="false" />
-			<jumping value="false" />
-			<grid value="false" />
-			<gravity_active value="true" />
-		</player>
+		<position x="64" y="1000" />
+		<gravity value="8" />
+		<speed x="4" y="24" />
+		<grounded value="false" />
+		<sliding value="false" />
+		<jumping value="true" />
+		<grid value="false" />
+    <gravity_active value="true" />
+    <size width="32"  height="32" />
 	</player>
-	<:anonymous />
 	<renderer>
 		<camera x="0" y="467" />
 	</renderer>
