@@ -1,17 +1,7 @@
 # Development
-This is a little game made by two second year students of the Videogame Design and Development degree It's just a small platformer with two levels, where the player can move right and left, jump, and dash. The game has been made using C++, using SDL and pugi libraries. The maps have been made using Tiled.
+This is a little game made by two second year students of the Videogame Design and Development degree It's just a small platformer with two levels, where the player can move right and left, jump, and grip. The game has been made using C++, SDL and pugi libraries. The maps have been made using Tiled.
 
-2.0 Update:
-
-We have improved the game by adding framerate cap and selection(at 30 by default), performance analyisis with brofiler, and an entity system which can be seen at the pdf inside the release. We also have added enemies that can pathfind to the player, and the hability to stop time.
-
-3.0 Update
-
-We have added an Intro screen before the game and UI. The UI System can be checked in the pdf file inside the release In the Intro screen, the player can start a new gameload a saved game(if possible) change the volume or check the authors and the license. While playing, the player will have a clock that indicates the state of the ZA WARUDO hability a lifebar with the remaining lifes, and counters for the time the pickups(we have also added those) and the score.
-
-The score is calculated by the number of pickups100 - current time10 - lost lives*50.
-
-Controls
+###Controls
 -Movement with 'A' (left) 'D' (right) keys.
 
 -Jump with spacebar.
@@ -22,23 +12,23 @@ Controls
 
 -Close Game wit ESC.
 
-Debug Controls
+###Debug Controls
 F1: Load the first level. F2: Restart the current level. F3: Load the second level. F5: Load the saved game. F6: Save the current game. F9: View collider logic. F10: Activate/Deactivate God Mode.
 
-Autors
+###Autors
 -David Tello Panea
 
 -Marc Garcia Reig
 
-Webpage
+###Webpage
 https://github.com/DavidTello1/Development
 
-Disclosure
+###Disclosure
 We do not own any of the sprites or tilesets presented in this game.
 
 
-License
-MIT License
+##License
+###MIT License
 
 Copyright (c) [2017] [Jaume Surís Valhondo, Lorién Portella López]
 
