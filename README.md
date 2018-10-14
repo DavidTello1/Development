@@ -1,7 +1,7 @@
 # Development
 This is a little game made by two second year students of the Videogame Design and Development degree It's just a small platformer with two levels, where the player can move right and left, jump, and grip. The game has been made using C++, SDL and pugi libraries. The maps have been made using Tiled.
 
-###Controls
+### Controls
 -Movement with 'A' (left) 'D' (right) keys.
 
 -Jump with spacebar.
@@ -12,23 +12,23 @@ This is a little game made by two second year students of the Videogame Design a
 
 -Close Game wit ESC.
 
-###Debug Controls
+### Debug Controls
 F1: Load the first level. F2: Restart the current level. F3: Load the second level. F5: Load the saved game. F6: Save the current game. F9: View collider logic. F10: Activate/Deactivate God Mode.
 
-###Autors
+### Autors
 -David Tello Panea
 
 -Marc Garcia Reig
 
-###Webpage
+### Webpage
 https://github.com/DavidTello1/Development
 
-###Disclosure
+### Disclosure
 We do not own any of the sprites or tilesets presented in this game.
 
 
-##License
-###MIT License
+## License
+### MIT License
 
 Copyright (c) [2017] [Jaume Surís Valhondo, Lorién Portella López]
 
