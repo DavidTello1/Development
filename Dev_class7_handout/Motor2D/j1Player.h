@@ -68,6 +68,7 @@ public:
 	bool wall_left, wall_right;
 	bool gravity_active;
 	bool grid_collision;
+	bool top_grid;
 	bool ceiling;
 
 	SDL_Rect playerCollider;

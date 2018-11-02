@@ -59,7 +59,7 @@ bool j1Scene::Start()
 // Called each loop iteration
 bool j1Scene::PreUpdate()
 {
-	//LOG("IsChanging: %i", App->scenechange->IsChanging());
+	LOG("IsChanging: %i", App->scenechange->IsChanging());
 	return true;
 }
 

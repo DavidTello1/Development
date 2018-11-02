@@ -18,30 +18,6 @@ j1Colliders::~j1Colliders()
 {
 }
 
-bool j1Colliders::Update(float dt) //Draws the colliders
-{
-	bool ret = true;
-
-	for (p2List_item<ObjectsGroup*>* object = App->map->data.objLayers.start; object; object = object->next)
-	{
-		if (object->data->name == ("Collision"))
-		{
-			for (p2List_item<ObjectsData*>* objectdata = object->data->objects.start; objectdata; objectdata = objectdata->next)
-			{
-				SDL_Rect Collider_new;
-				Collider_new = Collider;
-				Collider_new.x = objectdata->data->x;
-				Collider_new.y = objectdata->data->y;
-				Collider_new.w = objectdata->data->width;
-				Collider_new.h = objectdata->data->height;
-			}
-		}
-	}
-
-	return ret;
-}
-
-
 bool j1Colliders::Collider_Overlay()
 {
 	bool ret = true;
@@ -75,7 +51,7 @@ bool j1Colliders::Collider_Overlay()
 							App->player->wall_right = true;
 						}
 					}
-					else if (objectdata->data->name == "Floor") //
+					else if (objectdata->data->name == "Floor")
 					{
 						if (App->player->playerPos.y + App->player->playerCollider.h - App->player->gravity <= ObjectRect.y)
 						{
@@ -104,6 +80,10 @@ bool j1Colliders::Collider_Overlay()
 					else if (objectdata->data->name == "Grid")
 					{
 						App->player->grid_collision = true;
+						if (App->player->playerCollider.y + (2 * App->player->playerCollider.h / 3) <= objectdata->data->y)
+						{
+							App->player->top_grid = true;
+						}
 					}
 					else if (objectdata->data->name == "Finish")
 					{

@@ -161,8 +161,11 @@ bool j1Player::Update(float dt)
 			}
 			if (grid == true && ceiling == false)
 			{
-				playerPos.y -= playerSpeed.x / 2;
-			}
+				if (top_grid == false)
+					{
+						playerPos.y -= playerSpeed.x / 2;
+					}
+				}
 		}
 		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) //down
 		{
@@ -256,6 +259,7 @@ bool j1Player::Update(float dt)
 		sliding = false;
 		grounded = false;
 		grid_collision = false;
+		top_grid = false;
 		ceiling = false;
 	}
 
@@ -320,30 +324,25 @@ bool j1Player::Save(pugi::xml_node& data) const
 
 bool j1Player::CameraOnPlayer()
 {
-	uint winWidth = 0, winHeight = 0;
-	App->win->GetWindowSize(winWidth, winHeight); // w = 1024, h = 768
-	SDL_Rect mapSize;
-	App->render->GetViewPort(mapSize);
+	App->render->camera.x = playerPos.x - App->render->camera.w / 3;
+	App->render->camera.y = playerPos.y - App->render->camera.h / 2;
 
-	App->render->camera.x = playerPos.x - winWidth / 2 + playerRect.w / 2;
-	App->render->camera.y = playerPos.y - winHeight / 2 + playerRect.h / 2;
-
-	if (App->render->camera.x < mapSize.x) // left limit
+	if (App->render->camera.x < 0) // left limit
 	{ 
-		App->render->camera.x = mapSize.x;
+		App->render->camera.x = 0;
 	}
-	if (App->render->camera.x + mapSize.w > (App->map->data.width) * App->map->data.tile_width) //right limit
+	if (App->render->camera.x + App->win->width > App->map->data.width * App->map->data.tile_width) //right limit
 	{
-		App->render->camera.x = App->map->data.width * App->map->data.tile_width - mapSize.w;
+		App->render->camera.x = App->map->data.width * App->map->data.tile_width - App->win->width;
 	}
 
-	if (App->render->camera.y < mapSize.y) //up limit
+	if (App->render->camera.y < 0) //up limit
 	{
-		App->render->camera.y = mapSize.y;
+		App->render->camera.y = 0;
 	}	
-	if (App->render->camera.y + mapSize.h > (App->map->data.height) * App->map->data.tile_height) //down limit
+	if (App->render->camera.y + App->render->camera.h > App->map->data.height * App->map->data.tile_height) //down limit
 	{
-		App->render->camera.y = App->map->data.height * App->map->data.tile_height - mapSize.h;
+		App->render->camera.y = App->map->data.height * App->map->data.tile_height - App->win->height;
 	}
 
 	return true;

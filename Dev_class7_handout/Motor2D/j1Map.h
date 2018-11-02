@@ -174,6 +174,8 @@ private:
 	pugi::xml_document	map_file;
 	p2SString			folder;
 	bool				map_loaded;
+	SDL_Texture*		texture = nullptr;
+	SDL_Surface*		surface;
 };
 
 #endif // __j1MAP_H__

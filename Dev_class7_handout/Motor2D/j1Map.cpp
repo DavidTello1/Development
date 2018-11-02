@@ -34,77 +34,18 @@ void j1Map::Draw()
 	if (map_loaded == false)
 		return;
 
-	//SDL_Rect camera = App->render->camera;
-	//for (uint lay = 0; lay < data.layers.count(); lay++)
-	//{
-	//	if (data.layers[lay]->name != "Meta")
-	//	{
-	//		for (uint set = 0; set < data.tilesets.count(); set++)
-	//		{
-	//			for (int y = 0; y < data.height; y++)
-	//			{
-	//				for (int x = 0; x < data.width; x++)
-	//				{
-	//					int tile_id = data.layers[lay]->Get(x, y);
 
-	//					if (tile_id > 0)
-	//					{
-	//						TileSet* tileset = GetTilesetFromTileId(tile_id);
-	//						SDL_Rect r = tileset->GetTileRect(tile_id);
-	//						iPoint pos = MapToWorld(x, y);
-	//						if (data.layers[lay]->parallaxSpeed == 1)
-	//						{
-	//							if (pos.x >= camera.x - 32 && pos.x <= camera.x + camera.w &&
-	//								pos.y >= camera.y - 32 && pos.y <= camera.y + camera.h)
-	//							{
-	//								App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE, -data.layers[lay]->parallaxSpeed);
-	//							}
-	//						}
-	//						else 
-	//						{
-	//							App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE, -data.layers[lay]->parallaxSpeed);
-	//						}
-	//					}
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
-
-	p2List_item<MapLayer*>* item = data.layers.start;
-
-	for (; item != NULL; item = item->next)
+	for (uint lay = 0; lay < data.layers.count(); lay++)
 	{
-		layer = item->data;
-
-		if (layer->name != "Meta")
+		if (data.layers[lay]->name != "Meta")
 		{
-			for (int y = 0; y < data.height; ++y)
-			{
-				for (int x = 0; x < data.width; ++x)
-				{
-					int tile_id = layer->Get(x, y);
-					if (tile_id > 0)
-					{
-						TileSet* tileset = GetTilesetFromTileId(tile_id);
-
-						SDL_Rect r = tileset->GetTileRect(tile_id);
-						iPoint pos = MapToWorld(x, y);
-
-						App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE);
-					}
-				}
-			}
-		}
-		else
-		{
-			if (debug == true)
+			for (uint set = 0; set < data.tilesets.count(); set++)
 			{
 				for (int y = 0; y < data.height; ++y)
 				{
 					for (int x = 0; x < data.width; ++x)
 					{
-						int tile_id = layer->Get(x, y);
+						int tile_id = data.layers[lay]->Get(x, y);
 						if (tile_id > 0)
 						{
 							TileSet* tileset = GetTilesetFromTileId(tile_id);
@@ -112,15 +53,15 @@ void j1Map::Draw()
 							SDL_Rect r = tileset->GetTileRect(tile_id);
 							iPoint pos = MapToWorld(x, y);
 
-							App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE);
+							App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 						}
 					}
 				}
 			}
 		}
 	}
-	//if (debug == true)
-	//{
+	if (debug == true)
+	{
 	//	SDL_Rect collisions;
 	//	for (p2List_item<ObjectsGroup*>* object = App->map->data.objLayers.start; object; object = object->next)
 	//	{
@@ -128,37 +69,34 @@ void j1Map::Draw()
 	//		{
 	//			for (p2List_item<ObjectsData*>* objectdata = object->data->objects.start; objectdata; objectdata = objectdata->next)
 	//			{
-	//				if (objectdata->data->name == "Grid")
+	//					collisions.x = objectdata->data->x;
+	//					collisions.y = objectdata->data->y;
+	//					collisions.w = objectdata->data->width;
+	//					collisions.h = objectdata->data->height;
+	//				if (objectdata->data->name == "Floor") //green
 	//				{
-	//					collisions.h = objectdata->data->height, collisions.w = objectdata->data->width, collisions.x = objectdata->data->x, collisions.y = objectdata->data->y;
-	//					App->render->DrawQuad(collisions, 0, 0, 255, 50); //blue
+	//					App->render->DrawQuad(collisions, 0, 255, 0, 50);
 	//				}
-	//				else if (objectdata->data->name == "Floor")
+	//				else if (objectdata->data->name == "Spikes") //red
 	//				{
-	//					collisions.h = objectdata->data->height, collisions.w = objectdata->data->width, collisions.x = objectdata->data->x, collisions.y = objectdata->data->y;
-	//					App->render->DrawQuad(collisions, 0, 255, 0, 50); //green
+	//					App->render->DrawQuad(collisions, 255, 0, 0, 50);
 	//				}
-	//				else if (objectdata->data->name == "Spikes")
-	//				{
-	//					collisions.h = objectdata->data->height, collisions.w = objectdata->data->width, collisions.x = objectdata->data->x, collisions.y = objectdata->data->y;
-	//					App->render->DrawQuad(collisions, 255, 0, 0, 50); //red
+	//				else if (objectdata->data->name == "Wall") //yellow
+	//				{			
+	//					App->render->DrawQuad(collisions, 255, 255, 0, 50);
 	//				}
-	//				else if (objectdata->data->name == "Ceiling")
+	//				else if (objectdata->data->name == "Grid") //blue
 	//				{
-	//					collisions.h = objectdata->data->height, collisions.w = objectdata->data->width, collisions.x = objectdata->data->x, collisions.y = objectdata->data->y;
-	//					App->render->DrawQuad(collisions, 0, 0, 0, 50); //black
-	//				}
-	//				else if (objectdata->data->name == "Wall")
-	//				{
-	//					collisions.h = objectdata->data->height, collisions.w = objectdata->data->width, collisions.x = objectdata->data->x, collisions.y = objectdata->data->y;
-	//					App->render->DrawQuad(collisions, 255, 255, 0, 50); //yellow
+	//					App->render->DrawQuad(collisions, 0, 0, 255, 50); 
+	//				}																							
+	//				else if (objectdata->data->name == "Ceiling") //black
+	//				{		
+	//					App->render->DrawQuad(collisions, 0, 0, 0, 50);
 	//				}
 	//			}
 	//		}
 	//	}
-	//}
-
-
+	}
 }
 
 int Properties::Get(const char* value, int default_value) const
@@ -259,6 +197,7 @@ SDL_Rect TileSet::GetTileRect(int id) const
 bool j1Map::CleanUp()
 {
 	LOG("Unloading map");
+	App->tex->UnLoad(texture);
 
 	// Remove all tilesets
 	p2List_item<TileSet*>* item;

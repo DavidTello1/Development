@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<game_state>
+	<input />
+	<window />
+	<textures />
+	<audio />
+	<scene>
+		<currentMap num="1" />
+	</scene>
+	<map />
+	<player>
+		<position x="176" y="904" />
+		<gravity value="8" />
+		<speed x="4" y="24" />
+		<grounded value="false" />
+		<sliding value="false" />
+		<jumping value="true" />
+		<grid value="false" />
+		<gravity_active value="true" />
+	</player>
+	<colliders />
+	<scenechange />
+	<renderer>
+		<camera x="0" y="512" />
+	</renderer>
+</game_state>

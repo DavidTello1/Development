@@ -15,18 +15,12 @@ public:
 	// Destructor
 	virtual ~j1Colliders();
 
-	//Called each loop iteration
-	bool Update(float dt);
-
 	//Detects if the player is colliding with something
 	bool Collider_Overlay();
 
 	// Called before quitting
 	bool CleanUp();
 
-public:
-	int points;
-	SDL_Rect Collider;
 };
 
 #endif
