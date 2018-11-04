@@ -6,14 +6,13 @@
 #include "j1Textures.h"
 #include "j1Input.h"
 #include "j1Scene.h"
-#include "j1Colliders.h"
 #include "j1SceneChange.h"
+#include "j1EntityController.h"
 #include "p2Log.h"
 
 
-j1Player::j1Player() : j1Module()
+j1Player::j1Player() : Entity(entityType::PLAYER)
 {
-	name.create("player");
 }
 
 j1Player::~j1Player()
@@ -26,39 +25,32 @@ bool j1Player::Awake(pugi::xml_node & config)
 	bool ret = true;
 
 	// Player starting point
-	playerPos.x = config.child("position").attribute("x").as_int();
-	playerPos.y = config.child("position").attribute("y").as_int();
-	playerSpeed.x = config.child("speed").attribute("x").as_int();
-	playerSpeed.y = config.child("speed").attribute("y").as_int();
-	playerSize.w = config.child("size").attribute("width").as_int();
-	playerSize.h = config.child("size").attribute("height").as_int();
+	position.x = config.child("position").attribute("x").as_int();
+	position.y = config.child("position").attribute("y").as_int();
+	speed.x = config.child("speed").attribute("x").as_int();
+	speed.y = config.child("speed").attribute("y").as_int();
 	gravity = config.child("gravity").attribute("value").as_int();
 	gravity_active = config.child("gravity_active").attribute("value").as_bool();
-	LOG("pos.x : %d, pos.y: %d, speed.x: %d, speed.y: %d", playerPos.x, playerPos.y, playerSpeed.x, playerSpeed.y);
-
-	playerRect.x = 0;
-	playerRect.y = 0;
-	playerRect.h = playerSize.h;
-	playerRect.w = playerSize.w;
 
 	return ret;
 }
 
 bool j1Player::Start()
-{
-	graph = App->tex->Load("textures/penguin_player.png");
-	
+{	
+	LoadAnimation();
+	Current_Animation = &idle;
+
 	//Sets the player in the start position
-	for (p2List_item<ObjectsGroup*>* obj = App->map->data.objLayers.start; obj; obj = obj->next)
+	for (p2List_item<ObjectsGroup*>* object = App->map->data.objLayers.start; object; object = object->next)
 	{
-		if (obj->data->name == ("Collision"))
+		if (object->data->name == ("Collision"))
 		{
-			for (p2List_item<ObjectsData*>* objectdata = obj->data->objects.start; objectdata; objectdata = objectdata->next)
+			for (p2List_item<ObjectsData*>* objectdata = object->data->objects.start; objectdata; objectdata = objectdata->next)
 			{
 				if (objectdata->data->name == "StartPosition")
 				{
-					playerPos.x = objectdata->data->x;
-					playerPos.y = objectdata->data->y;
+					position.x = objectdata->data->x;
+					position.y = objectdata->data->y;
 				}
 			}
 		}
@@ -71,12 +63,8 @@ bool j1Player::Update(float dt)
 {
 	if (!dead)
 	{
-		playerCollider.x = playerPos.x;
-		playerCollider.y = playerPos.y;
-		playerCollider.w = playerSize.w;
-		playerCollider.h = playerSize.h;
-
-		App->collider->Collider_Overlay();
+		PositionCollider();
+		Collider_Overlay();
 
 		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) //space
 		{
@@ -85,11 +73,11 @@ bool j1Player::Update(float dt)
 				jumping = true;
 				grounded = false;
 				grid = false;
-				jumpSpeed.y = playerSpeed.y;
+				jumpSpeed.y = speed.y;
 			}
-			if (godmode == true)
+			if (App->scene->godmode == true)
 			{
-				jumpSpeed.y = playerSpeed.y;
+				jumpSpeed.y = speed.y;
 			}
 		}
 
@@ -97,17 +85,17 @@ bool j1Player::Update(float dt)
 		{
 			if (grid == true)
 			{
-				playerPos.x -= playerSpeed.x / 2;
+				position.x -= speed.x / 2;
 			}
 			else
 			{
 				left = true;
-				if (playerPos.x - playerSpeed.x <= 0) {
-					playerPos.x = 0;
+				if (position.x - speed.x <= 0) {
+					position.x = 0;
 				}
 				else
 				{
-					playerPos.x -= playerSpeed.x;
+					position.x -= speed.x;
 				}
 				if (wall_left == true && grounded == false) {
 					sliding = true;
@@ -118,19 +106,19 @@ bool j1Player::Update(float dt)
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) //right
 		{
 			if (grid == true) {
-				playerPos.x += playerSpeed.x / 2;
+				position.x += speed.x / 2;
 			}
 			else
 			{
 				right = true;
-				playerSpeed.x = playerSpeed.x;
+				speed.x = speed.x;
 
-				if (playerPos.x + playerSpeed.x >= (App->map->data.width - 1) * App->map->data.tile_width) {
-					playerPos.x = (App->map->data.width - 1) * App->map->data.tile_width;
+				if (position.x + speed.x >= (App->map->data.width - 1) * App->map->data.tile_width) {
+					position.x = (App->map->data.width - 1) * App->map->data.tile_width;
 				}
 				else
 				{
-					playerPos.x += playerSpeed.x;
+					position.x += speed.x;
 				}
 				if (wall_right == true && grounded == false) {
 					sliding = true;
@@ -162,16 +150,16 @@ bool j1Player::Update(float dt)
 			if (grid == true && ceiling == false)
 			{
 				if (top_grid == false)
-					{
-						playerPos.y -= playerSpeed.x / 2;
-					}
+				{
+					position.y -= speed.x / 2;
 				}
+			}
 		}
 		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) //down
 		{
 			if (grid == true)
 			{
-				playerPos.y += playerSpeed.x / 2;
+				position.y += speed.x / 2;
 			}
 		}
 
@@ -207,38 +195,38 @@ bool j1Player::Update(float dt)
 		if (jumping == true) //jumping
 		{
 			gravity_active = true;
-			if (playerPos.y - jumpSpeed.y <= 0)
+			if (position.y - jumpSpeed.y <= 0)
 			{
-				playerPos.y = 0;
+				position.y = 0;
 			}
 			if (jumpSpeed.y > 0)
 			{
 				jumpSpeed.y--;
-				playerPos.y -= jumpSpeed.y;
+				position.y -= jumpSpeed.y;
 			}
 		}
 
 		if (ceiling == true)
 		{
-			App->player->jumpSpeed.y = 0;
+			jumpSpeed.y = 0;
 		}
 
 		if (wall_left == true) //wall left
 		{
-			playerPos.x += playerSpeed.x;
+			position.x += speed.x;
 			wall_left = false;
 		}
 
 		if (wall_right == true) //wall right
 		{
-			playerPos.x -= playerSpeed.x;
+			position.x -= speed.x;
 			wall_right = false;
 		}
 
 		if (gravity_active == true) //gravity
 		{
-			if (playerPos.y + gravity >= (App->map->data.height - 1) * App->map->data.tile_height) {
-				playerPos.y = (App->map->data.height - 1) * App->map->data.tile_height;
+			if (position.y + gravity >= (App->map->data.height - 1) * App->map->data.tile_height) {
+				position.y = (App->map->data.height - 1) * App->map->data.tile_height;
 			}
 			else
 			{
@@ -246,11 +234,11 @@ bool j1Player::Update(float dt)
 				{
 					if (sliding == true)
 					{
-						playerPos.y += gravity / 4;
+						position.y += gravity / 4;
 					}
 					if (sliding == false)
 					{
-						playerPos.y += gravity;
+						position.y += gravity;
 					}
 				}
 			}
@@ -261,9 +249,10 @@ bool j1Player::Update(float dt)
 		grid_collision = false;
 		top_grid = false;
 		ceiling = false;
+		return true;
 	}
+	ChangeAnimation();
 
-	return true;
 }
 
 
@@ -274,7 +263,6 @@ bool j1Player::PostUpdate()
 		App->scenechange->ChangeMap(App->scene->currentMap, App->scene->fade_time);
 	}
 
-	App->render->Blit(graph, playerPos.x, playerPos.y, &playerRect);
 	CameraOnPlayer();
 
 	return true;
@@ -282,15 +270,15 @@ bool j1Player::PostUpdate()
 
 
 
-bool j1Player::Load(pugi::xml_node& data)
+void j1Player::Load(pugi::xml_node& data)
 {
-	bool ret = true;
-
-	playerPos.x = data.child("position").attribute("x").as_int();
-	playerPos.y = data.child("position").attribute("y").as_int();
+	size.x = data.child("size").attribute("width").as_int();
+	size.y = data.child("size").attribute("height").as_int();
+	position.x = data.child("position").attribute("x").as_int();
+	position.y = data.child("position").attribute("y").as_int();
 	gravity = data.child("gravity").attribute("value").as_int();
-	playerSpeed.x = data.child("speed").attribute("x").as_int();
-	playerSpeed.y = data.child("speed").attribute("y").as_int();
+	speed.x = data.child("speed").attribute("x").as_int();
+	speed.y = data.child("speed").attribute("y").as_int();
 	grounded = data.child("grounded").attribute("value").as_bool();
 	sliding = data.child("sliding").attribute("value").as_bool();
 	jumping = data.child("jumping").attribute("value").as_bool();
@@ -298,20 +286,18 @@ bool j1Player::Load(pugi::xml_node& data)
 	gravity_active = data.child("gravity_active").attribute("value").as_bool();
 	
 	LOG("--- Player Loaded");
-	return ret;
 }
 
 // Save Game State
-bool j1Player::Save(pugi::xml_node& data) const
+void j1Player::Save(pugi::xml_node& data) const
 {
-	bool ret = true;
-	// pugi::xml_node position = data.append_child("position");
-
-	data.append_child("position").append_attribute("x") = playerPos.x;
-	data.child("position").append_attribute("y") = playerPos.y;
+	data.append_child("size").append_attribute("width") = size.x;
+	data.append_child("size").append_attribute("height") = size.y;
+	data.append_child("position").append_attribute("x") = position.x;
+	data.child("position").append_attribute("y") = position.y;
 	data.append_child("gravity").append_attribute("value") = gravity;
-	data.append_child("speed").append_attribute("x") = playerSpeed.x;
-	data.child("speed").append_attribute("y") = playerSpeed.y;
+	data.append_child("speed").append_attribute("x") = speed.x;
+	data.child("speed").append_attribute("y") = speed.y;
 	data.append_child("grounded").append_attribute("value") = grounded;
 	data.append_child("sliding").append_attribute("value") = sliding;
 	data.append_child("jumping").append_attribute("value") = jumping;
@@ -319,13 +305,12 @@ bool j1Player::Save(pugi::xml_node& data) const
 	data.append_child("gravity_active").append_attribute("value") = gravity_active;
 
 	LOG("---Player Saved");
-	return ret;
 }
 
 bool j1Player::CameraOnPlayer()
 {
-	App->render->camera.x = playerPos.x - App->render->camera.w / 3;
-	App->render->camera.y = playerPos.y - App->render->camera.h / 2;
+	App->render->camera.x = position.x - App->render->camera.w / 3;
+	App->render->camera.y = position.y - App->render->camera.h / 2;
 
 	if (App->render->camera.x < 0) // left limit
 	{ 
@@ -348,30 +333,49 @@ bool j1Player::CameraOnPlayer()
 	return true;
 }
 
-bool j1Player::CleanUp()
+void j1Player::CleanUp()
 {
 	LOG("Deleting player");
-	App->tex->UnLoad(graph);
-
-	return true;
-
 }
 
 void j1Player::Restart()
 {
-	for (p2List_item<ObjectsGroup*>* obj = App->map->data.objLayers.start; obj; obj = obj->next)
+	for (p2List_item<ObjectsGroup*>* object = App->map->data.objLayers.start; object; object = object->next)
 	{
-		if (obj->data->name == ("Collision"))
+		if (object->data->name == ("Collision"))
 		{
-			for (p2List_item<ObjectsData*>* objectdata = obj->data->objects.start; objectdata; objectdata = objectdata->next)
+			for (p2List_item<ObjectsData*>* objectdata = object->data->objects.start; objectdata; objectdata = objectdata->next)
 			{
 				if (objectdata->data->name == "StartPosition")
 				{
-					playerPos.x = objectdata->data->x;
-					playerPos.y = objectdata->data->y;
+					position.x = objectdata->data->x;
+					position.y = objectdata->data->y;
 				}
 			}
 		}
 	}
 	dead = false;
+}
+
+void j1Player::ChangeAnimation()
+{
+	if (!dead)
+	{
+		if (grounded)
+		{
+			if (speed.x == 0)
+			{
+				Current_Animation = &idle;
+			}
+		}
+	}
+}
+
+void j1Player::LoadAnimation()
+{
+	idle.PushBack({ 0, 0, 32, 32 });
+	idle.PushBack({ 32, 0, 32, 32 });
+	idle.PushBack({ 64, 0, 32, 32 });
+	idle.loop = true;
+	idle.speed = 1.0f;
 }

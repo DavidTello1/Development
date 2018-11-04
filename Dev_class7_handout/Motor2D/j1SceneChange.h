@@ -8,7 +8,6 @@ enum ListOfMapNames;
 
 class j1SceneChange : public j1Module
 {
-	//-------------Functions-----------------
 public:
 
 	j1SceneChange();
@@ -35,15 +34,14 @@ public:
 	bool fading = false;
 
 private:
-
 	enum fade_step
 	{
 		none,
 		fade_to_black,
 		fade_from_black
-	} current_step = fade_step::none;
-
-
+	} 
+	current_step = fade_step::none;
+	
 	int nextMap;
 	uint start_time = 0;
 	uint total_time = 0;

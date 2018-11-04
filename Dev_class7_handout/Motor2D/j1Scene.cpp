@@ -6,9 +6,9 @@
 #include "j1Render.h"
 #include "j1Window.h"
 #include "j1Map.h"
-#include "j1Player.h"
 #include "j1Scene.h"
 #include "j1SceneChange.h"
+#include "j1EntityController.h"
 
 j1Scene::j1Scene() : j1Module()
 {
@@ -53,13 +53,21 @@ bool j1Scene::Start()
 	ret = App->map->Load(map_names.start->data->GetString());
 	currentMap = 0;
 
+	Entity* player = App->entitycontroller->AddEntity(Entity::entityType::PLAYER, { 0,0 });
+	player->Awake(config.child(App->entitycontroller->name.GetString()));
+
+	player->Start();
+
+	SpawnEnemies();
+
+
 	return ret;
 }
 
 // Called each loop iteration
 bool j1Scene::PreUpdate()
 {
-	LOG("IsChanging: %i", App->scenechange->IsChanging());
+	//LOG("IsChanging: %i", App->scenechange->IsChanging());
 	return true;
 }
 
@@ -73,7 +81,7 @@ bool j1Scene::Update(float dt)
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) //Start from beginning of current map
 	{
-		App->player->Restart();
+		App->entitycontroller->Restart();
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) //Start from second level
 	{
@@ -94,9 +102,10 @@ bool j1Scene::Update(float dt)
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) //Godmode
 	{
-		App->player->godmode = !App->player->godmode;
+		godmode = !godmode;
 	}
 	App->map->Draw();
+	App->entitycontroller->Draw(dt);
 
 	int x, y;
 	App->input->GetMousePosition(x, y);
@@ -184,6 +193,30 @@ bool j1Scene::Save(pugi::xml_node& data) const
 bool j1Scene::Load_level(int time)
 {
 	App->map->SwitchMaps(map_names[time]);
-	App->player->Restart();
+	App->entitycontroller->DeleteEnemies();
+	App->entitycontroller->Restart();
+	App->scene->SpawnEnemies();
 	return true;
+}
+
+void j1Scene::SpawnEnemies()
+{
+	for (p2List_item<ObjectsGroup*>* object = App->map->data.objLayers.start; object; object = object->next)
+	{
+		if (object->data->name == ("Enemies"))
+		{
+			for (p2List_item<ObjectsData*>* objectdata = object->data->objects.start; objectdata; objectdata = objectdata->next)
+			{
+				if (objectdata->data->name == "Flying_Enemy")
+				{
+					App->entitycontroller->AddEntity(Entity::entityType::FLYING_ENEMY, { objectdata->data->x,objectdata->data->y });
+				}
+
+				else if (objectdata->data->name == "Land_Enemy")
+				{
+					App->entitycontroller->AddEntity(Entity::entityType::LAND_ENEMY, { objectdata->data->x,objectdata->data->y });
+				}
+			}
+		}
+	}
 }

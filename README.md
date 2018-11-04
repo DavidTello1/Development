@@ -26,7 +26,7 @@ https://github.com/DavidTello1/Development
 ### Disclosure
 We do not own any of the sprites or tilesets presented in this game.
 
--Player Texture: http://es.clubpenguin.wikia.com/wiki/Archivo:Penguin_Player_card_look_1222333.png
+-Player Texture: Stephen "Redshrike" Challener https://opengameart.org/content/16x16-16x24-32x32-rpg-enemies-updated
 -Tileset: New Super Mario Bros https://www.spriters-resource.com/ds_dsi/newsupermariobros/sheet/8415/
 -Background: New Super Mario Bros https://www.spriters-resource.com/ds_dsi/newsupermariobros/sheet/26066/
 

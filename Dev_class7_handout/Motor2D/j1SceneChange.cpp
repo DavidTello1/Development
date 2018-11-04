@@ -4,6 +4,7 @@
 #include "j1Render.h"
 #include "j1Scene.h"
 #include "j1Window.h"
+#include "j1EntityController.h"
 #include "j1Player.h"
 #include "j1Map.h"
 
@@ -57,7 +58,7 @@ bool j1SceneChange::Update(float dt)
 
 			App->map->SwitchMaps(App->scene->map_names[nextMap]);
 
-			App->player->Restart();
+			App->entitycontroller->Restart();
 			total_time += total_time;
 			start_time = SDL_GetTicks();
 			fading = false;

@@ -1,7 +1,7 @@
 <!-- Config file for the game -->
 
 <config>
-  <app>
+  <app framerate_cap="30">
     <title>Game Development Testbed</title>
     <organization>UPC</organization>
   </app>
@@ -26,17 +26,22 @@
     <folder>maps/</folder>
   </map>
 
-  <player>
-    <size width="32" height="32"/>
-    <position x="64" y="500"/>
-    <gravity value="8"/>
-    <speed x="4" y="24"/>
-    <grounded value ="false"/>
-    <sliding value="false"/>
-    <jumping value="true"/>
-    <grid value="false"/>
-    <gravity_active value="true"/>
-  </player>
+  <entitycontroller>
+    <folder>textures/</folder>
+    <sprite_sheet source="Entities.png"/>
+    <player>
+      <size width="32" height="32"/>
+      <position x="64" y="500"/>
+      <gravity value="8"/>
+      <speed x="4" y="24"/>
+      <grounded value ="false"/>
+      <sliding value="false"/>
+      <jumping value="true"/>
+      <grid value="false"/>
+      <gravity_active value="true"/>
+    </player>
+  </entitycontroller>
+
 
   <scene>
     <map_name name="level1.tmx"></map_name>

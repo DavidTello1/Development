@@ -5,9 +5,9 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "j1Module.h"
-#include "j1Colliders.h"
+#include "SDL\include\SDL_rect.h"
 
-class j1Colliders;
+struct SDL_Texture;
 
 struct Properties
 {
@@ -160,22 +160,18 @@ private:
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
 	bool LoadObjectLayers(pugi::xml_node& node, ObjectsGroup* group);
 
+	TileSet* GetTilesetFromTileId(int id) const;
+
 public:
 
-	MapData data;
-	MapLayer* layer;
-	TileSet* GetTilesetFromTileId(int id) const;
-	ObjectsData objectsdata;
-
-	bool debug = false;
+	MapData				data;
+	bool				debug = false;
 
 private:
 
 	pugi::xml_document	map_file;
 	p2SString			folder;
 	bool				map_loaded;
-	SDL_Texture*		texture = nullptr;
-	SDL_Surface*		surface;
 };
 
 #endif // __j1MAP_H__

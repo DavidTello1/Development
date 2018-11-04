@@ -4,22 +4,23 @@
 	<window />
 	<textures />
 	<audio />
+	<map />
 	<scene>
 		<currentMap num="1" />
 	</scene>
-	<map />
-	<player>
-		<position x="176" y="904" />
-		<gravity value="8" />
-		<speed x="4" y="24" />
+	<scenechange />
+	<entitycontroller>
+		<size width="0" />
+		<size height="0" />
+		<position x="64" y="960" />
+		<gravity value="0" />
+		<speed x="0" y="0" />
 		<grounded value="false" />
 		<sliding value="false" />
 		<jumping value="true" />
 		<grid value="false" />
 		<gravity_active value="true" />
-	</player>
-	<colliders />
-	<scenechange />
+	</entitycontroller>
 	<renderer>
 		<camera x="0" y="512" />
 	</renderer>

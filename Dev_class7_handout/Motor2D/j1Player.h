@@ -4,16 +4,13 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "j1Module.h"
-#include "SDL/include/SDL_rect.h"
-#include "SDL/include/SDL_surface.h"
+#include "j1Entity.h"
 
 struct SDL_Texture;
 struct ObjectsData;
 
-
-class j1Player : public j1Module
+class j1Player : public Entity
 {
-	//-------------Functions-----------------
 public:
 
 	j1Player();
@@ -32,26 +29,22 @@ public:
 
 	// Called each loop iteration
 
-	bool Load(pugi::xml_node& file);
-	bool Save(pugi::xml_node& file) const;
+	void Load(pugi::xml_node& file);
+	void Save(pugi::xml_node& file) const;
 
 	// Called before quitting
-	bool CleanUp();
-
+	void CleanUp();
 
 	// Positions the player in the start of the current level
 	 void Restart();
 
-
 	// Centers the camera on the player
 	bool CameraOnPlayer();
 
-public: 
-	bool godmode = false;
+	void ChangeAnimation();
+	void LoadAnimation();
 
-	iPoint playerPos;
-	iPoint playerSpeed;
-	SDL_Surface playerSize;
+public: 
 	iPoint jumpSpeed;
 	int gravity;
 
@@ -71,17 +64,15 @@ public:
 	bool top_grid;
 	bool ceiling;
 
-	SDL_Rect playerCollider;
-
-private:
-
-	// Player graphs
-	SDL_Texture* graph = nullptr;
-
-	SDL_Rect playerRect;
-	p2SString playerFile;
-
-	pugi::xml_document	player_file;
+	Animation		idle;
+	Animation		move_anim;
+	Animation		jump_anim;
+	Animation		falling_anim;
+	Animation		grip_idle;
+	Animation		grip_moving_horizontally;
+	Animation		grip_moving_vertically;
+	Animation		slide_anim;
+	Animation		dying;
 };
 
 #endif // !__J1PLAYER_H__

@@ -36,14 +36,17 @@ public:
 	bool Save(pugi::xml_node& data) const;
 
 	bool Load_level(int time);
+	void SpawnEnemies();
 
 public:
 
 	p2List<p2SString*> map_names;
-	int currentMap;
+	uint currentMap;
 	float fade_time;
 	bool to_end;
 	bool change;
+
+	bool godmode = false;
 
 };
 
