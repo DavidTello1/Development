@@ -25,8 +25,12 @@ bool j1Player::Awake(pugi::xml_node & config)
 	bool ret = true;
 
 	// Player starting point
+	config = config.child("player");
+
 	position.x = config.child("position").attribute("x").as_int();
 	position.y = config.child("position").attribute("y").as_int();
+	size.x = config.child("size").attribute("width").as_int();
+	size.y = config.child("size").attribute("height").as_int();
 	speed.x = config.child("speed").attribute("x").as_int();
 	speed.y = config.child("speed").attribute("y").as_int();
 	gravity = config.child("gravity").attribute("value").as_int();
@@ -225,7 +229,8 @@ bool j1Player::Update(float dt)
 
 		if (gravity_active == true) //gravity
 		{
-			if (position.y + gravity >= (App->map->data.height - 1) * App->map->data.tile_height) {
+			if (position.y + gravity >= (App->map->data.height - 1) * App->map->data.tile_height) 
+			{
 				position.y = (App->map->data.height - 1) * App->map->data.tile_height;
 			}
 			else
@@ -249,10 +254,10 @@ bool j1Player::Update(float dt)
 		grid_collision = false;
 		top_grid = false;
 		ceiling = false;
-		return true;
 	}
 	ChangeAnimation();
 
+	return true;
 }
 
 
@@ -359,16 +364,7 @@ void j1Player::Restart()
 
 void j1Player::ChangeAnimation()
 {
-	if (!dead)
-	{
-		if (grounded)
-		{
-			if (speed.x == 0)
-			{
-				Current_Animation = &idle;
-			}
-		}
-	}
+	Current_Animation = &idle;
 }
 
 void j1Player::LoadAnimation()
@@ -377,5 +373,5 @@ void j1Player::LoadAnimation()
 	idle.PushBack({ 32, 0, 32, 32 });
 	idle.PushBack({ 64, 0, 32, 32 });
 	idle.loop = true;
-	idle.speed = 1.0f;
+	idle.speed = 5.0f;
 }

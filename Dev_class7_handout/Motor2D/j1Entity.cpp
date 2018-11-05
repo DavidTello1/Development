@@ -42,17 +42,6 @@ void Entity::Collider_Overlay()
 	SDL_Rect ObjectRect;
 	SDL_Rect result;
 
-	p2List<Entity*> Entities;
-	p2List_item<Entity*>* player = nullptr;
-	for (p2List_item<Entity*>* i = Entities.start; i != nullptr; i = i->next)
-	{
-		if (i->data->type == Entity::entityType::PLAYER)
-		{
-			player = i;
-			break;
-		}
-	}
-
 	for (p2List_item<ObjectsGroup*>* object = App->map->data.objLayers.start; object; object = object->next)
 	{
 		if (object->data->name == ("Collision"))
@@ -79,11 +68,11 @@ void Entity::Collider_Overlay()
 					}
 					else if (objectdata->data->name == "Floor")
 					{
-						if (player->data->position.y + player->data->Collider.h - gravity <= ObjectRect.y)
+						if (position.y + Collider.h - gravity <= ObjectRect.y)
 						{
-							if (result.h <= result.w || player->data->position.x + player->data->Collider.w >= ObjectRect.x)
+							if (result.h <= result.w || position.x + Collider.w >= ObjectRect.x)
 							{
-								player->data->position.y -= result.h - 1;
+								position.y -= result.h - 1;
 								grounded = true;
 							}
 						}
@@ -106,7 +95,7 @@ void Entity::Collider_Overlay()
 					else if (objectdata->data->name == "Grid")
 					{
 						grid_collision = true;
-						if (player->data->Collider.y + (3 * player->data->Collider.h / 4) <= objectdata->data->y)
+						if (Collider.y + (3 * Collider.h / 4) <= objectdata->data->y)
 						{
 							top_grid = true;
 						}

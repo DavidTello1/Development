@@ -45,24 +45,6 @@ public:
 	void LoadAnimation();
 
 public: 
-	iPoint jumpSpeed;
-	int gravity;
-
-	bool left;
-	bool right;
-
-	bool dead;
-
-	bool grounded;
-	bool jumping;
-	bool sliding;
-	bool grid;
-
-	bool wall_left, wall_right;
-	bool gravity_active;
-	bool grid_collision;
-	bool top_grid;
-	bool ceiling;
 
 	Animation		idle;
 	Animation		move_anim;

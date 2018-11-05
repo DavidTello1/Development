@@ -6,7 +6,6 @@
 #include "p2Animation.h"
 #include "j1Map.h"
 #include "j1App.h"
-#include "SDL\include\SDL_rect.h"
 
 
 class Entity
@@ -58,12 +57,15 @@ public:
 	SDL_Rect Collider;
 	SDL_Rect SightCollider;
 
-	bool dead = true;
-	bool isDying = false;
-	bool grounded = false;
+	bool isDying;
+	bool grounded;
 	bool flip = false;
 	bool chasing_player = false;
 
+	bool left;
+	bool right;
+
+	bool dead;
 	bool jumping;
 	bool sliding;
 	bool grid;
