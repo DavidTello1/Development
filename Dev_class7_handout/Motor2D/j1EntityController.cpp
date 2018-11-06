@@ -256,7 +256,7 @@ void j1EntityController::EnemyColliderCheck()
 			//}
 			if (SDL_HasIntersection(&tmp->data->Collider, &player->data->Collider) && !godmode && !App->scenechange->IsChanging())
 			{
-				player->data->isDying = true;
+				player->data->dead = true;
 			}
 		}
 		tmp = tmp->next;

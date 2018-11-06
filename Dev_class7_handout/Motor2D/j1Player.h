@@ -42,7 +42,7 @@ public:
 	bool CameraOnPlayer();
 
 	void ChangeAnimation();
-	void LoadAnimation();
+	void LoadAnimations();
 
 public: 
 
@@ -51,9 +51,10 @@ public:
 	Animation		jump_anim;
 	Animation		falling_anim;
 	Animation		grip_idle;
-	Animation		grip_moving_horizontally;
-	Animation		grip_moving_vertically;
+	Animation		grip_move;
 	Animation		slide_anim;
+	Animation		landing_anim;
+	Animation		grip_anim;
 	Animation		dying;
 };
 

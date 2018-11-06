@@ -73,12 +73,16 @@ void Entity::Collider_Overlay()
 							if (result.h <= result.w || position.x + Collider.w >= ObjectRect.x)
 							{
 								position.y -= result.h - 1;
+								if (landed == false)
+								{
+									landing = true;
+								}
 								grounded = true;
 							}
 						}
 						else
 						{
-							jumpSpeed.y = 0;
+							jumpSpeed = 0;
 						}
 					}
 					else if (objectdata->data->name == "Spikes")

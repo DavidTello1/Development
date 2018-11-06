@@ -6,18 +6,18 @@
 	<audio />
 	<map />
 	<scene>
-		<currentMap num="1" />
+		<currentMap num="0" />
 	</scene>
 	<scenechange />
 	<entitycontroller>
-		<size width="0" />
-		<size height="0" />
-		<position x="64" y="960" />
-		<gravity value="0" />
-		<speed x="0" y="0" />
+		<size width="32" />
+		<size height="32" />
+		<position x="64" y="1121" />
+		<gravity value="8" />
+		<speed x="4" y="24" />
 		<grounded value="false" />
 		<sliding value="false" />
-		<jumping value="true" />
+		<jumping value="false" />
 		<grid value="false" />
 		<gravity_active value="true" />
 	</entitycontroller>

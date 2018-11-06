@@ -37,19 +37,21 @@ public:
 	virtual void Save(pugi::xml_node& file) const {};
 	virtual void Load(pugi::xml_node& file) {};
 	virtual void Restart() {};
-
+	virtual void LoadAnimations() {};
+	virtual void ChangeAnimation() {};
 	
 	void Collider_Overlay(); //Detects if the player is colliding with something
 	void PositionCollider();
 	void Draw(float dt);
 
 public:
+	Animation* Current_Animation = nullptr;
 	entityType type;
 	
 	iPoint position;
 	iPoint size;
 	iPoint speed;
-	iPoint jumpSpeed;
+	int jumpSpeed;
 	int gravity;
 
 	int direction_x = 1; //-1 = left, 1 = right
@@ -57,27 +59,27 @@ public:
 	SDL_Rect Collider;
 	SDL_Rect SightCollider;
 
-	bool isDying;
-	bool grounded;
 	bool flip = false;
 	bool chasing_player = false;
 
 	bool left;
 	bool right;
+	bool grid_moving;
 
 	bool dead;
+	bool grounded;
 	bool jumping;
-	bool sliding;
 	bool grid;
+	bool sliding;
+	bool landing;
+	bool gripping;
 
 	bool wall_left, wall_right;
 	bool gravity_active;
 	bool grid_collision;
 	bool top_grid;
 	bool ceiling;
-
-	float animationSpeed = 3;
-	Animation* Current_Animation = nullptr;
+	bool landed;
 };
 
 #endif

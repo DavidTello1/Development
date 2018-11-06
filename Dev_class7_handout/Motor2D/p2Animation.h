@@ -31,7 +31,8 @@ public:
 	SDL_Rect& GetCurrentFrame(float dt)
 	{
 		float tmp = speed;
-		current_frame += tmp*dt;
+		//current_frame += tmp*dt;
+		current_frame += tmp;
 
 		if (current_frame < 0)
 		{
@@ -57,20 +58,16 @@ public:
 		current_frame = 0;
 	}
 
-	float GetCurrentFrameinFloat()
+	void ResetLoops()
 	{
-		return current_frame;
+		loops = 0;
 	}
 
-	int GetLastFrameinInt()
+	int GetLastFrame()
 	{
 		return last_frame;
 	}
 
-	void ChangeCurrentFrame(float frame)
-	{
-		current_frame = frame;
-	}
 };
 
 #endif

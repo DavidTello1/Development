@@ -6,11 +6,11 @@ This is a little game made by two second year students of the Videogame Design a
 
 -Jump with spacebar.
 
--Grip to metal net with 'W' key.
+-Grip to metal net with 'E' key.
 
 -While gripped, movement with WASD keys.
 
--Close Game wit ESC.
+-Close Game with ESC.
 
 ### Debug Controls
 F1: Load the first level. F2: Restart the current level. F3: Load the second level. F5: Load the saved game. F6: Save the current game. F9: View collider logic. F10: Activate/Deactivate God Mode.
@@ -26,7 +26,7 @@ https://github.com/DavidTello1/Development
 ### Disclosure
 We do not own any of the sprites or tilesets presented in this game.
 
--Player Texture: Stephen "Redshrike" Challener https://opengameart.org/content/16x16-16x24-32x32-rpg-enemies-updated
+-Player Texture: The Legendary Starfy 4 https://www.spriters-resource.com/ds_dsi/thelegendarystarfy4/sheet/13166/
 -Tileset: New Super Mario Bros https://www.spriters-resource.com/ds_dsi/newsupermariobros/sheet/8415/
 -Background: New Super Mario Bros https://www.spriters-resource.com/ds_dsi/newsupermariobros/sheet/26066/
 
