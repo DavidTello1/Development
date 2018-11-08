@@ -246,14 +246,14 @@ void j1EntityController::EnemyColliderCheck()
 	{
 		if (tmp->data->type == Entity::entityType::LAND_ENEMY || tmp->data->type == Entity::entityType::FLYING_ENEMY)
 		{
-			//if (SDL_HasIntersection(&tmp->data->SightCollider, &player->data->Collider))
-			//{
-			//	tmp->data->chasing_player = true;
-			//}
-			//else
-			//{
+			if (SDL_HasIntersection(&tmp->data->SightCollider, &player->data->Collider))
+			{
+				tmp->data->chasing_player = true;
+			}
+			else
+			{
 				tmp->data->chasing_player = false;
-			//}
+			}
 			if (SDL_HasIntersection(&tmp->data->Collider, &player->data->Collider) && !godmode && !App->scenechange->IsChanging())
 			{
 				player->data->dead = true;

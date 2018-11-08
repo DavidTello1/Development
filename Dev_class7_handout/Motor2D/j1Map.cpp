@@ -33,7 +33,8 @@ void j1Map::Draw()
 	if (map_loaded == false)
 		return;
 
-
+	//double angle = 15.0;
+	iPoint center = { (data.width * data.tile_width) /2, 0 };
 	for (uint lay = 0; lay < data.layers.count(); lay++)
 	{
 		if (data.layers[lay]->name != "Meta")
@@ -51,8 +52,10 @@ void j1Map::Draw()
 
 							SDL_Rect r = tileset->GetTileRect(tile_id);
 							iPoint pos = MapToWorld(x, y);
+							//double new_x = x * cos(angle) - y * sin(angle);
+							//double new_y = x * sin(angle) + y * cos(angle);
 
-							App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE);
+							App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 						}
 					}
 				}
@@ -560,4 +563,8 @@ bool j1Map::SwitchMaps(p2SString* new_map)
 	Load(new_map->GetString());
 
 	return true;
+}
+
+void j1Map::RotateMaps()
+{
 }

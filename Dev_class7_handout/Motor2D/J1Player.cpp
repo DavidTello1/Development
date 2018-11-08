@@ -306,8 +306,6 @@ bool j1Player::PostUpdate()
 		App->scenechange->ChangeMap(App->scene->currentMap, App->scene->fade_time);
 	}
 
-	CameraOnPlayer();
-
 	return true;
 }
 
@@ -350,31 +348,6 @@ void j1Player::Save(pugi::xml_node& data) const
 	LOG("---Player Saved");
 }
 
-bool j1Player::CameraOnPlayer()
-{
-	App->render->camera.x = position.x - App->render->camera.w / 3;
-	App->render->camera.y = position.y - App->render->camera.h / 2;
-
-	if (App->render->camera.x < 0) // left limit
-	{ 
-		App->render->camera.x = 0;
-	}
-	if (App->render->camera.x + App->win->width > App->map->data.width * App->map->data.tile_width) //right limit
-	{
-		App->render->camera.x = App->map->data.width * App->map->data.tile_width - App->win->width;
-	}
-
-	if (App->render->camera.y < 0) //up limit
-	{
-		App->render->camera.y = 0;
-	}	
-	if (App->render->camera.y + App->render->camera.h > App->map->data.height * App->map->data.tile_height) //down limit
-	{
-		App->render->camera.y = App->map->data.height * App->map->data.tile_height - App->win->height;
-	}
-
-	return true;
-}
 
 void j1Player::CleanUp()
 {
@@ -464,7 +437,7 @@ void j1Player::LoadAnimations()
 	idle.PushBack({ 64, 0, size.x, size.y });
 	idle.PushBack({ 96, 0, size.x, size.y });
 	idle.loop = true;
-	idle.speed = 0.1f;
+	idle.speed = 0.2f;
 
 	move_anim.PushBack({ 0, 32, size.x, size.y });
 	move_anim.PushBack({ 32, 32, size.x, size.y });
@@ -475,28 +448,26 @@ void j1Player::LoadAnimations()
 	move_anim.PushBack({ 192, 32, size.x, size.y });
 	move_anim.PushBack({ 224, 32, size.x, size.y });
 	move_anim.loop = true;
-	move_anim.speed = 0.1f;
+	move_anim.speed = 0.2f;
 
 	jump_anim.PushBack({ 224, 64, size.x, size.y });
 	jump_anim.PushBack({ 192, 64, size.x, size.y });
 	jump_anim.loop = true;
-	jump_anim.speed = 0.1f;
+	jump_anim.speed = 0.2f;
 
 	falling_anim.PushBack({ 160, 64, size.x, size.y });
 	falling_anim.PushBack({ 128, 64, size.x, size.y });
 	falling_anim.loop = false;
-	falling_anim.speed = 0.1f;
+	falling_anim.speed = 0.2f;
 
 	landing_anim.PushBack({ 96, 64, size.x, size.y });
 	landing_anim.PushBack({ 64, 64, size.x, size.y });
 	landing_anim.PushBack({ 32, 64, size.x, size.y });
 	landing_anim.PushBack({ 0, 64, size.x, size.y });
 	landing_anim.loop = false;
-	landing_anim.speed = 0.1f;
+	landing_anim.speed = 0.2f;
 
 	grip_idle.PushBack({ 160, 0, size.x, size.y });
-	grip_idle.loop = false;
-	grip_idle.speed = 0.1f;
 
 	grip_anim.PushBack({ 128, 64, size.x, size.y });
 	grip_anim.PushBack({ 224, 96, size.x, size.y });
@@ -514,11 +485,7 @@ void j1Player::LoadAnimations()
 	grip_move.speed = 0.2f;
 
 	slide_anim.PushBack({ 128, 96, size.x, size.y });
-	slide_anim.loop = false;
-	slide_anim.speed = 0.1f;
 
 	dying.PushBack({ 64, 96, size.x, size.y });
-	dying.loop = false;
-	dying.speed = 0.1f;
 
 }

@@ -38,9 +38,6 @@ public:
 	// Positions the player in the start of the current level
 	 void Restart();
 
-	// Centers the camera on the player
-	bool CameraOnPlayer();
-
 	void ChangeAnimation();
 	void LoadAnimations();
 
