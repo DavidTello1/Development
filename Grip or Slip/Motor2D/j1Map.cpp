@@ -55,7 +55,15 @@ void j1Map::Draw()
 							//double new_x = x * cos(angle) - y * sin(angle);
 							//double new_y = x * sin(angle) + y * cos(angle);
 
-							App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+							if (data.layers[lay]->name == "Background") 
+							{
+								App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE, 0.8f);
+
+							}
+							else
+							{
+								App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+							}
 						}
 					}
 				}

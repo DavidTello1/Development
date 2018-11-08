@@ -164,6 +164,8 @@ private:
 	uint				cost_so_far[COST_MAP][COST_MAP];
 	p2DynArray<iPoint>	path;
 	SDL_Texture*		tile_x = nullptr;
+
+	int				new_cost;
 };
 
 #endif // __j1MAP_H__
