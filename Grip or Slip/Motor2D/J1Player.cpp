@@ -205,6 +205,39 @@ bool j1Player::Update(float dt)
 			grounded = false;
 			sliding = false;
 			landed = false;
+
+			if (!is_static) 
+			{
+				if (vertical == true)
+				{
+					if (flip_ver == true) //hide_up
+					{
+						if (!ceiling)
+						{
+							position.y -= grid_speed.y;
+						}
+						else
+						{
+							position.y += grid_speed.y;
+						}
+					}
+					if (flip_ver == false) //hide_down
+					{
+						position.y += grid_speed.y;
+					}
+				}
+				if (vertical == false)
+				{
+					if (flip_hor == true) //hide_left
+					{
+						position.x -= grid_speed.x;
+					}
+					if (flip_hor == false) //hide_right
+					{
+						position.x += grid_speed.x;
+					}
+				}
+			}
 		}
 
 		if (sliding == true) //sliding
@@ -351,7 +384,7 @@ void j1Player::Save(pugi::xml_node& data) const
 
 void j1Player::CleanUp()
 {
-	LOG("Deleting player");
+	LOG("---Player Deleted");
 
 }
 

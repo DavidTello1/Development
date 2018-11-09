@@ -40,6 +40,9 @@
       <grid value="false"/>
       <gravity_active value="true"/>
     </player>
+    <grid>
+      <speed x="1" y="1"/>
+    </grid>
   </entitycontroller>
 
 

@@ -27,20 +27,84 @@ Entity::~Entity()
 
 void Entity::Draw(float dt)
 {
-	if (flip)
+	if (type == GRID)
 	{
-		App->render->Blit(App->entitycontroller->texture, position.x, position.y, &(Current_Animation->GetCurrentFrame(dt)), SDL_FLIP_HORIZONTAL);
+		if (flip_ver)
+		{
+			App->render->Blit(App->entitycontroller->texture, position.x, position.y, &rect, SDL_FLIP_VERTICAL);
+		}
+		if (flip_hor)
+		{
+			App->render->Blit(App->entitycontroller->texture, position.x, position.y, &rect, SDL_FLIP_HORIZONTAL);
+		}
+		if (!flip_ver && !flip_hor)
+		{
+			App->render->Blit(App->entitycontroller->texture, position.x, position.y, &rect, SDL_FLIP_NONE);
+		}
+
 	}
 	else
 	{
-		App->render->Blit(App->entitycontroller->texture, position.x, position.y, &(Current_Animation->GetCurrentFrame(dt)), SDL_FLIP_NONE);
+		if (flip)
+		{
+			App->render->Blit(App->entitycontroller->texture, position.x, position.y, &(Current_Animation->GetCurrentFrame(dt)), SDL_FLIP_HORIZONTAL);
+		}
+		else
+		{
+			App->render->Blit(App->entitycontroller->texture, position.x, position.y, &(Current_Animation->GetCurrentFrame(dt)), SDL_FLIP_NONE);
+		}
 	}
+
 }
 
 void Entity::Collider_Overlay()
 {
 	SDL_Rect ObjectRect;
 	SDL_Rect result;
+
+	p2List_item<Entity*>* tmp = App->entitycontroller->Entities.start;
+	while(tmp != nullptr)
+	{
+		if (tmp->data->type == Entity::entityType::GRID)
+		{
+			if (SDL_IntersectRect(&Collider, &tmp->data->Collider, &result))
+			{
+				grid_collision = true;
+				is_static = false;
+
+				if (Collider.y + (3 * Collider.h / 4) <= tmp->data->position.y)
+				{
+					top_grid = true;
+				}
+
+				if (tmp->data->grid_type == "Hide_up") 
+				{
+					vertical = true;
+					flip_ver = true;
+				}
+				else if (tmp->data->grid_type == "Hide_down")
+				{
+					vertical = true;
+					flip_ver = false;
+				}
+				else if (tmp->data->grid_type == "Hide_left")
+				{
+					vertical = false;
+					flip_hor = true;
+				}
+				else if (tmp->data->grid_type == "Hide_right")
+				{
+					vertical = false;
+					flip_hor = false;
+				}
+
+				grid_speed.x = tmp->data->speed.x;
+				grid_speed.y = tmp->data->speed.y;
+
+			}
+		}
+		tmp = tmp->next;
+	}
 
 	for (p2List_item<ObjectsGroup*>* object = App->map->data.objLayers.start; object; object = object->next)
 	{
@@ -94,11 +158,16 @@ void Entity::Collider_Overlay()
 					}
 					else if (objectdata->data->name == "Ceiling")
 					{
-						ceiling = true;
+						if (App->scene->godmode == false)
+						{
+							ceiling = true;
+						}
 					}
-					else if (objectdata->data->name == "Grid")
+					else if (objectdata->data->name == "Box")
 					{
 						grid_collision = true;
+						is_static = true;
+
 						if (Collider.y + (3 * Collider.h / 4) <= objectdata->data->y)
 						{
 							top_grid = true;
@@ -107,6 +176,17 @@ void Entity::Collider_Overlay()
 					else if (objectdata->data->name == "Finish")
 					{
 						App->scene->change = true;
+					}
+					else if (objectdata->data->name == "Grid" && objectdata->data->type == "Static") 
+					{
+						grid_collision = true;
+						is_static = true;
+
+						if (Collider.y + (3 * Collider.h / 4) <= objectdata->data->y)
+						{
+							top_grid = true;
+						}
+
 					}
 				}
 			}
@@ -121,7 +201,7 @@ void Entity::PositionCollider()
 	Collider.w = size.x;
 	Collider.h = size.y;
 
-	if (type != PLAYER)
+	if (type != PLAYER && type != GRID)
 	{
 		SightCollider.x = position.x;
 		SightCollider.y = position.y;

@@ -5,6 +5,7 @@
 #include "j1SceneChange.h"
 #include "j1Entity.h"
 #include "j1Player.h"
+#include "j1Grid.h"
 #include "j1Textures.h"
 
 #include "PugiXml/src/pugixml.hpp"
@@ -48,10 +49,7 @@ bool j1EntityController::Update(float dt)
 	p2List_item<Entity*>* tmp = Entities.start;
 	while (tmp != nullptr)
 	{
-		if (tmp->data->type == Entity::entityType::PLAYER)
-			ret = tmp->data->Update(dt);
-		else
-			ret = tmp->data->Update(enemy_dt);
+		ret = tmp->data->Update(dt);
 		tmp = tmp->next;
 	}
 
@@ -79,6 +77,7 @@ bool j1EntityController::CleanUp()
 		tmp->data->CleanUp();
 		tmp = tmp->next;
 	}
+	DeleteEntities();
 	return ret;
 }
 
@@ -99,23 +98,23 @@ bool j1EntityController::Load(pugi::xml_node& file)
 	bool ret = true;
 	p2List_item<Entity*>* tmp = Entities.start;
 	pugi::xml_node box = file.child("box");
-	pugi::xml_node moving_grid = file.child("moving_grid");
+	pugi::xml_node grid = file.child("grid");
 	while (tmp != nullptr)
 	{
-		if (tmp->data->type == Entity::entityType::PLAYER)
-		{
-			tmp->data->Load(file.child("player"));
-		}
-		else if (tmp->data->type == Entity::entityType::BOX)
+		if (tmp->data->type == Entity::entityType::BOX)
 		{
 			tmp->data->Load(box);
 			box = box.next_sibling("box");
 
 		}
-		else if (tmp->data->type == Entity::entityType::MOVING_GRID)
+		else if (tmp->data->type == Entity::entityType::GRID)
 		{
-			tmp->data->Load(moving_grid);
-			moving_grid = moving_grid.next_sibling("moving_grid");
+			tmp->data->Load(grid);
+			grid = grid.next_sibling("grid");
+		}
+		else if (tmp->data->type == Entity::entityType::PLAYER)
+		{
+			tmp->data->Load(file.child("player"));
 		}
 		tmp = tmp->next;
 	}
@@ -125,12 +124,19 @@ bool j1EntityController::Load(pugi::xml_node& file)
 bool j1EntityController::Restart()
 {
 	bool ret = true;
-	p2List_item<Entity*>* tmp = Entities.start;
-	while (tmp != nullptr)
-	{
-		tmp->data->Restart();
-		tmp = tmp->next;
-	}
+
+	DeleteEntities();
+	App->scene->SpawnEnemies();
+
+	pugi::xml_document	config_file;
+	pugi::xml_node		config;
+
+	config = App->LoadConfig(config_file);
+
+	Entity* player = App->entitycontroller->AddEntity(Entity::entityType::PLAYER, { 0,0 }, { 0,0 });
+	player->Awake(config.child(App->entitycontroller->name.GetString()));
+	player->Start();
+
 	return ret;
 }
 
@@ -140,7 +146,7 @@ void j1EntityController::DeleteEnemies()
 	while (tmp != nullptr)
 	{
 		p2List_item<Entity*>* tmp2 = tmp;
-		if (tmp->data->type != Entity::entityType::PLAYER)
+		if (tmp->data->type != Entity::entityType::PLAYER && tmp->data->type)
 		{
 			RELEASE(tmp->data);
 			Entities.del(tmp2);
@@ -179,25 +185,32 @@ bool j1EntityController::Draw(float dt)
 
 bool j1EntityController::DebugDraw()
 {
-	//p2List_item<Entity*>* tmp = Entities.start;
-	//SDL_Rect col;
-	//SDL_Rect col2;
-	//while (tmp != nullptr)
-	//{
-	//	col.h = tmp->data->Collider.h, col.w = tmp->data->Collider.w, col.x = tmp->data->Collider.x, col.y = tmp->data->Collider.y;
-	//	App->render->DrawQuad(col, 255, 0, 0, 50);
-	//	if (tmp->data->type == Entity::entityType::FLYING_ENEMY || tmp->data->type == Entity::entityType::LAND_ENEMY)
-	//	{
-	//		col2.h = tmp->data->SightCollider.h, col2.w = tmp->data->SightCollider.w, col2.x = tmp->data->SightCollider.x, col2.y = tmp->data->SightCollider.y;
-	//		App->render->DrawQuad(col2, 255, 0, 0, 50);
-	//	}
-	//	tmp = tmp->next;
-	//}
+	p2List_item<Entity*>* tmp = Entities.start;
+	SDL_Rect col;
+	SDL_Rect col2;
+	while (tmp != nullptr)
+	{
+		col.x = tmp->data->Collider.x;
+		col.y = tmp->data->Collider.y;
+		col.h = tmp->data->Collider.h;
+		col.w = tmp->data->Collider.w;
+		App->render->DrawQuad(col, 0, 0, 255, 50); //blue
+
+		if (tmp->data->type == Entity::entityType::FLYING_ENEMY || tmp->data->type == Entity::entityType::LAND_ENEMY)
+		{
+			col2.x = tmp->data->SightCollider.x;
+			col2.y = tmp->data->SightCollider.y;
+			col2.h = tmp->data->SightCollider.h;
+			col2.w = tmp->data->SightCollider.w;
+			App->render->DrawQuad(col2, 255, 0, 0, 50);
+		}
+		tmp = tmp->next;
+	}
 
 	return true;
 }
 
-Entity* j1EntityController::AddEntity(Entity::entityType type, iPoint position)
+Entity* j1EntityController::AddEntity(Entity::entityType type, iPoint position, iPoint Size, p2SString Type)
 {
 	Entity* tmp = nullptr;
 
@@ -210,11 +223,10 @@ Entity* j1EntityController::AddEntity(Entity::entityType type, iPoint position)
 	case Entity::entityType::BOX:
 		//tmp = new box(position);
 		break;
-	case Entity::entityType::MOVING_GRID:
-		//tmp = new moving_grid(position);
+	case Entity::entityType::GRID:
+		tmp = new j1Grid(position, Size, Type);
 		break;
 	}
-
 
 	if (tmp)
 		Entities.add(tmp);

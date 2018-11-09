@@ -37,37 +37,34 @@ void j1Map::Draw()
 	iPoint center = { (data.width * data.tile_width) /2, 0 };
 	for (uint lay = 0; lay < data.layers.count(); lay++)
 	{
-		if (data.layers[lay]->name != "Meta")
+		for (uint set = 0; set < data.tilesets.count(); set++)
 		{
-			for (uint set = 0; set < data.tilesets.count(); set++)
+			for (int y = 0; y < data.height; ++y)
 			{
-				for (int y = 0; y < data.height; ++y)
+				for (int x = 0; x < data.width; ++x)
 				{
-					for (int x = 0; x < data.width; ++x)
+					int tile_id = data.layers[lay]->Get(x, y);
+					if (tile_id > 0)
 					{
-						int tile_id = data.layers[lay]->Get(x, y);
-						if (tile_id > 0)
+						TileSet* tileset = GetTilesetFromTileId(tile_id);
+
+						SDL_Rect r = tileset->GetTileRect(tile_id);
+						iPoint pos = MapToWorld(x, y);
+						//double new_x = x * cos(angle) - y * sin(angle);
+						//double new_y = x * sin(angle) + y * cos(angle);
+
+						if (data.layers[lay]->name == "Background")
 						{
-							TileSet* tileset = GetTilesetFromTileId(tile_id);
-
-							SDL_Rect r = tileset->GetTileRect(tile_id);
-							iPoint pos = MapToWorld(x, y);
-							//double new_x = x * cos(angle) - y * sin(angle);
-							//double new_y = x * sin(angle) + y * cos(angle);
-
-							if (data.layers[lay]->name == "Background") 
-							{
-								App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE, 0.8f);
-
-							}
-							else
-							{
-								App->render->Blit(tileset->texture, pos.x, pos.y, &r);
-							}
+							App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE, data.layers[lay]->parallaxSpeed);
+						}
+						else
+						{
+							App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE, data.layers[lay]->parallaxSpeed);
 						}
 					}
 				}
 			}
+
 		}
 	}
 	if (debug == true)
@@ -95,10 +92,10 @@ void j1Map::Draw()
 					{			
 						App->render->DrawQuad(collisions, 255, 255, 0, 50);
 					}
-					else if (objectdata->data->name == "Grid") //blue
+					else if (objectdata->data->name == "Grid" && objectdata->data->type == "Static") //blue
 					{
-						App->render->DrawQuad(collisions, 0, 0, 255, 50); 
-					}																							
+						App->render->DrawQuad(collisions, 0, 0, 255, 50);
+					}
 					else if (objectdata->data->name == "Ceiling") //black
 					{		
 						App->render->DrawQuad(collisions, 0, 0, 0, 50);
@@ -490,9 +487,10 @@ bool j1Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	bool ret = true;
 
 	layer->name = node.attribute("name").as_string();
-	layer->width = node.attribute("width").as_int();
-	layer->height = node.attribute("height").as_int();
+	layer->width = node.attribute("width").as_uint();
+	layer->height = node.attribute("height").as_uint();
 	LoadProperties(node, layer->properties);
+	layer->data = new uint[layer->width * layer->height];
 	layer->parallaxSpeed = node.child("properties").child("property").attribute("value").as_float(0.0f);
 
 	pugi::xml_node layer_data = node.child("data");
@@ -551,7 +549,7 @@ bool j1Map::LoadProperties(pugi::xml_node& node, Properties& properties)
 	{
 		pugi::xml_node properties_node;
 
-		for (properties_node = data.child("property"); properties_node; properties_node = properties_node.next_sibling("property"))
+		for (properties_node = data.child("property"); properties_node != NULL; properties_node = properties_node.next_sibling("property"))
 		{
 			Properties::Property* property = new Properties::Property();
 

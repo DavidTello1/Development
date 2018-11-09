@@ -5,6 +5,7 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "j1Player.h"
+#include "j1Grid.h"
 
 class Entity;
 
@@ -26,7 +27,7 @@ public:
 	bool Draw(float dt);
 	bool DebugDraw();
 
-	Entity* AddEntity(Entity::entityType type, iPoint position);
+	Entity* AddEntity(Entity::entityType type, iPoint position, iPoint Size, p2SString Type = "0");
 	bool DeleteEntity(Entity* entity);
 	void DeleteEntities();
 	void EnemyColliderCheck();
@@ -38,7 +39,6 @@ public:
 	p2List<Entity*> Entities;
 
 	bool godmode = false;
-	float enemy_dt;
 };
 
 #endif //

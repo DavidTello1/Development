@@ -53,6 +53,9 @@ public:
 	Animation		landing_anim;
 	Animation		grip_anim;
 	Animation		dying;
+
+private:
+	iPoint move;
 };
 
 #endif // !__J1PLAYER_H__

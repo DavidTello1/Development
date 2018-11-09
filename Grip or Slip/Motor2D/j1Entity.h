@@ -14,9 +14,9 @@ public:
 	enum entityType
 	{
 		NO_TYPE,
-		PLAYER,
-		MOVING_GRID,
+		GRID,
 		BOX,
+		PLAYER,
 		FLYING_ENEMY,
 		LAND_ENEMY,
 		BOSS
@@ -54,8 +54,6 @@ public:
 	int jumpSpeed;
 	int gravity;
 
-	int direction_x = 1; //-1 = left, 1 = right
-
 	SDL_Rect Collider;
 	SDL_Rect SightCollider;
 
@@ -65,7 +63,6 @@ public:
 	bool left;
 	bool right;
 	bool grid_moving;
-
 	bool dead;
 	bool grounded;
 	bool jumping;
@@ -73,13 +70,22 @@ public:
 	bool sliding;
 	bool landing;
 	bool gripping;
-
 	bool wall_left, wall_right;
 	bool gravity_active;
 	bool grid_collision;
 	bool top_grid;
 	bool ceiling;
 	bool landed;
+
+	p2SString grid_type;
+	iPoint initial_size;
+	iPoint grid_speed;
+	int frame = 0;
+	SDL_Rect rect;
+	bool flip_ver = false;
+	bool flip_hor = false;
+	bool vertical;
+	bool is_static;
 };
 
 #endif

@@ -40,8 +40,8 @@ struct Properties
 struct MapLayer
 {
 	p2SString	name;
-	int			width;
-	int			height;
+	uint			width;
+	uint			height;
 	uint*		data;
 	Properties	properties;
 	float		parallaxSpeed;
@@ -66,8 +66,8 @@ struct ObjectsData
 	p2SString	type;
 	int			x;
 	int			y;
-	uint		width;
-	uint		height;
+	int		width;
+	int		height;
 
 };
 

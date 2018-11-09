@@ -68,6 +68,10 @@ public:
 		return last_frame;
 	}
 
+	void setFrame(int frame) {
+		current_frame = frame;
+	}
+
 };
 
 #endif

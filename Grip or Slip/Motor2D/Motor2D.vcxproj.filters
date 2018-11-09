@@ -49,6 +49,9 @@
     <ClCompile Include="j1Player.cpp">
       <Filter>Desenvolupament  ========\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="j1Grid.cpp">
+      <Filter>Desenvolupament  ========\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -119,6 +122,9 @@
     </ClInclude>
     <ClInclude Include="p2Animation.h">
       <Filter>Programacio 2 ===========</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Grid.h">
+      <Filter>Desenvolupament  ========\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

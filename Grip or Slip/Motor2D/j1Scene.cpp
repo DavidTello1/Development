@@ -53,13 +53,10 @@ bool j1Scene::Start()
 	ret = App->map->Load(map_names.start->data->GetString());
 	currentMap = 0;
 
-	Entity* player = App->entitycontroller->AddEntity(Entity::entityType::PLAYER, { 0,0 });
-	player->Awake(config.child(App->entitycontroller->name.GetString()));
-
-	player->Start();
-
 	SpawnEnemies();
-
+	Entity* player = App->entitycontroller->AddEntity(Entity::entityType::PLAYER, { 0,0 }, { 0,0 });
+	player->Awake(config.child(App->entitycontroller->name.GetString()));
+	player->Start();
 
 	return ret;
 }
@@ -193,9 +190,18 @@ bool j1Scene::Save(pugi::xml_node& data) const
 bool j1Scene::Load_level(int time)
 {
 	App->map->SwitchMaps(map_names[time]);
-	App->entitycontroller->DeleteEnemies();
-	App->entitycontroller->Restart();
-	App->scene->SpawnEnemies();
+	App->entitycontroller->DeleteEntities();
+	SpawnEnemies();
+
+	pugi::xml_document	config_file;
+	pugi::xml_node		config;
+
+	config = App->LoadConfig(config_file);
+
+	Entity* player = App->entitycontroller->AddEntity(Entity::entityType::PLAYER, { 0,0 }, { 0,0 });
+	player->Awake(config.child(App->entitycontroller->name.GetString()));
+	player->Start();
+
 	return true;
 }
 
@@ -209,12 +215,22 @@ void j1Scene::SpawnEnemies()
 			{
 				if (objectdata->data->name == "Flying_Enemy")
 				{
-					App->entitycontroller->AddEntity(Entity::entityType::FLYING_ENEMY, { objectdata->data->x,objectdata->data->y });
+					App->entitycontroller->AddEntity(Entity::entityType::FLYING_ENEMY, { objectdata->data->x, objectdata->data->y }, { objectdata->data->width, objectdata->data->height });
 				}
 
 				else if (objectdata->data->name == "Land_Enemy")
 				{
-					App->entitycontroller->AddEntity(Entity::entityType::LAND_ENEMY, { objectdata->data->x,objectdata->data->y });
+					App->entitycontroller->AddEntity(Entity::entityType::LAND_ENEMY, { objectdata->data->x, objectdata->data->y }, { objectdata->data->width, objectdata->data->height });
+				}
+			}
+		}
+		if (object->data->name == ("Collision"))
+		{
+			for (p2List_item<ObjectsData*>* objectdata = object->data->objects.start; objectdata; objectdata = objectdata->next)
+			{
+				if (objectdata->data->name == "Grid" && objectdata->data->type != "Static") 
+				{
+					App->entitycontroller->AddEntity(Entity::entityType::GRID, { objectdata->data->x, objectdata->data->y }, { objectdata->data->width, objectdata->data->height }, objectdata->data->type);
 				}
 			}
 		}
