@@ -153,7 +153,7 @@ bool j1Player::Update(float dt)
 			}
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT) //grip
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) //grip
 		{
 			if (grid_collision == true && grid == false)
 			{
@@ -264,6 +264,10 @@ bool j1Player::Update(float dt)
 		if (ceiling == true)
 		{
 			jumpSpeed = 0;
+			if (grid == true)
+			{
+				position.y += speed.x / 2;
+			}
 		}
 
 		if (wall_left == true) //wall left
@@ -470,7 +474,7 @@ void j1Player::LoadAnimations()
 	idle.PushBack({ 64, 0, size.x, size.y });
 	idle.PushBack({ 96, 0, size.x, size.y });
 	idle.loop = true;
-	idle.speed = 0.2f;
+	idle.speed = 0.15f;
 
 	move_anim.PushBack({ 0, 32, size.x, size.y });
 	move_anim.PushBack({ 32, 32, size.x, size.y });
@@ -481,24 +485,24 @@ void j1Player::LoadAnimations()
 	move_anim.PushBack({ 192, 32, size.x, size.y });
 	move_anim.PushBack({ 224, 32, size.x, size.y });
 	move_anim.loop = true;
-	move_anim.speed = 0.2f;
+	move_anim.speed = 0.15f;
 
 	jump_anim.PushBack({ 224, 64, size.x, size.y });
 	jump_anim.PushBack({ 192, 64, size.x, size.y });
 	jump_anim.loop = true;
-	jump_anim.speed = 0.2f;
+	jump_anim.speed = 0.15f;
 
 	falling_anim.PushBack({ 160, 64, size.x, size.y });
 	falling_anim.PushBack({ 128, 64, size.x, size.y });
 	falling_anim.loop = false;
-	falling_anim.speed = 0.2f;
+	falling_anim.speed = 0.15f;
 
 	landing_anim.PushBack({ 96, 64, size.x, size.y });
 	landing_anim.PushBack({ 64, 64, size.x, size.y });
 	landing_anim.PushBack({ 32, 64, size.x, size.y });
 	landing_anim.PushBack({ 0, 64, size.x, size.y });
 	landing_anim.loop = false;
-	landing_anim.speed = 0.2f;
+	landing_anim.speed = 0.15f;
 
 	grip_idle.PushBack({ 160, 0, size.x, size.y });
 
@@ -515,7 +519,7 @@ void j1Player::LoadAnimations()
 	grip_move.PushBack({ 160, 96, size.x, size.y });
 	grip_move.PushBack({ 192, 96, size.x, size.y });
 	grip_move.loop = true;
-	grip_move.speed = 0.2f;
+	grip_move.speed = 0.15f;
 
 	slide_anim.PushBack({ 128, 96, size.x, size.y });
 

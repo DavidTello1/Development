@@ -62,7 +62,7 @@ void Entity::Collider_Overlay()
 	SDL_Rect ObjectRect;
 	SDL_Rect result;
 
-	p2List_item<Entity*>* tmp = App->entitycontroller->Entities.start;
+	p2List_item<Entity*>* tmp = App->entitycontroller->Entities.start; //grid
 	while(tmp != nullptr)
 	{
 		if (tmp->data->type == Entity::entityType::GRID)
@@ -106,7 +106,7 @@ void Entity::Collider_Overlay()
 		tmp = tmp->next;
 	}
 
-	for (p2List_item<ObjectsGroup*>* object = App->map->data.objLayers.start; object; object = object->next)
+	for (p2List_item<ObjectsGroup*>* object = App->map->data.objLayers.start; object; object = object->next) //objects colliders
 	{
 		if (object->data->name == ("Collision"))
 		{

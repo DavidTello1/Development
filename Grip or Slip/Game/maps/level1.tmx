@@ -2633,10 +2633,10 @@
    <tile gid="4"/>
    <tile gid="4"/>
    <tile gid="4"/>
-   <tile gid="4"/>
-   <tile gid="8"/>
-   <tile gid="9"/>
-   <tile gid="10"/>
+   <tile gid="0"/>
+   <tile gid="28"/>
+   <tile gid="29"/>
+   <tile gid="30"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="38"/>
@@ -2805,13 +2805,13 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="4"/>
-   <tile gid="4"/>
-   <tile gid="4"/>
-   <tile gid="4"/>
-   <tile gid="4"/>
-   <tile gid="4"/>
-   <tile gid="4"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
    <tile gid="23"/>
    <tile gid="24"/>
    <tile gid="24"/>
@@ -3429,7 +3429,7 @@
    <tile gid="24"/>
    <tile gid="24"/>
    <tile gid="25"/>
-   <tile gid="18"/>
+   <tile gid="19"/>
    <tile gid="19"/>
    <tile gid="20"/>
    <tile gid="0"/>
@@ -3477,7 +3477,7 @@
    <tile gid="24"/>
    <tile gid="24"/>
    <tile gid="25"/>
-   <tile gid="28"/>
+   <tile gid="29"/>
    <tile gid="29"/>
    <tile gid="30"/>
    <tile gid="0"/>
@@ -3525,7 +3525,7 @@
    <tile gid="24"/>
    <tile gid="24"/>
    <tile gid="25"/>
-   <tile gid="38"/>
+   <tile gid="39"/>
    <tile gid="39"/>
    <tile gid="40"/>
    <tile gid="0"/>
@@ -3725,9 +3725,9 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="18"/>
-   <tile gid="19"/>
-   <tile gid="20"/>
+   <tile gid="28"/>
+   <tile gid="29"/>
+   <tile gid="30"/>
    <tile gid="0"/>
    <tile gid="23"/>
    <tile gid="25"/>
@@ -4069,7 +4069,7 @@
   </data>
  </layer>
  <objectgroup name="Collision">
-  <object id="1" name="StartPosition" x="64" y="1120" width="32" height="32"/>
+  <object id="1" name="StartPosition" x="64" y="1184" width="32" height="32"/>
   <object id="4" name="Floor" x="32" y="1280" width="128" height="32"/>
   <object id="7" name="Spikes" x="160" y="1320" width="256" height="24"/>
   <object id="10" name="Wall" type="Wall_left" x="478" y="1264" width="32" height="80"/>
@@ -4103,7 +4103,6 @@
   <object id="40" name="Spikes" x="928" y="840" width="32" height="24"/>
   <object id="41" name="Spikes" x="896" y="872" width="32" height="24"/>
   <object id="42" name="Spikes" x="512" y="296" width="64" height="24"/>
-  <object id="43" name="Spikes" x="1120" y="480" width="224" height="24"/>
   <object id="44" name="Spikes" x="512" y="384" width="256" height="24"/>
   <object id="45" name="Spikes" x="1056" y="1256" width="32" height="24"/>
   <object id="46" name="Floor" x="416" y="1248" width="96" height="16"/>
@@ -4127,7 +4126,7 @@
   <object id="64" name="Wall" type="Wall_left" x="944" y="528" width="16" height="48"/>
   <object id="65" name="Ceiling" x="32" y="960" width="896" height="32"/>
   <object id="67" name="Ceiling" x="1344" y="1056" width="176" height="32"/>
-  <object id="68" name="Ceiling" x="1120" y="448" width="128" height="32"/>
+  <object id="68" name="Ceiling" x="1120" y="448" width="224" height="32"/>
   <object id="69" name="Ceiling" x="768" y="352" width="352" height="32"/>
   <object id="70" name="Ceiling" x="32" y="352" width="320" height="32"/>
   <object id="71" name="Ceiling" x="32" y="0" width="1472" height="8"/>
@@ -4150,7 +4149,7 @@
   <object id="90" name="Finish" x="768" y="128" width="32" height="192"/>
   <object id="91" name="Wall" type="Wall_left" x="256" y="304" width="32" height="32"/>
   <object id="92" name="Wall" type="Wall_right" x="128" y="304" width="32" height="32"/>
-  <object id="93" name="Spikes" x="32" y="384" width="320" height="24"/>
+  <object id="93" name="Spikes" x="32" y="384" width="192" height="24"/>
   <object id="94" name="Wall" type="Wall_right" x="928" y="528" width="16" height="48"/>
   <object id="96" name="Spikes" x="1248" y="736" width="96" height="24"/>
  </objectgroup>
