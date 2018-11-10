@@ -2,13 +2,11 @@
 This is a little game made by two second year students of the Videogame Design and Development degree It's just a small platformer with two levels, where the player can move right and left, jump, and grip. The game has been made using C++, SDL and pugi libraries. The maps have been made using Tiled.
 
 ### Controls
--Movement with 'A' (left) 'D' (right) keys.
+-Movement with WASD keys: A (left), D (right), W (up & grip), S (down)
 
 -Jump with spacebar.
 
--Grip to metal net with 'E' key.
-
--While gripped, movement with WASD keys.
+-Grip to metal net with 'W' key.
 
 -Close Game with ESC.
 
