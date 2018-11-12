@@ -1,12 +1,12 @@
 # GRIP OR SLIP
-This is a little game made by two second year students of the Videogame Design and Development degree It's just a small platformer with two levels, where the player can move right and left, jump, and grip. The game has been made using C++, SDL and pugi libraries. The maps have been made using Tiled.
+This is a little game made by two second year students of the Videogame Design and Development degree. It's a platformer with two levels, where the player must change between levels to complete them. The game has been made using C++, SDL and pugi libraries. The maps have been made using Tiled.
 
 ### Controls
 -Movement with WASD keys: A (left), D (right), W (up & grip), S (down)
 
--Jump with spacebar.
+-Jump with Space.
 
--Grip to metal net with 'W' key.
+-Attack with E.
 
 -Close Game with ESC.
 
@@ -26,7 +26,7 @@ We do not own any of the sprites or tilesets presented in this game.
 
 -Player Texture: The Legendary Starfy 4 https://www.spriters-resource.com/ds_dsi/thelegendarystarfy4/sheet/13166/
 -Tileset: New Super Mario Bros https://www.spriters-resource.com/ds_dsi/newsupermariobros/sheet/8415/
--Background: New Super Mario Bros https://www.spriters-resource.com/ds_dsi/newsupermariobros/sheet/26066/
+-Backgrounds: New Super Mario Bros https://www.spriters-resource.com/ds_dsi/newsupermariobros/sheet/26066/
 
 ## License
 ### MIT License

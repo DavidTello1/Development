@@ -146,6 +146,14 @@ void Entity::Collider_Overlay()
 						}
 						else
 						{
+							if (position.x + Collider.w > ObjectRect.x + ObjectRect.w)
+							{
+								wall_left = true;
+							}
+							else 
+							{
+								wall_right = true;
+							}
 							jumpSpeed = 0;
 						}
 					}
