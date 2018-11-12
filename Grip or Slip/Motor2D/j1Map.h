@@ -148,8 +148,6 @@ public:
 	//Unloads the current map and loads a new one 
 	bool SwitchMaps(p2SString* new_map);
 
-	void RotateMaps();
-
 	iPoint MapToWorld(int x, int y) const;
 	iPoint WorldToMap(int x, int y) const;
 

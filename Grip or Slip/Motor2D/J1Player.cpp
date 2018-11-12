@@ -69,68 +69,85 @@ bool j1Player::Update(float dt)
 	{
 		PositionCollider();
 		Collider_Overlay();
-
-		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) //space
+		if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) //attack
 		{
-			if (jumping == false)
+			if (attack == false && attack_able == true)
 			{
-				jumping = true;
-				grounded = false;
+				attack = true;
+				attack_able = false;
 				grid = false;
-				landed = false;
-				jumpSpeed = speed.y;
+				jumpSpeed = 0;
 			}
-			if (App->scene->godmode == true)
+		}
+		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) //jump
+		{
+			if (attack == false)
 			{
-				jumpSpeed = speed.y;
+				if (jumping == false)
+				{
+					jumping = true;
+					grounded = false;
+					grid = false;
+					landed = false;
+					attack_able = true;
+					jumpSpeed = speed.y;
+				}
+				if (App->scene->godmode == true)
+				{
+					jumpSpeed = speed.y;
+				}
 			}
 		}
 
 		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) //left
 		{
-			if (grid == true)
-			{
-				grid_moving = true;
-				position.x -= speed.x / 2;
-			}
-			else
+			if (attack == false)
 			{
 				flip = false;
-				left = true;
-				if (position.x - speed.x <= 0) {
-					position.x = 0;
+				if (grid == true)
+				{
+					grid_moving = true;
+					position.x -= speed.x / 2;
 				}
 				else
 				{
-					position.x -= speed.x;
-				}
-				if (wall_left == true && grounded == false) {
-					flip = false;
-					sliding = true;
+					left = true;
+					if (position.x - speed.x <= 0) {
+						position.x = 0;
+					}
+					else
+					{
+						position.x -= speed.x;
+					}
+					if (wall_left == true && grounded == false) {
+						sliding = true;
+					}
 				}
 			}
 		}
 
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) //right
 		{
-			if (grid == true) {
-				grid_moving = true;
-				position.x += speed.x / 2;
-			}
-			else
+			if (attack == false)
 			{
 				flip = true;
-				right = true;
-				if (position.x + speed.x >= (App->map->data.width - 1) * App->map->data.tile_width) {
-					position.x = (App->map->data.width - 1) * App->map->data.tile_width;
+				if (grid == true) {
+					grid_moving = true;
+					position.x += speed.x / 2;
 				}
 				else
 				{
-					position.x += speed.x;
-				}
-				if (wall_right == true && grounded == false) {
-					flip = true;
-					sliding = true;
+					right = true;
+					if (position.x + speed.x >= (App->map->data.width - 1) * App->map->data.tile_width) {
+						position.x = (App->map->data.width - 1) * App->map->data.tile_width;
+					}
+					else
+					{
+						position.x += speed.x;
+					}
+					if (wall_right == true && grounded == false) {
+						sliding = true;
+					}
 				}
 			}
 		}
@@ -160,9 +177,9 @@ bool j1Player::Update(float dt)
 				gripping = true;
 				grid = true;
 				jumping = false;
+				attack_able = true;
 			}
 		}
-
 
 		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP) //left release
 		{
@@ -187,10 +204,23 @@ bool j1Player::Update(float dt)
 
 
 		//----------------	
+		if (attack == true) //attack
+		{
+			if (flip)
+			{
+				position.x += speed.x;
+			}
+			else
+			{
+				position.x -= speed.x;
+			}
+		}
+
 		if (grounded == true) //grounded
 		{
 			jumping = false;
 			sliding = false;
+			attack_able = true;
 		}
 
 		if (grid_collision == false) //grid collision
@@ -261,13 +291,14 @@ bool j1Player::Update(float dt)
 			}
 		}
 
-		if (ceiling == true)
+		if (ceiling == true) //ceiling
 		{
 			jumpSpeed = 0;
 			if (grid == true)
 			{
 				position.y += speed.x / 2;
 			}
+			ceiling = false;
 		}
 
 		if (wall_left == true) //wall left
@@ -290,7 +321,7 @@ bool j1Player::Update(float dt)
 			}
 			else
 			{
-				if (grounded == false && grid == false)
+				if (grounded == false && grid == false && attack == false)
 				{
 					if (sliding == true)
 					{
@@ -317,14 +348,25 @@ bool j1Player::Update(float dt)
 			grip_anim.ResetLoops();
 			gripping = false;
 		}
+		if (end_attacking.Finished())
+		{
+			start_attacking.Reset();
+			attacking.Reset();
+			end_attacking.Reset();
+			start_attacking.ResetLoops();
+			attacking.ResetLoops();
+			end_attacking.ResetLoops();
+			attack = false;
+			gravity_active = true;
+		}
+
 
 		ChangeAnimation();
 
-		sliding = false;
 		grounded = false;
+		sliding = false;
 		grid_collision = false;
 		top_grid = false;
-		ceiling = false;
 	}
 	else
 	{
@@ -415,6 +457,10 @@ void j1Player::ChangeAnimation()
 {
 	if (!dead)
 	{
+		if (gravity_active)
+		{
+			Current_Animation = &falling_anim;
+		}
 		if (grounded && landed)
 		{
 			if (!left && !right)
@@ -459,6 +505,20 @@ void j1Player::ChangeAnimation()
 		if (gripping)
 		{
 			Current_Animation = &grip_anim;
+		}
+		if (attack)
+		{
+			Current_Animation = &start_attacking;
+			if (start_attacking.Finished() == true && attacking.Finished() == false)
+			{
+				Current_Animation = &attacking;
+				is_attacking = true;
+			}
+			if (start_attacking.Finished() == true && attacking.Finished() == true)
+			{
+				Current_Animation = &end_attacking;
+				is_attacking = false;
+			}
 		}
 	}
 	else
@@ -525,4 +585,31 @@ void j1Player::LoadAnimations()
 
 	dying.PushBack({ 64, 96, size.x, size.y });
 
+	start_attacking.PushBack({ 448, 160, size.x, size.y });
+	//start_attacking.PushBack({ 416, 160, size.x, size.y });
+	start_attacking.PushBack({ 384, 160, size.x, size.y });
+	//start_attacking.PushBack({ 352, 160, size.x, size.y });
+	start_attacking.PushBack({ 320, 160, size.x, size.y });
+	//start_attacking.PushBack({ 288, 160, size.x, size.y });
+	start_attacking.PushBack({ 256, 160, size.x, size.y });
+	start_attacking.loop = false;
+	start_attacking.speed = 0.5f;
+
+	attacking.PushBack({ 224, 160, size.x, size.y });
+	attacking.PushBack({ 192, 160, size.x, size.y });
+	attacking.PushBack({ 224, 160, size.x, size.y });
+	attacking.PushBack({ 192, 160, size.x, size.y });
+	attacking.PushBack({ 224, 160, size.x, size.y });
+	attacking.PushBack({ 192, 160, size.x, size.y });
+	attacking.loop = false;
+	attacking.speed = 0.4f;
+
+	//end_attacking.PushBack({ 160, 160, size.x, size.y });
+	end_attacking.PushBack({ 128, 160, size.x, size.y });
+	//end_attacking.PushBack({ 96, 160, size.x, size.y });
+	end_attacking.PushBack({ 64, 160, size.x, size.y });
+	//end_attacking.PushBack({ 32, 160, size.x, size.y });
+	end_attacking.PushBack({ 0, 160, size.x, size.y });
+	end_attacking.loop = false;
+	end_attacking.speed = 0.5f;
 }

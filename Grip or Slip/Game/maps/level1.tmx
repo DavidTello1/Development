@@ -4072,7 +4072,7 @@
   <object id="1" name="StartPosition" x="64" y="1184" width="32" height="32"/>
   <object id="4" name="Floor" x="32" y="1280" width="128" height="32"/>
   <object id="7" name="Spikes" x="160" y="1320" width="256" height="24"/>
-  <object id="10" name="Wall" type="Wall_left" x="478" y="1264" width="32" height="80"/>
+  <object id="10" name="Wall" type="Wall_left" x="480" y="1264" width="32" height="80"/>
   <object id="11" name="Wall" type="Wall_right" x="416" y="1264" width="32" height="80"/>
   <object id="12" name="Wall" type="Wall_right" x="576" y="1200" width="32" height="144"/>
   <object id="13" name="Wall" type="Wall_left" x="641" y="1200" width="32" height="144"/>

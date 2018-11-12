@@ -4125,7 +4125,7 @@
   <object id="72" name="Grid" type="Static" x="416" y="288" width="96" height="128"/>
   <object id="74" name="Grid" type="Hide_left" x="1120" y="896" width="160" height="96"/>
   <object id="75" name="Grid" type="Hide_right" x="1216" y="736" width="128" height="96"/>
-  <object id="76" name="Grid" type="Hide_right" x="1344" y="928" width="64" height="128"/>
+  <object id="76" name="Grid" type="Hide_right" x="1344" y="960" width="64" height="96"/>
   <object id="77" name="Box" type="Move" x="192" y="1152" width="192" height="96"/>
   <object id="78" name="Grid" type="Hide_right" x="1312" y="1120" width="192" height="96"/>
   <object id="79" name="Grid" type="Hide_up" x="1184" y="480" width="96" height="160"/>

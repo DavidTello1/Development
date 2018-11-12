@@ -31,7 +31,6 @@ public:
 	virtual bool PreUpdate() { return true; };
 	virtual bool Update(float dt) { return true; };
 	virtual bool PostUpdate() { return true; };
-	virtual bool Move() { return true; };
 
 	virtual void CleanUp() {};
 	virtual void Save(pugi::xml_node& file) const {};
@@ -53,6 +52,7 @@ public:
 	iPoint speed;
 	int jumpSpeed;
 	int gravity;
+	int lives;
 
 	SDL_Rect Collider;
 	SDL_Rect SightCollider;
@@ -76,6 +76,9 @@ public:
 	bool top_grid;
 	bool ceiling;
 	bool landed;
+	bool attack;
+	bool attack_able;
+	bool is_attacking;
 
 	p2SString grid_type;
 	iPoint initial_size;
