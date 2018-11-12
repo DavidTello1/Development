@@ -25,8 +25,11 @@ https://github.com/DavidTello1/Development
 We do not own any of the sprites or tilesets presented in this game.
 
 -Player Texture: The Legendary Starfy 4 https://www.spriters-resource.com/ds_dsi/thelegendarystarfy4/sheet/13166/
+
 -Tileset: New Super Mario Bros https://www.spriters-resource.com/ds_dsi/newsupermariobros/sheet/8415/
+
 -Backgrounds: New Super Mario Bros https://www.spriters-resource.com/ds_dsi/newsupermariobros/sheet/26066/
+
 -Boss: The Legendary Starfy 2 https://www.spriters-resource.com/game_boy_advance/thelegendarystarfy2/sheet/21288/
 
 ## License
