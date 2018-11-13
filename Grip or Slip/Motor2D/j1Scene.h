@@ -35,7 +35,7 @@ public:
 	bool Load(pugi::xml_node& data);
 	bool Save(pugi::xml_node& data) const;
 
-	bool Load_level(int time);
+	bool Load_level(int map);
 	void SpawnEnemies();
 
 public:

@@ -102,7 +102,10 @@ bool j1Scene::Update(float dt)
 		godmode = !godmode;
 	}
 	App->map->Draw();
-	App->entitycontroller->Draw(dt);
+	if (change == false)
+	{
+		App->entitycontroller->Draw(dt);
+	}
 
 	int x, y;
 	App->input->GetMousePosition(x, y);
@@ -124,17 +127,26 @@ bool j1Scene::PostUpdate()
 
 	if (change == true)
 	{
-		if (currentMap == 0)
+		if (App->map->rotate == false)
 		{
-			Load_level(1);
-			currentMap = 1;
+			if (App->map->rotate_end == true) 
+			{
+				change = false;
+			}
+			else if (App->map->rotate_back == false && App->map->rotate_end == false)
+			{
+				if (currentMap == 0)
+				{
+					Load_level(1);
+					currentMap = 1;
+				}
+				else if (currentMap == 1)
+				{
+					Load_level(0);
+					currentMap = 0;
+				}
+			}
 		}
-		else if (currentMap == 1)
-		{
-			Load_level(0);
-			currentMap = 0;
-		}
-		change = false;
 	}
 
 	if (to_end && App->scenechange->IsChanging() == false)
@@ -187,10 +199,10 @@ bool j1Scene::Save(pugi::xml_node& data) const
 	return true;
 }
 
-bool j1Scene::Load_level(int time)
+bool j1Scene::Load_level(int map)
 {
-	App->map->SwitchMaps(map_names[time]);
 	App->entitycontroller->DeleteEntities();
+	App->map->SwitchMaps(map_names[map]);
 	SpawnEnemies();
 
 	pugi::xml_document	config_file;

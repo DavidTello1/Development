@@ -69,7 +69,18 @@ bool j1Player::Update(float dt)
 	{
 		PositionCollider();
 		Collider_Overlay();
-		if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) //attack
+		if (App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN) //change
+		{
+			if (App->scene->change == false)
+			{
+			App->map->angle = 0.0;
+			App->map->rotate = true;
+			App->map->rotate_end = false;
+			App->scene->change = true;
+			}
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN) //attack
 		{
 			if (attack == false && attack_able == true)
 			{
@@ -79,6 +90,7 @@ bool j1Player::Update(float dt)
 				jumpSpeed = 0;
 			}
 		}
+
 		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) //jump
 		{
 			if (attack == false)
@@ -236,7 +248,7 @@ bool j1Player::Update(float dt)
 			sliding = false;
 			landed = false;
 
-			if (!is_static) 
+			if (!is_static)
 			{
 				if (vertical == true)
 				{
@@ -315,7 +327,7 @@ bool j1Player::Update(float dt)
 
 		if (gravity_active == true) //gravity
 		{
-			if (position.y + gravity >= (App->map->data.height - 1) * App->map->data.tile_height) 
+			if (position.y + gravity >= (App->map->data.height - 1) * App->map->data.tile_height)
 			{
 				position.y = (App->map->data.height - 1) * App->map->data.tile_height;
 			}

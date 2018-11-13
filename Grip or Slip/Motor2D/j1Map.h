@@ -166,7 +166,11 @@ public:
 
 	MapData				data;
 	bool				debug = false;
-
+	bool				rotate = false;
+	bool				rotate_back = false;
+	bool				rotated = false;
+	bool				rotate_end = true;
+	double				angle = 0.0;
 private:
 
 	pugi::xml_document	map_file;

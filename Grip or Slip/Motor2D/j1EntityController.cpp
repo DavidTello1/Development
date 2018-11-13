@@ -39,18 +39,20 @@ bool j1EntityController::Start()
 bool j1EntityController::Update(float dt)
 {
 	bool ret = true;
-
-	if (App->map->debug)
+	if (App->scene->change == false)
 	{
-		DebugDraw();
-	}
-	EnemyColliderCheck();
+		if (App->map->debug)
+		{
+			DebugDraw();
+		}
+		EnemyColliderCheck();
 
-	p2List_item<Entity*>* tmp = Entities.start;
-	while (tmp != nullptr)
-	{
-		ret = tmp->data->Update(dt);
-		tmp = tmp->next;
+		p2List_item<Entity*>* tmp = Entities.start;
+		while (tmp != nullptr)
+		{
+			ret = tmp->data->Update(dt);
+			tmp = tmp->next;
+		}
 	}
 
 	return ret;

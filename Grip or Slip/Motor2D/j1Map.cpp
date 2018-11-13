@@ -34,66 +34,148 @@ void j1Map::Draw()
 	if (map_loaded == false)
 		return;
 
-	for (uint lay = 0; lay < data.layers.count(); lay++)
+	if (rotate == true) //rotate
 	{
-		for (uint set = 0; set < data.tilesets.count(); set++)
+		if (angle >= 90)
 		{
-			for (int y = 0; y < data.height; ++y)
+			rotate = false;
+			rotated = true;
+		}
+		else
+		{
+			for (uint lay = 0; lay < data.layers.count(); lay++)
 			{
-				for (int x = 0; x < data.width; ++x)
+				for (uint set = 0; set < data.tilesets.count(); set++)
 				{
-					int tile_id = data.layers[lay]->Get(x, y);
-					if (tile_id > 0)
+					for (int y = 0; y < data.height; ++y)
 					{
-						TileSet* tileset = GetTilesetFromTileId(tile_id);
+						for (int x = 0; x < data.width; ++x)
+						{
+							int tile_id = data.layers[lay]->Get(x, y);
+							if (tile_id > 0)
+							{
+								TileSet* tileset = GetTilesetFromTileId(tile_id);
 
-						SDL_Rect r = tileset->GetTileRect(tile_id);
-						iPoint pos = MapToWorld(x, y);
-						if (data.layers[lay]->name == "Background")
-						{
-							App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE, data.layers[lay]->parallaxSpeed);
+								SDL_Rect r = tileset->GetTileRect(tile_id);
+								iPoint pos = MapToWorld(x, y);
+								iPoint new_pos;
+
+								new_pos.x = pos.x * cos(angle* 3.14159265359 / 180) + pos.y * sin(angle* 3.14159265359 / 180);
+								new_pos.y = pos.y * cos(angle* 3.14159265359 / 180) - pos.x * sin(angle* 3.14159265359 / 180);
+								App->render->Blit(tileset->texture, new_pos.x, new_pos.y, &r, SDL_FLIP_NONE, 1.0f, -angle);
+							}
 						}
-						else
+					}
+				}
+			}
+			angle+=0.5;
+		}
+	}
+	else if (rotated == true)
+	{
+		rotated = false;
+		angle = 0.0;
+		rotate_back = true;
+	}
+	else if (rotate_back == true) //rotate backwards
+	{
+		if (angle >= 90.0)
+		{
+			rotate_back = false;
+			rotate_end = true;
+		}
+		else
+		{
+			for (uint lay = 0; lay < data.layers.count(); lay++)
+			{
+				for (uint set = 0; set < data.tilesets.count(); set++)
+				{
+					for (int y = 0; y < data.height; ++y)
+					{
+						for (int x = 0; x < data.width; ++x)
 						{
-							App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE, data.layers[lay]->parallaxSpeed);
+							int tile_id = data.layers[lay]->Get(x, y);
+							if (tile_id > 0)
+							{
+								TileSet* tileset = GetTilesetFromTileId(tile_id);
+								SDL_Rect r = tileset->GetTileRect(tile_id);
+								iPoint pos = MapToWorld(-(y+1), x);
+								iPoint new_pos;
+
+								new_pos.x = pos.x * cos(angle* 3.14159265359 / 180) + pos.y * sin(angle* 3.14159265359 / 180);
+								new_pos.y = pos.y * cos(angle* 3.14159265359 / 180) - pos.x * sin(angle* 3.14159265359 / 180);
+								App->render->Blit(tileset->texture, new_pos.x, new_pos.y - data.tile_height, &r, SDL_FLIP_NONE, 1.0f, -angle + 90);
+							}
+						}
+					}
+				}
+			}
+			angle+=0.5;
+		}
+	}
+	else if (rotate == false && rotate_back == false && rotated == false) //draw normal
+	{
+		for (uint lay = 0; lay < data.layers.count(); lay++)
+		{
+			for (uint set = 0; set < data.tilesets.count(); set++)
+			{
+				for (int y = 0; y < data.height; ++y)
+				{
+					for (int x = 0; x < data.width; ++x)
+					{
+						int tile_id = data.layers[lay]->Get(x, y);
+						if (tile_id > 0)
+						{
+							TileSet* tileset = GetTilesetFromTileId(tile_id);
+							SDL_Rect r = tileset->GetTileRect(tile_id);
+							iPoint pos = MapToWorld(x, y);
+
+							if (data.layers[lay]->name == "Background")
+							{
+								App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE, data.layers[lay]->parallaxSpeed);
+							}
+							else
+							{
+								App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE, data.layers[lay]->parallaxSpeed);
+							}
 						}
 					}
 				}
 			}
 		}
-	}
-	if (debug == true)
-	{
-		SDL_Rect collisions;
-		for (p2List_item<ObjectsGroup*>* object = App->map->data.objLayers.start; object; object = object->next)
+		if (debug == true) //debug draw
 		{
-			if (object->data->name == ("Collision"))
+			SDL_Rect collisions;
+			for (p2List_item<ObjectsGroup*>* object = App->map->data.objLayers.start; object; object = object->next)
 			{
-				for (p2List_item<ObjectsData*>* objectdata = object->data->objects.start; objectdata; objectdata = objectdata->next)
+				if (object->data->name == ("Collision"))
 				{
+					for (p2List_item<ObjectsData*>* objectdata = object->data->objects.start; objectdata; objectdata = objectdata->next)
+					{
 						collisions.x = objectdata->data->x;
 						collisions.y = objectdata->data->y;
 						collisions.w = objectdata->data->width;
 						collisions.h = objectdata->data->height;
-					if (objectdata->data->name == "Floor") //green
-					{
-						App->render->DrawQuad(collisions, 0, 255, 0, 50);
-					}
-					else if (objectdata->data->name == "Spikes") //red
-					{
-						App->render->DrawQuad(collisions, 255, 0, 0, 50);
-					}
-					else if (objectdata->data->name == "Wall") //yellow
-					{			
-						App->render->DrawQuad(collisions, 255, 255, 0, 50);
-					}
-					else if (objectdata->data->name == "Grid" && objectdata->data->type == "Static") //blue
-					{
-						App->render->DrawQuad(collisions, 0, 0, 255, 50);
-					}
-					else if (objectdata->data->name == "Ceiling") //black
-					{		
-						App->render->DrawQuad(collisions, 0, 0, 0, 50);
+						if (objectdata->data->name == "Floor") //green
+						{
+							App->render->DrawQuad(collisions, 0, 255, 0, 50);
+						}
+						else if (objectdata->data->name == "Spikes") //red
+						{
+							App->render->DrawQuad(collisions, 255, 0, 0, 50);
+						}
+						else if (objectdata->data->name == "Wall") //yellow
+						{
+							App->render->DrawQuad(collisions, 255, 255, 0, 50);
+						}
+						else if (objectdata->data->name == "Grid" && objectdata->data->type == "Static") //blue
+						{
+							App->render->DrawQuad(collisions, 0, 0, 255, 50);
+						}
+						else if (objectdata->data->name == "Ceiling") //black
+						{
+							App->render->DrawQuad(collisions, 0, 0, 0, 50);
+						}
 					}
 				}
 			}
@@ -560,8 +642,8 @@ bool j1Map::LoadProperties(pugi::xml_node& node, Properties& properties)
 bool j1Map::SwitchMaps(p2SString* new_map)
 {
 	CleanUp();
-	App->scene->to_end = false;
 	Load(new_map->GetString());
+	App->scene->to_end = false;
 
 	return true;
 }

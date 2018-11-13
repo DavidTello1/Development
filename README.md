@@ -6,7 +6,9 @@ This is a little game made by two second year students of the Videogame Design a
 
 -Jump with Space.
 
--Attack with E.
+-Attack with M.
+
+-Jump to other map with N.
 
 -Close Game with ESC.
 

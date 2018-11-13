@@ -181,10 +181,6 @@ void Entity::Collider_Overlay()
 							top_grid = true;
 						}
 					}
-					else if (objectdata->data->name == "Finish")
-					{
-						App->scene->change = true;
-					}
 					else if (objectdata->data->name == "Grid" && objectdata->data->type == "Static") 
 					{
 						grid_collision = true;
