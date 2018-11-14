@@ -423,18 +423,20 @@ void j1Player::Load(pugi::xml_node& data)
 // Save Game State
 void j1Player::Save(pugi::xml_node& data) const
 {
-	data.append_child("size").append_attribute("width") = size.x;
-	data.append_child("size").append_attribute("height") = size.y;
-	data.append_child("position").append_attribute("x") = position.x;
-	data.child("position").append_attribute("y") = position.y;
-	data.append_child("gravity").append_attribute("value") = gravity;
-	data.append_child("speed").append_attribute("x") = speed.x;
-	data.child("speed").append_attribute("y") = speed.y;
-	data.append_child("grounded").append_attribute("value") = grounded;
-	data.append_child("sliding").append_attribute("value") = sliding;
-	data.append_child("jumping").append_attribute("value") = jumping;
-	data.append_child("grid").append_attribute("value") = grid;
-	data.append_child("gravity_active").append_attribute("value") = gravity_active;
+	pugi::xml_node player = data.append_child("player");
+
+	player.append_child("size").append_attribute("width") = size.x;
+	player.child("size").append_attribute("height") = size.y;
+	player.append_child("position").append_attribute("x") = position.x;
+	player.child("position").append_attribute("y") = position.y;
+	player.append_child("gravity").append_attribute("value") = gravity;
+	player.append_child("speed").append_attribute("x") = speed.x;
+	player.child("speed").append_attribute("y") = speed.y;
+	player.append_child("grounded").append_attribute("value") = grounded;
+	player.append_child("sliding").append_attribute("value") = sliding;
+	player.append_child("jumping").append_attribute("value") = jumping;
+	player.append_child("grid").append_attribute("value") = grid;
+	player.append_child("gravity_active").append_attribute("value") = gravity_active;
 
 	LOG("---Player Saved");
 }

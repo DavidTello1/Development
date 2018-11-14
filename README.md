@@ -1,5 +1,5 @@
 # GRIP OR SLIP
-This is a little game made by two second year students of the Videogame Design and Development degree. It's a platformer with two levels, where the player must change between levels to complete them. The game has been made using C++, SDL and pugi libraries. The maps have been made using Tiled.
+This is a little game made by two second year students of the Videogame Design and Development degree. It's a platformer with two levels, where the player must jump between them to complete the game. It has been made using C++, SDL and pugi libraries. The maps have been made using Tiled.
 
 ### Controls
 -Movement with WASD keys: A (left), D (right), W (up & grip), S (down)

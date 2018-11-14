@@ -131,6 +131,7 @@ bool j1Scene::PostUpdate()
 		{
 			if (App->map->rotate_end == true) 
 			{
+				//App->entitycontroller->Load();
 				change = false;
 			}
 			else if (App->map->rotate_back == false && App->map->rotate_end == false)

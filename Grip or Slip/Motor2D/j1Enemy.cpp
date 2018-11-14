@@ -48,7 +48,7 @@ void Enemy::Save(pugi::xml_node &data) const
 {
 	if (type == FLYING_ENEMY)
 	{
-		pugi::xml_node furrball = data.append_child("j1Grid");;
+		pugi::xml_node furrball = data.append_child("flying_enemy");;
 		furrball.append_child("position").append_attribute("x") = position.x;
 		furrball.child("position").append_attribute("y") = position.y;
 	}

@@ -82,6 +82,8 @@ void j1Grid::CleanUp()
 
 void j1Grid::Load(pugi::xml_node& data)
 {
+	position.x = data.child("position").attribute("x").as_int();
+	position.y = data.child("position").attribute("y").as_int();
 	size.x = data.child("size").attribute("width").as_int();
 	size.y = data.child("size").attribute("height").as_int();
 	speed.x = data.child("speed").attribute("x").as_int();
@@ -93,13 +95,18 @@ void j1Grid::Load(pugi::xml_node& data)
 // Save Game State
 void j1Grid::Save(pugi::xml_node& data) const
 {
-	data.append_child("size").append_attribute("width") = size.x;
-	data.append_child("size").append_attribute("height") = size.y;
-	data.append_child("speed").append_attribute("x") = speed.x;
-	data.append_child("speed").append_attribute("y") = speed.y;
+	pugi::xml_node grid = data.append_child("grid");
+
+	grid.append_child("position").append_attribute("x") = position.x;
+	grid.child("position").append_attribute("y") = position.y;
+	grid.append_child("size").append_attribute("width") = size.x;
+	grid.child("size").append_attribute("height") = size.y;
+	grid.append_child("speed").append_attribute("x") = speed.x;
+	grid.child("speed").append_attribute("y") = speed.y;
 
 	LOG("---Grid Saved");
 }
+
 
 void j1Grid :: ChangeAnimation()
 {
