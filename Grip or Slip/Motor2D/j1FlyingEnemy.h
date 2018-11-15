@@ -22,8 +22,6 @@ public:
 
 private:
 
-	SDL_Texture* texture = nullptr;
-
 	Animation idle;
 	Animation moving;
 	Animation attacking;

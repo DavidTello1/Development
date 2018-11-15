@@ -21,7 +21,7 @@ FlyingEnemy::FlyingEnemy(iPoint pos) : Enemy(entityType::FLYING_ENEMY, pos)
 
 	config = App->LoadConfig(config_file);
 
-	config = config.child("entitycontroller").child("FlyingEnemy");
+	config = config.child("entitycontroller").child("flyingenemy");
 
 	speed = { 0,0 };
 
@@ -109,7 +109,6 @@ bool FlyingEnemy::Update(float dt)
 
 bool FlyingEnemy::Start()
 {
-	texture = App->tex->Load("textures/test.png");
 	return true;
 }
 
@@ -144,6 +143,14 @@ bool FlyingEnemy::Move()
 
 void FlyingEnemy::LoadPushbacks()
 {
+
+	idle.PushBack({ 0, 0, size.x, size.y });
+	idle.PushBack({ 32, 0, size.x, size.y });
+	idle.PushBack({ 64, 0, size.x, size.y });
+	idle.PushBack({ 96, 0, size.x, size.y });
+	idle.loop = true;
+	idle.speed = 0.15f;
+
 	/*idle.PushBack({ 732,575,53,53 });
 	idle.PushBack({ 796,575,53,53 });
 	idle.PushBack({ 860,575,53,53 });
