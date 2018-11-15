@@ -2,6 +2,7 @@
 #define __j1FlyingEnemyH__
 #include "j1Enemy.h"
 
+
 class FlyingEnemy : public Enemy
 {
 public:
@@ -18,7 +19,11 @@ private:
 	void CleanUp();
 public:
 
+
 private:
+
+	SDL_Texture* texture = nullptr;
+
 	Animation idle;
 	Animation moving;
 	Animation attacking;

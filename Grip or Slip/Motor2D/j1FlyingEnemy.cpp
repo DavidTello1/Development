@@ -2,6 +2,7 @@
 #include "j1FlyingEnemy.h"
 #include "j1Scene.h"
 #include "j1Render.h"
+#include "j1Textures.h"
 
 
 FlyingEnemy::FlyingEnemy() : Enemy(entityType::FLYING_ENEMY)
@@ -11,10 +12,11 @@ FlyingEnemy::FlyingEnemy() : Enemy(entityType::FLYING_ENEMY)
 
 FlyingEnemy::FlyingEnemy(iPoint pos) : Enemy(entityType::FLYING_ENEMY, pos)
 {
+
 	LoadPushbacks();
 	Current_Animation = &idle;
 	canFly = true;
-	pugi::xml_document	config_file;
+	pugi::xml_document	config_file; 
 	pugi::xml_node		config;
 
 	config = App->LoadConfig(config_file);
@@ -23,7 +25,7 @@ FlyingEnemy::FlyingEnemy(iPoint pos) : Enemy(entityType::FLYING_ENEMY, pos)
 
 	speed = { 0,0 };
 
-	/*maxSpeed.x = config.child("maxSpeed").attribute("x").as_int();
+	maxSpeed.x = config.child("maxSpeed").attribute("x").as_int();
 	maxSpeed.y = config.child("maxSpeed").attribute("y").as_int();
 	gravity = config.child("gravity").attribute("value").as_float();
 	direction_x = 1;
@@ -39,7 +41,7 @@ FlyingEnemy::FlyingEnemy(iPoint pos) : Enemy(entityType::FLYING_ENEMY, pos)
 	SightCollider.x = position.x - sightOffset.x;
 	SightCollider.y = position.y - sightOffset.y;
 	SightCollider.w = config.child("SightCollider").attribute("w").as_int();
-	SightCollider.h = config.child("SightCollider").attribute("h").as_int();*/
+	SightCollider.h = config.child("SightCollider").attribute("h").as_int();
 }
 
 
@@ -63,33 +65,30 @@ bool FlyingEnemy::Update(float dt)
 		accumulated_time = 0.0f;
 	}
 
-	if (App->entitycontroller->time_state != STOPPED)
+	if (chasing_player)
 	{
-		if (chasing_player)
+		Current_Animation = &moving;
+		if (DoPathfinding)
 		{
-			Current_Animation = &moving;
-			if (DoPathfinding)
+			DoPathfinding = false;
+			if (App->pathfinding->CreatePath(App->map->WorldToMap(position.x + colOffset.x, position.y + colOffset.y), App->map->WorldToMap(target->position.x + target->colOffset.x, target->position.y + target->colOffset.y)) > -1)
 			{
-				DoPathfinding = false;
-				if (App->pathfinding->CreatePath(App->map->WorldToMap(position.x + colOffset.x, position.y + colOffset.y), App->map->WorldToMap(target->position.x + target->colOffset.x, target->position.y + target->colOffset.y), canFly) > -1)
-				{
-					path = *App->pathfinding->GetLastPath();
-
-					if (path.Count() > 0 && currentPathtile != *path.At(0))currentPathtile = *path.At(0);
-
-					else if (path.Count() > 1)currentPathtile = *path.At(1);
-
-					else speed = { 0,0 };
-				}
-				else
-					speed = { 0,-100 };
+				path = *App->pathfinding->GetLastPath();
+	
+				if (path.Count() > 0 && currentPathtile != *path.At(0)) currentPathtile = *path.At(0);
+	
+				else if (path.Count() > 1)currentPathtile = *path.At(1);
+	
+				else speed = { 0,0 };
 			}
+			else
+				speed = { 0,-100 };
 		}
-		else
-		{
-			Current_Animation = &idle;
-			speed = { 0, 0 };
-		}
+	}
+	else
+	{
+		Current_Animation = &idle;
+		speed = { 0, 0 };
 	}
 
 	PositionCollider();
@@ -98,7 +97,7 @@ bool FlyingEnemy::Update(float dt)
 	speed.y = speed.y*dt;
 	//speed = Collider_Overlay(speed, 1);
 
-	FlipImage();
+	//FlipImage();
 	position.x += speed.x;
 	position.y += speed.y;
 	//Current_Animation->speed = animationSpeed*dt;
@@ -110,6 +109,7 @@ bool FlyingEnemy::Update(float dt)
 
 bool FlyingEnemy::Start()
 {
+	texture = App->tex->Load("textures/test.png");
 	return true;
 }
 
@@ -144,7 +144,7 @@ bool FlyingEnemy::Move()
 
 void FlyingEnemy::LoadPushbacks()
 {
-	idle.PushBack({ 732,575,53,53 });
+	/*idle.PushBack({ 732,575,53,53 });
 	idle.PushBack({ 796,575,53,53 });
 	idle.PushBack({ 860,575,53,53 });
 	idle.loop = true;
@@ -153,7 +153,7 @@ void FlyingEnemy::LoadPushbacks()
 	moving.PushBack({ 732, 633,53,53 });
 	moving.PushBack({ 796, 633,53,53 });
 	moving.loop = true;
-	moving.speed = 9.0f;
+	moving.speed = 9.0f;*/
 }
 
 void FlyingEnemy::CleanUp()
