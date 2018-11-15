@@ -9,40 +9,46 @@
 		<currentMap num="0" />
 	</scene>
 	<scenechange />
+	<pathfinding />
 	<entitycontroller>
 		<grid>
-			<position x="1238" y="736" />
-			<size width="106" height="96" />
+			<position x="134" y="1090" />
+			<size width="32" height="32" />
 			<speed x="1" y="1" />
 		</grid>
 		<grid>
-			<position x="1270" y="992" />
-			<size width="74" height="96" />
+			<position x="1244" y="736" />
+			<size width="100" height="96" />
+			<speed x="1" y="1" />
+		</grid>
+		<grid>
+			<position x="1276" y="992" />
+			<size width="68" height="96" />
 			<speed x="1" y="1" />
 		</grid>
 		<grid>
 			<position x="1152" y="480" />
-			<size width="96" height="138" />
+			<size width="96" height="132" />
 			<speed x="1" y="1" />
 		</grid>
 		<grid>
-			<position x="918" y="384" />
-			<size width="202" height="96" />
+			<position x="924" y="384" />
+			<size width="196" height="96" />
 			<speed x="1" y="1" />
 		</grid>
 		<grid>
 			<position x="32" y="608" />
-			<size width="74" height="96" />
+			<size width="68" height="96" />
 			<speed x="1" y="1" />
 		</grid>
 		<grid>
 			<position x="32" y="768" />
-			<size width="202" height="96" />
+			<size width="196" height="96" />
 			<speed x="1" y="1" />
 		</grid>
 		<grid>
 			<position x="96" y="384" />
-			<size width="96" height="138" />
+			<size width="96" height="132" />
 			<speed x="1" y="1" />
 		</grid>
 		<player>

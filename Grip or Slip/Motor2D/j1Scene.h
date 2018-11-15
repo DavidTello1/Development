@@ -40,6 +40,8 @@ public:
 
 public:
 
+	SDL_Texture * debug_tex;
+
 	p2List<p2SString*> map_names;
 	uint currentMap;
 	float fade_time;
