@@ -15,6 +15,7 @@ class j1Scene;
 class j1Map;
 class j1SceneChange;
 class j1EntityController;
+class j1Pathfinding;
 
 class j1App
 {
@@ -87,6 +88,7 @@ public:
 	j1Map*				map;
 	j1SceneChange*		scenechange;
 	j1EntityController* entitycontroller;
+	j1PathFinding*		pathfinding;
 
 
 	bool fpsCapON = true;

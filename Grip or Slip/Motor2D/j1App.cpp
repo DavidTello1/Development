@@ -14,6 +14,7 @@
 #include "j1SceneChange.h"
 #include "j1Map.h"
 #include "j1EntityController.h"
+#include "j1Pathfinding.h"
 #include "j1App.h"
 
 // Constructor
@@ -30,6 +31,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	scene = new j1Scene();
 	scenechange = new j1SceneChange();
 	map = new j1Map();
+	pathfinding = new j1PathFinding();
 	entitycontroller = new j1EntityController();
 
 	// Ordered for awake / Start / Update
@@ -41,6 +43,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(map);
 	AddModule(scene);
 	AddModule(scenechange);
+	AddModule(pathfinding);
 	AddModule(entitycontroller);
 
 
