@@ -89,6 +89,7 @@ public:
 	bool flip_hor = false;
 	bool vertical;
 	bool is_static;
+	int type_int;
 };
 
 #endif

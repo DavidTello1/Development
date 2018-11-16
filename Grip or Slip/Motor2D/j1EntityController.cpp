@@ -5,7 +5,6 @@
 #include "j1SceneChange.h"
 #include "j1Entity.h"
 #include "j1Player.h"
-#include "j1FlyingEnemy.h"
 #include "j1Grid.h"
 #include "j1Textures.h"
 
@@ -251,7 +250,7 @@ Entity* j1EntityController::AddEntity(Entity::entityType type, iPoint position, 
 		break;
 
 	case Entity::entityType::FLYING_ENEMY:
-		tmp = new FlyingEnemy(position);
+		//tmp = new FlyingEnemy(position);
 
 	case Entity::entityType::GRID:
 		tmp = new j1Grid(position, Size, Type);
