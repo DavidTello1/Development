@@ -44,10 +44,19 @@ bool j1Scene::Start()
 {
 	bool ret = false;
 
+	pugi::xml_document	config_file;
+	pugi::xml_node		config;
+
+	config = App->LoadConfig(config_file);
+
 	to_end = false;
 	ret = App->map->Load(map_names.start->data->GetString());
 	currentMap = 0;
-	SpawnEntities();
+
+	SpawnEnemies();
+	Entity* player = App->entitycontroller->AddEntity(Entity::entityType::PLAYER, { 0,0 }, { 0,0 });
+	player->Awake(config.child(App->entitycontroller->name.GetString()));
+	player->Start();
 
 	return ret;
 }
@@ -93,7 +102,10 @@ bool j1Scene::Update(float dt)
 		godmode = !godmode;
 	}
 	App->map->Draw();
-	if (!change) { App->entitycontroller->Draw(dt); }
+	if (change == false)
+	{
+		App->entitycontroller->Draw(dt);
+	}
 
 	int x, y;
 	App->input->GetMousePosition(x, y);
@@ -119,23 +131,19 @@ bool j1Scene::PostUpdate()
 		{
 			if (App->map->rotate_end == true) 
 			{
-				pugi::xml_document	config_file;
-				pugi::xml_node		config;
-				config = App->LoadConfig(config_file);
-
-				App->entitycontroller->Load(config);
+				//App->entitycontroller->Load();
 				change = false;
 			}
 			else if (App->map->rotate_back == false && App->map->rotate_end == false)
 			{
 				if (currentMap == 0)
 				{
-					App->map->SwitchMaps(map_names[1]);
+					Load_level(1);
 					currentMap = 1;
 				}
 				else if (currentMap == 1)
 				{
-					App->map->SwitchMaps(map_names[0]);
+					Load_level(0);
 					currentMap = 0;
 				}
 			}
@@ -196,22 +204,18 @@ bool j1Scene::Load_level(int map)
 {
 	App->entitycontroller->DeleteEntities();
 	App->map->SwitchMaps(map_names[map]);
-	SpawnEntities();
-
-	return true;
-}
-
-void j1Scene::SpawnEntities()
-{
 	SpawnEnemies();
 
 	pugi::xml_document	config_file;
 	pugi::xml_node		config;
+
 	config = App->LoadConfig(config_file);
 
 	Entity* player = App->entitycontroller->AddEntity(Entity::entityType::PLAYER, { 0,0 }, { 0,0 });
-	player->Awake(config);
+	player->Awake(config.child(App->entitycontroller->name.GetString()));
 	player->Start();
+
+	return true;
 }
 
 void j1Scene::SpawnEnemies()
@@ -222,25 +226,22 @@ void j1Scene::SpawnEnemies()
 		{
 			for (p2List_item<ObjectsData*>* objectdata = object->data->objects.start; objectdata; objectdata = objectdata->next)
 			{
-				if (objectdata->data->name == "FlyingEnemy")
+				if (objectdata->data->name == "Flying_Enemy")
 				{
 					//App->entitycontroller->AddEntity(Entity::entityType::FLYING_ENEMY, { objectdata->data->x, objectdata->data->y }, { objectdata->data->width, objectdata->data->height });
 				}
 
-				else if (objectdata->data->name == "LandEnemy")
+				else if (objectdata->data->name == "Land_Enemy")
 				{
 					//App->entitycontroller->AddEntity(Entity::entityType::LAND_ENEMY, { objectdata->data->x, objectdata->data->y }, { objectdata->data->width, objectdata->data->height });
 				}
 			}
 		}
-	}
-	for (p2List_item<ObjectsGroup*>* object = App->map->data.objLayers.start; object; object = object->next)
-	{
 		if (object->data->name == ("Collision"))
 		{
 			for (p2List_item<ObjectsData*>* objectdata = object->data->objects.start; objectdata; objectdata = objectdata->next)
 			{
-				if (objectdata->data->name == "Grid" && objectdata->data->type != "Static")
+				if (objectdata->data->name == "Grid" && objectdata->data->type != "Static") 
 				{
 					App->entitycontroller->AddEntity(Entity::entityType::GRID, { objectdata->data->x, objectdata->data->y }, { objectdata->data->width, objectdata->data->height }, objectdata->data->type);
 				}

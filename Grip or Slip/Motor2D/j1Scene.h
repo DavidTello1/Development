@@ -37,11 +37,8 @@ public:
 
 	bool Load_level(int map);
 	void SpawnEnemies();
-	void SpawnEntities();
 
 public:
-
-	SDL_Texture * debug_tex;
 
 	p2List<p2SString*> map_names;
 	uint currentMap;

@@ -25,14 +25,7 @@ bool j1Player::Awake(pugi::xml_node & config)
 	bool ret = true;
 
 	// Player starting point
-	if (App->scene->currentMap == 0)
-	{
-		config = config.child("entitycontroller").child("map_1").child("player");
-	}
-	else if (App->scene->currentMap == 1)
-	{
-		config = config.child("entitycontroller").child("map_2").child("player");
-	}
+	config = config.child("player");
 
 	position.x = config.child("position").attribute("x").as_int();
 	position.y = config.child("position").attribute("y").as_int();
@@ -62,7 +55,6 @@ bool j1Player::Start()
 				{
 					position.x = objectdata->data->x;
 					position.y = objectdata->data->y;
-					break;
 				}
 			}
 		}
@@ -81,15 +73,10 @@ bool j1Player::Update(float dt)
 		{
 			if (App->scene->change == false)
 			{
-				pugi::xml_document	config_file;
-				pugi::xml_node		config;
-				config = App->LoadConfig(config_file);
-
-				App->entitycontroller->Save(config);
-				App->map->angle = 0.0;
-				App->map->rotate = true;
-				App->map->rotate_end = false;
-				App->scene->change = true;
+			App->map->angle = 0.0;
+			App->map->rotate = true;
+			App->map->rotate_end = false;
+			App->scene->change = true;
 			}
 		}
 
@@ -412,6 +399,8 @@ bool j1Player::PostUpdate()
 
 	return true;
 }
+
+
 
 void j1Player::Load(pugi::xml_node& data)
 {
