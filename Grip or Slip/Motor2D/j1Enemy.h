@@ -2,7 +2,7 @@
 #define __ENEMY_H__
 
 #include "j1Entity.h"
-//#include "j1Pathfinding.h"
+#include "j1Pathfinding.h"
 #include "j1Map.h"
 
 struct SDL_Texture;
@@ -21,7 +21,7 @@ public:
 	iPoint originalpos;
 	float accumulated_time;
 	float update_ms_cycle = 0;
-	//p2DynArray<iPoint> path;
+	p2DynArray<iPoint> path;
 	bool DoPathfinding = false;
 	Entity* target = nullptr;
 	iPoint currentPathtile = { 0,0 };

@@ -50,10 +50,14 @@ public:
 	iPoint position;
 	iPoint size;
 	iPoint speed;
+	iPoint maxSpeed;
 	int jumpSpeed;
 	int gravity;
 	int lives;
+	int direction_x = 1; // 1 for left && -1 for right
 
+	iPoint colOffset;
+	iPoint sightOffset;
 	SDL_Rect Collider;
 	SDL_Rect SightCollider;
 
