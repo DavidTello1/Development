@@ -15,6 +15,7 @@ public:
 	void Load(pugi::xml_node& file);
 	void Save(pugi::xml_node& file) const;
 
+	void GetType();
 	void ChangeAnimation();
 
 };

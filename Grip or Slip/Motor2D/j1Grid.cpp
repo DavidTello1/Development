@@ -21,7 +21,14 @@ j1Grid::j1Grid(iPoint pos, iPoint Size, p2SString Type) : Entity(entityType::GRI
 	pugi::xml_node		config;
 
 	config = App->LoadConfig(config_file);
-	config = config.child("entitycontroller").child("grid");
+	if (App->scene->currentMap == 0)
+	{
+		config = config.child("entitycontroller").child("map_1").child("grid");
+	}
+	else if (App->scene->currentMap == 1)
+	{
+		config = config.child("entitycontroller").child("map_2").child("grid");
+	}
 
 	position.x = pos.x;
 	position.y = pos.y;
@@ -32,12 +39,30 @@ j1Grid::j1Grid(iPoint pos, iPoint Size, p2SString Type) : Entity(entityType::GRI
 	size.y = Size.y;
 	grid_type = Type;
 
+	if (grid_type == "Hide_up")
+	{
+		type_int = 1;
+	}
+	if (grid_type == "Hide_down")
+	{
+		type_int = 2;
+	}
+	if (grid_type == "Hide_left")
+	{
+		type_int = 3;
+	}
+	if (grid_type == "Hide_right")
+	{
+		type_int = 4;
+	}
+
 	ChangeAnimation();
 	PositionCollider();
 }
 
 bool j1Grid::Update(float dt)
 {
+	GetType();
 
 	if (size.x > initial_size.x || size.x <= 32)
 	{
@@ -88,6 +113,7 @@ void j1Grid::Load(pugi::xml_node& data)
 	size.y = data.child("size").attribute("height").as_int();
 	speed.x = data.child("speed").attribute("x").as_int();
 	speed.y = data.child("speed").attribute("y").as_int();
+	type_int = data.child("type").attribute("value").as_int();
 
 	LOG("--- Grid Loaded");
 }
@@ -103,10 +129,10 @@ void j1Grid::Save(pugi::xml_node& data) const
 	grid.child("size").append_attribute("height") = size.y;
 	grid.append_child("speed").append_attribute("x") = speed.x;
 	grid.child("speed").append_attribute("y") = speed.y;
+	grid.append_child("type").append_attribute("value") = type_int;
 
 	LOG("---Grid Saved");
 }
-
 
 void j1Grid :: ChangeAnimation()
 {
@@ -119,3 +145,24 @@ void j1Grid :: ChangeAnimation()
 		rect = { 352, 0, size.x, size.y };
 	}
 }
+
+void j1Grid::GetType()
+{
+	if (type_int == 1)
+	{
+		grid_type = "Hide_up";
+	}
+	if (type_int == 2)
+	{
+		grid_type = "Hide_down";
+	}
+	if (type_int == 3)
+	{
+		grid_type = "Hide_left";
+	}
+	if (type_int == 4)
+	{
+		grid_type = "Hide_right";
+	}
+}
+
