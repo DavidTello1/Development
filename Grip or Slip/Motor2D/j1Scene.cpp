@@ -226,22 +226,14 @@ void j1Scene::SpawnEnemies()
 		{
 			for (p2List_item<ObjectsData*>* objectdata = object->data->objects.start; objectdata; objectdata = objectdata->next)
 			{
-				if (objectdata->data->name == "FlyingEnemy")
+				if (objectdata->data->name == "Flying_Enemy")
 				{
-<<<<<<< HEAD
 					//App->entitycontroller->AddEntity(Entity::entityType::FLYING_ENEMY, { objectdata->data->x, objectdata->data->y }, { objectdata->data->width, objectdata->data->height });
-=======
-					App->entitycontroller->AddEntity(Entity::entityType::FLYING_ENEMY, { objectdata->data->x, objectdata->data->y }, { objectdata->data->width, objectdata->data->height }, objectdata->data->type);
->>>>>>> 2e1035b31be0ced9b9ed9cb186b15413de2212aa
 				}
 
-				else if (objectdata->data->name == "LandEnemy")
+				else if (objectdata->data->name == "Land_Enemy")
 				{
-<<<<<<< HEAD
 					//App->entitycontroller->AddEntity(Entity::entityType::LAND_ENEMY, { objectdata->data->x, objectdata->data->y }, { objectdata->data->width, objectdata->data->height });
-=======
-					App->entitycontroller->AddEntity(Entity::entityType::LAND_ENEMY, { objectdata->data->x, objectdata->data->y }, { objectdata->data->width, objectdata->data->height }, objectdata->data->type);
->>>>>>> 2e1035b31be0ced9b9ed9cb186b15413de2212aa
 				}
 			}
 		}

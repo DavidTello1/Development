@@ -5,7 +5,6 @@
 #include "j1SceneChange.h"
 #include "j1Entity.h"
 #include "j1Player.h"
-#include "j1FlyingEnemy.h"
 #include "j1Grid.h"
 #include "j1Textures.h"
 
@@ -227,19 +226,12 @@ Entity* j1EntityController::AddEntity(Entity::entityType type, iPoint position, 
 		//tmp = new box(position);
 		break;
 <<<<<<< HEAD
-<<<<<<< HEAD
 
 	case Entity::entityType::FLYING_ENEMY:
 		//tmp = new FlyingEnemy(position);
 
 =======
 >>>>>>> parent of b60f639... Saving improved
-=======
-
-	case Entity::entityType::FLYING_ENEMY:
-		tmp = new FlyingEnemy(position);
-
->>>>>>> 2e1035b31be0ced9b9ed9cb186b15413de2212aa
 	case Entity::entityType::GRID:
 		tmp = new j1Grid(position, Size, Type);
 		break;

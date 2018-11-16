@@ -14,14 +14,12 @@
 #include "j1SceneChange.h"
 #include "j1Map.h"
 #include "j1EntityController.h"
-#include "j1Pathfinding.h"
 #include "j1App.h"
 
 // Constructor
 j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 {
-	PERF_START(ptimer);
-
+	frames = 0;
 	want_to_save = want_to_load = false;
 
 	input = new j1Input();
@@ -32,7 +30,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	scene = new j1Scene();
 	scenechange = new j1SceneChange();
 	map = new j1Map();
-	pathfinding = new j1PathFinding();
 	entitycontroller = new j1EntityController();
 
 	// Ordered for awake / Start / Update
@@ -44,7 +41,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(map);
 	AddModule(scene);
 	AddModule(scenechange);
-	AddModule(pathfinding);
 	AddModule(entitycontroller);
 
 
@@ -52,8 +48,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(render);
 
 	save_game = load_game = "save_game.xml";
-
-	PERF_PEEK(ptimer);
 }
 
 // Destructor
@@ -95,10 +89,7 @@ bool j1App::Awake()
 		app_config = config.child("app");
 		title.create(app_config.child("title").child_value());
 		organization.create(app_config.child("organization").child_value());
-
-		framerate_cap = app_config.attribute("framerate_cap").as_int(30);
 	}
-	
 
 	if(ret == true)
 	{
@@ -174,13 +165,6 @@ pugi::xml_node j1App::LoadConfig(pugi::xml_document& config_file) const
 // ---------------------------------------------
 void j1App::PrepareUpdate()
 {
-	frame_count++;
-	last_sec_frame_count++;
-
-	// TODO 4: Calculate the dt: differential time since last frame
-	dt = frame_time.ReadSec();
-	LOG("DT : %f", dt);
-	frame_time.Start();
 }
 
 // ---------------------------------------------
@@ -191,31 +175,6 @@ void j1App::FinishUpdate()
 
 	if(want_to_load == true)
 		LoadGameNow();
-
-	// Framerate calculations --
-
-	if (last_sec_frame_time.Read() > 1000)
-	{
-		last_sec_frame_time.Start();
-		prev_last_sec_frame_count = last_sec_frame_count;
-		last_sec_frame_count = 0;
-	}
-
-	float avg_fps = float(frame_count) / startup_time.ReadSec();
-	float seconds_since_startup = startup_time.ReadSec();
-	uint32 last_frame_ms = frame_time.Read();
-	uint32 frames_on_last_update = prev_last_sec_frame_count;
-
-	static char title[256];
-	sprintf_s(title, 256, "Av.FPS: %.2f Last Frame Ms: %02u Last sec frames: %i  Time since startup: %.3f Frame Count: %lu ",
-		avg_fps, last_frame_ms, frames_on_last_update, seconds_since_startup, frame_count);
-	App->win->SetTitle(title);
-
-	ptimer.Start();
-	SDL_Delay((1000 / framerate_cap) - last_frame_ms);
-
-	LOG("We waited for : %f and got back in : %f", (float)(1000 / framerate_cap) - last_frame_ms, ptimer.ReadMs());
-
 }
 
 // Call modules before each loop iteration
