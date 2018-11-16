@@ -6,56 +6,95 @@
 	<audio />
 	<map />
 	<scene>
-		<currentMap num="0" />
+		<currentMap num="1" />
 	</scene>
 	<scenechange />
 	<entitycontroller>
-		<grid>
-			<position x="1238" y="736" />
-			<size width="106" height="96" />
-			<speed x="1" y="1" />
-		</grid>
-		<grid>
-			<position x="1270" y="992" />
-			<size width="74" height="96" />
-			<speed x="1" y="1" />
-		</grid>
-		<grid>
-			<position x="1152" y="480" />
-			<size width="96" height="138" />
-			<speed x="1" y="1" />
-		</grid>
-		<grid>
-			<position x="918" y="384" />
-			<size width="202" height="96" />
-			<speed x="1" y="1" />
-		</grid>
-		<grid>
-			<position x="32" y="608" />
-			<size width="74" height="96" />
-			<speed x="1" y="1" />
-		</grid>
-		<grid>
-			<position x="32" y="768" />
-			<size width="202" height="96" />
-			<speed x="1" y="1" />
-		</grid>
-		<grid>
-			<position x="96" y="384" />
-			<size width="96" height="138" />
-			<speed x="1" y="1" />
-		</grid>
-		<player>
-			<size width="32" height="32" />
-			<position x="64" y="1249" />
-			<gravity value="8" />
-			<speed x="4" y="22" />
-			<grounded value="false" />
-			<sliding value="false" />
-			<jumping value="false" />
-			<grid value="false" />
-			<gravity_active value="true" />
-		</player>
+		<map_2>
+			<grid>
+				<position x="1120" y="896" />
+				<size width="101" height="96" />
+				<speed x="1" y="1" />
+				<type value="3" />
+			</grid>
+			<grid>
+				<position x="1275" y="736" />
+				<size width="69" height="96" />
+				<speed x="1" y="1" />
+				<type value="4" />
+			</grid>
+			<grid>
+				<position x="1349" y="960" />
+				<size width="59" height="96" />
+				<speed x="-1" y="1" />
+				<type value="4" />
+			</grid>
+			<grid>
+				<position x="1371" y="1120" />
+				<size width="133" height="96" />
+				<speed x="1" y="1" />
+				<type value="4" />
+			</grid>
+			<grid>
+				<position x="1184" y="480" />
+				<size width="96" height="101" />
+				<speed x="1" y="1" />
+				<type value="1" />
+			</grid>
+			<grid>
+				<position x="1024" y="384" />
+				<size width="96" height="101" />
+				<speed x="1" y="1" />
+				<type value="1" />
+			</grid>
+			<grid>
+				<position x="96" y="384" />
+				<size width="96" height="37" />
+				<speed x="1" y="1" />
+				<type value="1" />
+			</grid>
+			<grid>
+				<position x="32" y="544" />
+				<size width="37" height="96" />
+				<speed x="1" y="1" />
+				<type value="3" />
+			</grid>
+			<grid>
+				<position x="32" y="672" />
+				<size width="101" height="96" />
+				<speed x="1" y="1" />
+				<type value="3" />
+			</grid>
+			<grid>
+				<position x="256" y="384" />
+				<size width="96" height="37" />
+				<speed x="1" y="1" />
+				<type value="1" />
+			</grid>
+			<grid>
+				<position x="960" y="1243" />
+				<size width="96" height="101" />
+				<speed x="1" y="1" />
+				<type value="2" />
+			</grid>
+			<grid>
+				<position x="1152" y="1275" />
+				<size width="96" height="69" />
+				<speed x="1" y="1" />
+				<type value="2" />
+			</grid>
+			<player>
+				<size width="32" height="32" />
+				<position x="64" y="1281" />
+				<gravity value="8" />
+				<speed x="4" y="22" />
+				<grounded value="false" />
+				<sliding value="false" />
+				<jumping value="false" />
+				<grid value="false" />
+				<gravity_active value="true" />
+			</player>
+		</map_2>
 	</entitycontroller>
 	<renderer>
 		<camera x="0" y="-640" />

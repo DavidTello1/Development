@@ -39,20 +39,18 @@ bool j1EntityController::Start()
 bool j1EntityController::Update(float dt)
 {
 	bool ret = true;
-	if (App->scene->change == false)
-	{
-		if (App->map->debug)
-		{
-			DebugDraw();
-		}
-		EnemyColliderCheck();
 
-		p2List_item<Entity*>* tmp = Entities.start;
-		while (tmp != nullptr)
-		{
-			ret = tmp->data->Update(dt);
-			tmp = tmp->next;
-		}
+	if (App->map->debug)
+	{
+		DebugDraw();
+	}
+	EnemyColliderCheck();
+
+	p2List_item<Entity*>* tmp = Entities.start;
+	while (tmp != nullptr)
+	{
+		ret = tmp->data->Update(dt);
+		tmp = tmp->next;
 	}
 
 	return ret;
@@ -86,11 +84,25 @@ bool j1EntityController::CleanUp()
 bool j1EntityController::Save(pugi::xml_node& file) const
 {
 	bool ret = true;
-	p2List_item<Entity*>* tmp = Entities.start;
-	while (tmp != nullptr)
+	if (App->scene->currentMap == 0)
 	{
-		tmp->data->Save(file);
-		tmp = tmp->next;
+		file = file.append_child("map_1");
+		p2List_item<Entity*>* tmp = Entities.start;
+		while (tmp != nullptr)
+		{
+			tmp->data->Save(file);
+			tmp = tmp->next;
+		}
+	}
+	else if (App->scene->currentMap == 1)
+	{
+		file = file.append_child("map_2");
+		p2List_item<Entity*>* tmp = Entities.start;
+		while (tmp != nullptr)
+		{
+			tmp->data->Save(file);
+			tmp = tmp->next;
+		}
 	}
 	return ret;
 }
@@ -98,6 +110,19 @@ bool j1EntityController::Save(pugi::xml_node& file) const
 bool j1EntityController::Load(pugi::xml_node& file)
 {
 	bool ret = true;
+
+	DeleteEntities();
+	App->scene->SpawnEntities();
+
+	if (App->scene->currentMap == 0)
+	{
+		file = file.child("map_1");
+	}
+	else if (App->scene->currentMap == 1)
+	{
+		file = file.child("map_2");
+	}
+
 	p2List_item<Entity*>* tmp = Entities.start;
 	pugi::xml_node box = file.child("box");
 	pugi::xml_node grid = file.child("grid");
@@ -127,18 +152,19 @@ bool j1EntityController::Restart()
 {
 	bool ret = true;
 
-	DeleteEntities();
+	DeleteEnemies();
 	App->scene->SpawnEnemies();
 
-	pugi::xml_document	config_file;
-	pugi::xml_node		config;
-
-	config = App->LoadConfig(config_file);
-
-	Entity* player = App->entitycontroller->AddEntity(Entity::entityType::PLAYER, { 0,0 }, { 0,0 });
-	player->Awake(config.child(App->entitycontroller->name.GetString()));
-	player->Start();
-
+	p2List_item<Entity*>* tmp = Entities.end;
+	while (tmp != nullptr)
+	{
+		if (tmp->data->type == Entity::entityType::PLAYER)
+		{
+			tmp->data->Restart();
+			break;
+		}
+		tmp = tmp->prev;
+	}
 	return ret;
 }
 
@@ -148,7 +174,7 @@ void j1EntityController::DeleteEnemies()
 	while (tmp != nullptr)
 	{
 		p2List_item<Entity*>* tmp2 = tmp;
-		if (tmp->data->type != Entity::entityType::PLAYER && tmp->data->type)
+		if (tmp->data->type != Entity::entityType::PLAYER)
 		{
 			RELEASE(tmp->data);
 			Entities.del(tmp2);
@@ -156,7 +182,6 @@ void j1EntityController::DeleteEnemies()
 		}
 		else
 			tmp = tmp->prev;
-
 	}
 }
 
@@ -170,7 +195,6 @@ void j1EntityController::DeleteEntities()
 		Entities.del(tmp2);
 		tmp = tmp->prev;
 	}
-
 }
 
 bool j1EntityController::Draw(float dt)
@@ -225,13 +249,10 @@ Entity* j1EntityController::AddEntity(Entity::entityType type, iPoint position, 
 	case Entity::entityType::BOX:
 		//tmp = new box(position);
 		break;
-<<<<<<< HEAD
 
 	case Entity::entityType::FLYING_ENEMY:
 		//tmp = new FlyingEnemy(position);
 
-=======
->>>>>>> parent of b60f639... Saving improved
 	case Entity::entityType::GRID:
 		tmp = new j1Grid(position, Size, Type);
 		break;

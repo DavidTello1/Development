@@ -37,6 +37,7 @@ public:
 
 	bool Load_level(int map);
 	void SpawnEnemies();
+	void SpawnEntities();
 
 public:
 

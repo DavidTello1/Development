@@ -29,48 +29,21 @@
   <entitycontroller>
     <folder>textures/</folder>
     <sprite_sheet source="Entities.png"/>
-    <map1>
-      <player>
-        <size width="32" height="32"/>
-        <position x="64" y="500"/>
-        <gravity value="8"/>
-        <speed x="4" y="22"/>
-        <grounded value ="false"/>
-        <sliding value="false"/>
-        <jumping value="true"/>
-        <grid value="false"/>
-        <gravity_active value="true"/>
-      </player>
-      <grid>
-        <speed x="1" y="1"/>
-      </grid>
-    </map1>
-    <map2>
-      <player>
-        <size width="32" height="32"/>
-        <position x="64" y="500"/>
-        <gravity value="8"/>
-        <speed x="4" y="22"/>
-        <grounded value ="false"/>
-        <sliding value="false"/>
-        <jumping value="true"/>
-        <grid value="false"/>
-        <gravity_active value="true"/>
-      </player>
-      <flyingenemy>
-        <gravity value="0"/>
-        <maxSpeed x="150" y="150"/>
-        <colOffset x="5" y ="5"/>
-        <Collider h="31" w="31"/>
-        <sightOffset x="250" y="300"/>
-        <SightCollider w="1000" h="631"/>
-      </flyingenemy>
-      <grid>
-        <speed x="1" y="1"/>
-      </grid>
-    </map2>
+    <player>
+      <size width="32" height="32"/>
+      <position x="64" y="500"/>
+      <gravity value="8"/>
+      <speed x="4" y="22"/>
+      <grounded value ="false"/>
+      <sliding value="false"/>
+      <jumping value="true"/>
+      <grid value="false"/>
+      <gravity_active value="true"/>
+    </player>
+    <grid>
+      <speed x="1" y="1"/>
+    </grid>
   </entitycontroller>
-
 
   <scene>
     <map_name name="level1.tmx"></map_name>

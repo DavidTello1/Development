@@ -44,19 +44,10 @@ bool j1Scene::Start()
 {
 	bool ret = false;
 
-	pugi::xml_document	config_file;
-	pugi::xml_node		config;
-
-	config = App->LoadConfig(config_file);
-
 	to_end = false;
 	ret = App->map->Load(map_names.start->data->GetString());
 	currentMap = 0;
-
-	SpawnEnemies();
-	Entity* player = App->entitycontroller->AddEntity(Entity::entityType::PLAYER, { 0,0 }, { 0,0 });
-	player->Awake(config.child(App->entitycontroller->name.GetString()));
-	player->Start();
+	SpawnEntities();
 
 	return ret;
 }
@@ -204,6 +195,14 @@ bool j1Scene::Load_level(int map)
 {
 	App->entitycontroller->DeleteEntities();
 	App->map->SwitchMaps(map_names[map]);
+	SpawnEntities();
+
+	return true;
+}
+
+void j1Scene::SpawnEntities()
+{
+	App->entitycontroller->DeleteEntities();
 	SpawnEnemies();
 
 	pugi::xml_document	config_file;
@@ -214,9 +213,8 @@ bool j1Scene::Load_level(int map)
 	Entity* player = App->entitycontroller->AddEntity(Entity::entityType::PLAYER, { 0,0 }, { 0,0 });
 	player->Awake(config.child(App->entitycontroller->name.GetString()));
 	player->Start();
-
-	return true;
 }
+
 
 void j1Scene::SpawnEnemies()
 {
