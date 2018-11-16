@@ -70,21 +70,6 @@ bool j1Player::Update(float dt)
 	{
 		PositionCollider();
 		Collider_Overlay();
-		if (App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN) //change
-		{
-			if (App->scene->change == false)
-			{
-				pugi::xml_document	config_file;
-				pugi::xml_node		config;
-				config = App->LoadConfig(config_file);
-
-				App->entitycontroller->Save(config);
-				App->map->angle = 0.0;
-				App->map->rotate = true;
-				App->map->rotate_end = false;
-				App->scene->change = true;
-			}
-		}
 
 		if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN) //attack
 		{
@@ -95,11 +80,15 @@ bool j1Player::Update(float dt)
 				grid = false;
 				jumpSpeed = 0;
 			}
+			if (App->scene->godmode == true)
+			{
+				attack_able = true;
+			}
 		}
 
 		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) //jump
 		{
-			if (attack == false)
+			if (attack == false && App->scene->godmode == false)
 			{
 				if (jumping == false)
 				{
@@ -110,10 +99,6 @@ bool j1Player::Update(float dt)
 					attack_able = true;
 					jumpSpeed = speed.y;
 				}
-				if (App->scene->godmode == true)
-				{
-					jumpSpeed = speed.y;
-				}
 			}
 		}
 
@@ -122,6 +107,7 @@ bool j1Player::Update(float dt)
 			if (attack == false)
 			{
 				flip = false;
+
 				if (grid == true)
 				{
 					grid_moving = true;
@@ -149,6 +135,7 @@ bool j1Player::Update(float dt)
 			if (attack == false)
 			{
 				flip = true;
+
 				if (grid == true) {
 					grid_moving = true;
 					position.x += speed.x / 2;
@@ -177,6 +164,16 @@ bool j1Player::Update(float dt)
 				grid_moving = true;
 				position.y -= speed.x / 2;
 			}
+			else if (App->scene->godmode == true)
+			{
+				if (position.y - speed.x <= 0) {
+					position.y = 0;
+				}
+				else
+				{
+					position.y -= speed.x;
+				}
+			}
 		}
 
 		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) //down
@@ -185,6 +182,16 @@ bool j1Player::Update(float dt)
 			{
 				grid_moving = true;
 				position.y += speed.x / 2;
+			}
+			else if (App->scene->godmode == true)
+			{
+				if (position.y + speed.x >= (App->map->data.height - 1) * App->map->data.tile_height) {
+					position.y = (App->map->data.height - 1) * App->map->data.tile_height;
+				}
+				else
+				{
+					position.y += speed.x;
+				}
 			}
 		}
 
@@ -226,11 +233,17 @@ bool j1Player::Update(float dt)
 		{
 			if (flip)
 			{
+				if (position.x + speed.x <= (App->map->data.width - 1)*App->map->data.tile_width)
+				{
 				position.x += speed.x;
+				}
 			}
 			else
 			{
+				if (position.x - speed.x >= 0)
+				{
 				position.x -= speed.x;
+				}
 			}
 		}
 
@@ -319,13 +332,13 @@ bool j1Player::Update(float dt)
 			ceiling = false;
 		}
 
-		if (wall_left == true) //wall left
+		if (wall_left == true && App->scene->godmode == false) //wall left
 		{
 			position.x += speed.x;
 			wall_left = false;
 		}
 
-		if (wall_right == true) //wall right
+		if (wall_right == true && App->scene->godmode == false) //wall right
 		{
 			position.x -= speed.x;
 			wall_right = false;
@@ -333,21 +346,25 @@ bool j1Player::Update(float dt)
 
 		if (gravity_active == true) //gravity
 		{
-			if (position.y + gravity >= (App->map->data.height - 1) * App->map->data.tile_height)
+			if (App->scene->godmode == false)
 			{
-				position.y = (App->map->data.height - 1) * App->map->data.tile_height;
-			}
-			else
-			{
-				if (grounded == false && grid == false && attack == false)
+
+				if (position.y + gravity >= (App->map->data.height - 1) * App->map->data.tile_height)
 				{
-					if (sliding == true)
+					position.y = (App->map->data.height - 1) * App->map->data.tile_height;
+				}
+				else
+				{
+					if (grounded == false && grid == false && attack == false)
 					{
-						position.y += gravity / 4;
-					}
-					if (sliding == false)
-					{
-						position.y += gravity;
+						if (sliding == true)
+						{
+							position.y += gravity / 4;
+						}
+						if (sliding == false)
+						{
+							position.y += gravity;
+						}
 					}
 				}
 			}

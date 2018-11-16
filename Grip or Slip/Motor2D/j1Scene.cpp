@@ -84,6 +84,16 @@ bool j1Scene::Update(float dt)
 	{
 		App->LoadGame();
 	}
+	else if (App->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN) //change map
+	{
+		if (change == false)
+		{
+			App->map->angle = 0.0;
+			App->map->rotate = true;
+			App->map->rotate_end = false;
+			change = true;
+		}
+	}
 	else if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) //View colliders
 	{
 		App->map->debug = !App->map->debug;
@@ -122,7 +132,6 @@ bool j1Scene::PostUpdate()
 		{
 			if (App->map->rotate_end == true) 
 			{
-				//App->entitycontroller->Load();
 				change = false;
 			}
 			else if (App->map->rotate_back == false && App->map->rotate_end == false)
