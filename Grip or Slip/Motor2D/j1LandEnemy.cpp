@@ -10,8 +10,8 @@
 #include "j1LandEnemy.h"
 #include "p2Log.h"
 //#include "j1PathFinding.h"
-//#include "Brofiler\Brofiler.h"
-//#include <time.h>
+#include "Brofiler\Brofiler.h"
+#include <time.h>
 
 LandEnemy::LandEnemy() : Entity(entityType::LAND_ENEMY)
 {
@@ -47,6 +47,8 @@ LandEnemy::LandEnemy(iPoint pos) : Entity(entityType::LAND_ENEMY)
 
 bool LandEnemy::Update(float dt)
 {
+	BROFILER_CATEGORY("LandEnemy Update", Profiler::Color::DarkSlateGray);
+
 	if (!dead)
 	{
 		PositionCollider();

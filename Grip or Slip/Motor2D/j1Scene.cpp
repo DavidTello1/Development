@@ -9,6 +9,7 @@
 #include "j1Scene.h"
 #include "j1SceneChange.h"
 #include "j1EntityController.h"
+#include "Brofiler\Brofiler.h"
 
 j1Scene::j1Scene() : j1Module()
 {
@@ -55,6 +56,8 @@ bool j1Scene::Start()
 // Called each loop iteration
 bool j1Scene::PreUpdate()
 {
+	BROFILER_CATEGORY("Scene PreUpdate", Profiler::Color::DarkOrange);
+
 	//LOG("IsChanging: %i", App->scenechange->IsChanging());
 	return true;
 }
@@ -62,6 +65,8 @@ bool j1Scene::PreUpdate()
 // Called each loop iteration
 bool j1Scene::Update(float dt)
 {
+	BROFILER_CATEGORY("Scene Update", Profiler::Color::DarkOrange);
+
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) //Start from first level
 	{
 		Load_level(0);
@@ -128,6 +133,8 @@ bool j1Scene::Update(float dt)
 // Called each loop iteration
 bool j1Scene::PostUpdate()
 {
+	BROFILER_CATEGORY("Scene PostUpdate", Profiler::Color::DarkOrange);
+
 	bool ret = true;
 
 	if (change == true)

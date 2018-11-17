@@ -3,6 +3,7 @@
 #include "j1Scene.h"
 #include "j1Render.h"
 #include "j1Map.h"
+#include "Brofiler\Brofiler.h"
 
 
 j1Grid::j1Grid() : Entity(entityType::GRID)
@@ -56,6 +57,7 @@ j1Grid::j1Grid(iPoint pos, iPoint Size, p2SString Type) : Entity(entityType::GRI
 
 bool j1Grid::Update(float dt)
 {
+	BROFILER_CATEGORY("Grid Update", Profiler::Color::SandyBrown);
 
 	GetType();
 	if (size.x > initial_size.x || size.x <= 32)

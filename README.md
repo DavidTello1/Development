@@ -1,5 +1,5 @@
 # GRIP OR SLIP
-This is a little game made by two second year students of the Videogame Design and Development degree. It's a platformer with two levels, where the player must jump between them to complete the game. It has been made using C++, SDL and pugi libraries. The maps have been made using Tiled.
+This is a little game made by two second year students of the Videogame Design and Development degree. It's a platformer with two levels where the player must jump, grip to the metal nets and kill the enemies to complete the game. It has been made using C++, SDL and pugi libraries. The maps have been made using Tiled.
 
 ### Controls
 -Movement with WASD keys: A (left), D (right), W (up & grip), S (down)
@@ -8,12 +8,10 @@ This is a little game made by two second year students of the Videogame Design a
 
 -Attack with M.
 
--Jump to other map with N.
-
 -Close Game with ESC.
 
 ### Debug Controls
-F1: Load the first level. F2: Restart the current level. F3: Load the second level. F5: Load the saved game. F6: Save the current game. F9: View collider logic. F10: Activate/Deactivate God Mode.
+F1: Load the first level. F2: Restart the current level. F3: Load the second level. F5: Load the saved game. F6: Save the current game. F7: Rotate Maps. F9: View collider logic. F10: Activate/Deactivate God Mode.
 
 ### Autors
 -David Tello Panea
@@ -32,7 +30,9 @@ We do not own any of the sprites or tilesets presented in this game.
 
 -Backgrounds: New Super Mario Bros https://www.spriters-resource.com/ds_dsi/newsupermariobros/sheet/26066/
 
--Boss: The Legendary Starfy 2 https://www.spriters-resource.com/game_boy_advance/thelegendarystarfy2/sheet/21288/
+-Land Enemy: The Legendary Starfy https://www.spriters-resource.com/ds_dsi/legendarystarfy/sheet/37442/
+
+-Flying Enemy: The Legendary Starfy 2 https://www.spriters-resource.com/game_boy_advance/thelegendarystarfy2/sheet/26327/
 
 ## License
 ### MIT License

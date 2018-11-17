@@ -32,8 +32,8 @@
     <player>
       <size width="32" height="32"/>
       <position x="64" y="500"/>
-      <gravity value="8"/>
-      <speed x="4" y="22"/>
+      <gravity value="13"/>
+      <speed x="6" y="26"/>
       <grounded value ="false"/>
       <sliding value="false"/>
       <jumping value="true"/>

@@ -9,6 +9,7 @@
 #include "j1FlyingEnemy.h"
 #include "j1LandEnemy.h"
 #include "j1Textures.h"
+#include "Brofiler\Brofiler.h"
 
 #include "PugiXml/src/pugixml.hpp"
 
@@ -40,6 +41,8 @@ bool j1EntityController::Start()
 
 bool j1EntityController::Update(float dt)
 {
+	BROFILER_CATEGORY("EntityController Update", Profiler::Color::Blue);
+
 	bool ret = true;
 
 	if (App->map->debug)
@@ -60,6 +63,8 @@ bool j1EntityController::Update(float dt)
 
 bool j1EntityController::PostUpdate()
 {
+	BROFILER_CATEGORY("EntityController PostUpdate", Profiler::Color::Blue);
+
 	bool ret = true;
 	p2List_item<Entity*>* tmp = Entities.start;
 	while (tmp != nullptr)

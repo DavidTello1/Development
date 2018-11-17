@@ -10,8 +10,8 @@
 #include "j1FlyingEnemy.h"
 #include "p2Log.h"
 //#include "j1PathFinding.h"
-//#include "Brofiler\Brofiler.h"
-//#include <time.h>
+#include "Brofiler\Brofiler.h"
+#include <time.h>
 
 FlyingEnemy::FlyingEnemy() : Entity(entityType::FLYING_ENEMY)
 {
@@ -53,6 +53,8 @@ FlyingEnemy::FlyingEnemy(iPoint pos) : Entity(entityType::FLYING_ENEMY)
 
 bool FlyingEnemy::Update(float dt)
 {
+	BROFILER_CATEGORY("FlyingEnemy Update", Profiler::Color::DarkGray);
+
 	if (!dead)
 	{
 		PositionCollider();

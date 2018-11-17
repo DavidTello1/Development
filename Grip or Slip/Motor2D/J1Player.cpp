@@ -9,6 +9,7 @@
 #include "j1SceneChange.h"
 #include "j1EntityController.h"
 #include "p2Log.h"
+#include "Brofiler\Brofiler.h"
 
 
 j1Player::j1Player() : Entity(entityType::PLAYER)
@@ -66,6 +67,8 @@ bool j1Player::Start()
 
 bool j1Player::Update(float dt)
 {
+	BROFILER_CATEGORY("Player Update", Profiler::Color::Black);
+
 	if (!dead)
 	{
 		PositionCollider();
@@ -235,14 +238,14 @@ bool j1Player::Update(float dt)
 			{
 				if (position.x + speed.x <= (App->map->data.width - 1)*App->map->data.tile_width)
 				{
-				position.x += speed.x;
+					position.x += speed.x;
 				}
 			}
 			else
 			{
 				if (position.x - speed.x >= 0)
 				{
-				position.x -= speed.x;
+					position.x -= speed.x;
 				}
 			}
 		}
@@ -409,6 +412,8 @@ bool j1Player::Update(float dt)
 
 bool j1Player::PostUpdate()
 {
+	BROFILER_CATEGORY("Player PostUpdate", Profiler::Color::Black);
+
 	if (dead && !App->scenechange->IsChanging())
 	{
 		App->scenechange->ChangeMap(App->scene->currentMap, App->scene->fade_time);
@@ -612,11 +617,9 @@ void j1Player::LoadAnimations()
 	attacking.PushBack({ 192, 160, size.x, size.y });
 	attacking.PushBack({ 224, 160, size.x, size.y });
 	attacking.PushBack({ 192, 160, size.x, size.y });
-	attacking.PushBack({ 224, 160, size.x, size.y });
-	attacking.PushBack({ 192, 160, size.x, size.y });
 	attacking.PushBack({ 128, 160, size.x, size.y });
 	attacking.PushBack({ 64, 160, size.x, size.y });
 	attacking.PushBack({ 0, 160, size.x, size.y });
 	attacking.loop = false;
-	attacking.speed = 0.5f;
+	attacking.speed = 0.6f;
 }

@@ -7,6 +7,7 @@
 #include "j1EntityController.h"
 #include "j1Player.h"
 #include "j1Map.h"
+#include "Brofiler\Brofiler.h"
 
 #include <math.h>
 #include "SDL\include\SDL_render.h"
@@ -38,6 +39,8 @@ bool j1SceneChange::Start()
 
 bool j1SceneChange::Update(float dt)
 {
+	BROFILER_CATEGORY("SceneChange Update", Profiler::Color::Red);
+
 	if (current_step == fade_step::none)
 	{
 		return true;

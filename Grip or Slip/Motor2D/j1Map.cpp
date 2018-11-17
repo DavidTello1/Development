@@ -6,6 +6,7 @@
 #include "j1Window.h"
 #include "j1Map.h"
 #include "j1Scene.h"
+#include "Brofiler\Brofiler.h"
 #include <cmath>
 
 
@@ -31,6 +32,8 @@ bool j1Map::Awake(pugi::xml_node& config)
 
 void j1Map::Draw()
 {
+	BROFILER_CATEGORY("Map Draw", Profiler::Color::Crimson);
+
 	if (map_loaded == false)
 		return;
 
