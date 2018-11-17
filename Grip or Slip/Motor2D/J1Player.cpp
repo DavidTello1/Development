@@ -619,7 +619,7 @@ void j1Player::LoadAnimations()
 
 	dying.PushBack({ 64, 96, size.x, size.y });
 
-	start_attacking.PushBack({ 448, 160, size.x, size.y });
+	start_attacking.PushBack({ 0, 160, size.x, size.y });
 	//start_attacking.PushBack({ 416, 160, size.x, size.y });
 	start_attacking.PushBack({ 384, 160, size.x, size.y });
 	//start_attacking.PushBack({ 352, 160, size.x, size.y });

@@ -6,6 +6,7 @@
 #include "j1Entity.h"
 #include "j1Player.h"
 #include "j1Grid.h"
+#include "j1FlyingEnemy.h"
 #include "j1Textures.h"
 
 #include "PugiXml/src/pugixml.hpp"
@@ -70,15 +71,9 @@ bool j1EntityController::PostUpdate()
 
 bool j1EntityController::CleanUp()
 {
-	bool ret = true;
-	p2List_item<Entity*>* tmp = Entities.start;
-	while (tmp != nullptr)
-	{
-		tmp->data->CleanUp();
-		tmp = tmp->next;
-	}
 	DeleteEntities();
-	return ret;
+
+	return true;
 }
 
 bool j1EntityController::Save(pugi::xml_node& file) const
@@ -126,6 +121,7 @@ bool j1EntityController::Load(pugi::xml_node& file)
 	p2List_item<Entity*>* tmp = Entities.start;
 	pugi::xml_node box = file.child("box");
 	pugi::xml_node grid = file.child("grid");
+	pugi::xml_node flying_enemy = file.child("flying_enemy");
 	while (tmp != nullptr)
 	{
 		if (tmp->data->type == Entity::entityType::BOX)
@@ -138,6 +134,11 @@ bool j1EntityController::Load(pugi::xml_node& file)
 		{
 			tmp->data->Load(grid);
 			grid = grid.next_sibling("grid");
+		}
+		else if (tmp->data->type == Entity::entityType::FLYING_ENEMY)
+		{
+			tmp->data->Load(flying_enemy);
+			flying_enemy = flying_enemy.next_sibling("flying_enemy");
 		}
 		else if (tmp->data->type == Entity::entityType::PLAYER)
 		{
@@ -187,14 +188,13 @@ void j1EntityController::DeleteEnemies()
 
 void j1EntityController::DeleteEntities()
 {
-	p2List_item<Entity*>* tmp = Entities.end;
+	p2List_item<Entity*>* tmp = Entities.start;
 	while (tmp != nullptr)
 	{
-		p2List_item<Entity*>* tmp2 = tmp;
 		RELEASE(tmp->data);
-		Entities.del(tmp2);
-		tmp = tmp->prev;
+		tmp = tmp->next;
 	}
+	Entities.clear();
 }
 
 bool j1EntityController::Draw(float dt)
@@ -244,14 +244,15 @@ Entity* j1EntityController::AddEntity(Entity::entityType type, iPoint position, 
 	{
 	case Entity::entityType::PLAYER:
 		tmp = new j1Player();
-
 		break;
+
 	case Entity::entityType::BOX:
 		//tmp = new box(position);
 		break;
 
 	case Entity::entityType::FLYING_ENEMY:
-		//tmp = new FlyingEnemy(position);
+		tmp = new FlyingEnemy(position);
+		break;
 
 	case Entity::entityType::GRID:
 		tmp = new j1Grid(position, Size, Type);

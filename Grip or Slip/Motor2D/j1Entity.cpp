@@ -207,7 +207,7 @@ void Entity::PositionCollider()
 
 	if (type != PLAYER && type != GRID)
 	{
-		SightCollider.x = position.x;
-		SightCollider.y = position.y;
+		SightCollider.x = position.x - SightCollider.w / 3;
+		SightCollider.y = position.y - SightCollider.h / 3;
 	}
 }
