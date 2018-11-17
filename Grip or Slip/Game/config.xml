@@ -55,7 +55,7 @@
       <speed x="4" y="22"/>
       <sightCollider width ="160" height="96"/>
       <dead value="false"/>
-      <lives value="3"/>
+      <lives value="2"/>
     </land_enemy>
   </entitycontroller>
 

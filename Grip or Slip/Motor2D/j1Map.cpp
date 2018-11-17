@@ -37,11 +37,86 @@ void j1Map::Draw()
 	if (map_loaded == false)
 		return;
 
-	if (rotate == true || rotate_back == true || rotated == true) //rotate
+	if (rotate == true) //rotate
 	{
-		RotateMaps();
-	}	
-	else //draw normal
+		if (angle >= 90)
+		{
+			rotate = false;
+			rotated = true;
+		}
+		else
+		{
+			for (uint lay = 0; lay < data.layers.count(); lay++)
+			{
+				for (uint set = 0; set < data.tilesets.count(); set++)
+				{
+					for (int y = 0; y < data.height; ++y)
+					{
+						for (int x = 0; x < data.width; ++x)
+						{
+							int tile_id = data.layers[lay]->Get(x, y);
+							if (tile_id > 0)
+							{
+								TileSet* tileset = GetTilesetFromTileId(tile_id);
+
+								SDL_Rect r = tileset->GetTileRect(tile_id);
+								iPoint pos = MapToWorld(x, y);
+								iPoint new_pos;
+
+								new_pos.x = pos.x * cos(angle* 3.14159265359 / 180) + pos.y * sin(angle* 3.14159265359 / 180);
+								new_pos.y = pos.y * cos(angle* 3.14159265359 / 180) - pos.x * sin(angle* 3.14159265359 / 180);
+								App->render->Blit(tileset->texture, new_pos.x, new_pos.y, &r, SDL_FLIP_NONE, 1.0f, -angle);
+							}
+						}
+					}
+				}
+			}
+			angle+=0.5;
+		}
+	}
+	else if (rotated == true)
+	{
+		rotated = false;
+		angle = 0.0;
+		rotate_back = true;
+	}
+	else if (rotate_back == true) //rotate backwards
+	{
+		if (angle >= 90.0)
+		{
+			rotate_back = false;
+			rotate_end = true;
+		}
+		else
+		{
+			for (uint lay = 0; lay < data.layers.count(); lay++)
+			{
+				for (uint set = 0; set < data.tilesets.count(); set++)
+				{
+					for (int y = 0; y < data.height; ++y)
+					{
+						for (int x = 0; x < data.width; ++x)
+						{
+							int tile_id = data.layers[lay]->Get(x, y);
+							if (tile_id > 0)
+							{
+								TileSet* tileset = GetTilesetFromTileId(tile_id);
+								SDL_Rect r = tileset->GetTileRect(tile_id);
+								iPoint pos = MapToWorld(-(y+1), x);
+								iPoint new_pos;
+
+								new_pos.x = pos.x * cos(angle* 3.14159265359 / 180) + pos.y * sin(angle* 3.14159265359 / 180);
+								new_pos.y = pos.y * cos(angle* 3.14159265359 / 180) - pos.x * sin(angle* 3.14159265359 / 180);
+								App->render->Blit(tileset->texture, new_pos.x, new_pos.y - data.tile_height, &r, SDL_FLIP_NONE, 1.0f, -angle + 90);
+							}
+						}
+					}
+				}
+			}
+			angle+=0.5;
+		}
+	}
+	else if (rotate == false && rotate_back == false && rotated == false) //draw normal
 	{
 		for (uint lay = 0; lay < data.layers.count(); lay++)
 		{
@@ -574,89 +649,4 @@ bool j1Map::SwitchMaps(p2SString* new_map)
 	App->scene->to_end = false;
 
 	return true;
-}
-
-void j1Map::RotateMaps()
-{
-	BROFILER_CATEGORY("RotateMaps", Profiler::Color::Purple);
-
-	if (rotate == true) //rotate
-	{
-		if (angle >= 90)
-		{
-			rotate = false;
-			rotated = true;
-		}
-		else
-		{
-			for (uint lay = 0; lay < data.layers.count(); lay++)
-			{
-				for (uint set = 0; set < data.tilesets.count(); set++)
-				{
-					for (int y = 0; y < data.height; ++y)
-					{
-						for (int x = 0; x < data.width; ++x)
-						{
-							int tile_id = data.layers[lay]->Get(x, y);
-							if (tile_id > 0)
-							{
-								TileSet* tileset = GetTilesetFromTileId(tile_id);
-
-								SDL_Rect r = tileset->GetTileRect(tile_id);
-								iPoint pos = MapToWorld(x, y);
-								iPoint new_pos;
-
-								new_pos.x = pos.x * cos(angle* 3.14159265359 / 180) + pos.y * sin(angle* 3.14159265359 / 180);
-								new_pos.y = pos.y * cos(angle* 3.14159265359 / 180) - pos.x * sin(angle* 3.14159265359 / 180);
-								App->render->Blit(tileset->texture, new_pos.x, new_pos.y, &r, SDL_FLIP_NONE, 1.0f, -angle);
-							}
-						}
-					}
-				}
-			}
-			angle += 0.5;
-		}
-	}
-	else if (rotated == true)
-	{
-		rotated = false;
-		angle = 0.0;
-		rotate_back = true;
-	}
-	else if (rotate_back == true) //rotate backwards
-	{
-		if (angle >= 90.0)
-		{
-			rotate_back = false;
-			rotate_end = true;
-		}
-		else
-		{
-			for (uint lay = 0; lay < data.layers.count(); lay++)
-			{
-				for (uint set = 0; set < data.tilesets.count(); set++)
-				{
-					for (int y = 0; y < data.height; ++y)
-					{
-						for (int x = 0; x < data.width; ++x)
-						{
-							int tile_id = data.layers[lay]->Get(x, y);
-							if (tile_id > 0)
-							{
-								TileSet* tileset = GetTilesetFromTileId(tile_id);
-								SDL_Rect r = tileset->GetTileRect(tile_id);
-								iPoint pos = MapToWorld(-(y + 1), x);
-								iPoint new_pos;
-
-								new_pos.x = pos.x * cos(angle * PI/180) + pos.y * sin(angle * PI/180);
-								new_pos.y = pos.y * cos(angle * PI/180) - pos.x * sin(angle * PI/180);
-								App->render->Blit(tileset->texture, new_pos.x, new_pos.y - data.tile_height, &r, SDL_FLIP_NONE, 1.0f, -angle + 90);
-							}
-						}
-					}
-				}
-			}
-			angle += 0.5;
-		}
-	}
 }
