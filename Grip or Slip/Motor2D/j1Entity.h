@@ -59,6 +59,7 @@ public:
 
 	bool flip = false;
 	bool chasing_player = false;
+	bool hurt;
 
 	bool left;
 	bool right;
@@ -78,7 +79,6 @@ public:
 	bool landed;
 	bool attack;
 	bool attack_able;
-	bool is_attacking;
 
 	p2SString grid_type;
 	iPoint initial_size;

@@ -46,14 +46,14 @@
     <flying_enemy>
       <size width="32" height="32"/>
       <speed x="4" y="22"/>
-      <sightCollider width ="96" height="96"/>
+      <sightCollider width ="160" height="160"/>
       <dead value="false"/>
       <lives value="1"/>
     </flying_enemy>
     <land_enemy>
       <size width="32" height="32"/>
       <speed x="4" y="22"/>
-      <sightCollider width ="96" height="96"/>
+      <sightCollider width ="160" height="96"/>
       <dead value="false"/>
       <lives value="2"/>
     </land_enemy>

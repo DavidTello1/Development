@@ -7,6 +7,7 @@
 #include "j1Player.h"
 #include "j1Grid.h"
 #include "j1FlyingEnemy.h"
+#include "j1LandEnemy.h"
 #include "j1Textures.h"
 
 #include "PugiXml/src/pugixml.hpp"
@@ -122,13 +123,14 @@ bool j1EntityController::Load(pugi::xml_node& file)
 	pugi::xml_node box = file.child("box");
 	pugi::xml_node grid = file.child("grid");
 	pugi::xml_node flying_enemy = file.child("flying_enemy");
+	pugi::xml_node land_enemy = file.child("land_enemy");
+
 	while (tmp != nullptr)
 	{
 		if (tmp->data->type == Entity::entityType::BOX)
 		{
 			tmp->data->Load(box);
 			box = box.next_sibling("box");
-
 		}
 		else if (tmp->data->type == Entity::entityType::GRID)
 		{
@@ -139,6 +141,11 @@ bool j1EntityController::Load(pugi::xml_node& file)
 		{
 			tmp->data->Load(flying_enemy);
 			flying_enemy = flying_enemy.next_sibling("flying_enemy");
+		}
+		else if (tmp->data->type == Entity::entityType::LAND_ENEMY)
+		{
+			tmp->data->Load(land_enemy);
+			land_enemy = land_enemy.next_sibling("land_enemy");
 		}
 		else if (tmp->data->type == Entity::entityType::PLAYER)
 		{
@@ -201,11 +208,22 @@ bool j1EntityController::Draw(float dt)
 {
 	bool ret = true;
 	p2List_item<Entity*>* tmp = Entities.start;
+	p2List_item<Entity*>* tmp2 = nullptr;
+
 	while (tmp != nullptr)
 	{
-		tmp->data->Draw(dt);
+		if (tmp->data->type == Entity::entityType::PLAYER)
+		{
+			tmp2 = tmp;
+		}
+		else
+		{
+			tmp->data->Draw(dt);
+		}
 		tmp = tmp->next;
 	}
+	tmp2->data->Draw(dt); //draw player last
+
 	return ret;
 }
 
@@ -224,11 +242,14 @@ bool j1EntityController::DebugDraw()
 
 		if (tmp->data->type == Entity::entityType::FLYING_ENEMY || tmp->data->type == Entity::entityType::LAND_ENEMY)
 		{
-			col2.x = tmp->data->SightCollider.x;
-			col2.y = tmp->data->SightCollider.y;
-			col2.h = tmp->data->SightCollider.h;
-			col2.w = tmp->data->SightCollider.w;
-			App->render->DrawQuad(col2, 255, 0, 0, 50);
+			if (tmp->data->dead == false)
+			{
+				col2.x = tmp->data->SightCollider.x;
+				col2.y = tmp->data->SightCollider.y;
+				col2.h = tmp->data->SightCollider.h;
+				col2.w = tmp->data->SightCollider.w;
+				App->render->DrawQuad(col2, 255, 0, 0, 50);
+			}
 		}
 		tmp = tmp->next;
 	}
@@ -242,10 +263,6 @@ Entity* j1EntityController::AddEntity(Entity::entityType type, iPoint position, 
 
 	switch (type)
 	{
-	case Entity::entityType::PLAYER:
-		tmp = new j1Player();
-		break;
-
 	case Entity::entityType::BOX:
 		//tmp = new box(position);
 		break;
@@ -254,8 +271,16 @@ Entity* j1EntityController::AddEntity(Entity::entityType type, iPoint position, 
 		tmp = new FlyingEnemy(position);
 		break;
 
+	case Entity::entityType::LAND_ENEMY:
+		tmp = new LandEnemy(position);
+		break;
+
 	case Entity::entityType::GRID:
 		tmp = new j1Grid(position, Size, Type);
+		break;
+
+	case Entity::entityType::PLAYER:
+		tmp = new j1Player();
 		break;
 	}
 
@@ -289,23 +314,34 @@ void j1EntityController::EnemyColliderCheck()
 	{
 		if (tmp->data->type == Entity::entityType::LAND_ENEMY || tmp->data->type == Entity::entityType::FLYING_ENEMY)
 		{
-			if (SDL_HasIntersection(&tmp->data->SightCollider, &player->data->Collider))
+			if (tmp->data->dead == false)
 			{
-				tmp->data->chasing_player = true;
-			}
-			else
-			{
-				tmp->data->chasing_player = false;
-			}
-			if (SDL_HasIntersection(&tmp->data->Collider, &player->data->Collider) && !godmode && !App->scenechange->IsChanging())
-			{
-				if (player->data->is_attacking)
+
+				if (SDL_HasIntersection(&tmp->data->SightCollider, &player->data->Collider))
 				{
-					tmp->data->lives--;
+					tmp->data->chasing_player = true;
 				}
 				else
 				{
-					player->data->dead = true;
+					tmp->data->chasing_player = false;
+				}
+				if (SDL_HasIntersection(&tmp->data->Collider, &player->data->Collider) && !App->scenechange->IsChanging())
+				{
+					if (player->data->attack)
+					{
+						if (tmp->data->hurt == false)
+						{
+							tmp->data->lives--;
+							tmp->data->hurt = true;
+						}
+					}
+					else
+					{
+						if (!App->scene->godmode)
+						{
+							player->data->dead = true;
+						}
+					}
 				}
 			}
 		}

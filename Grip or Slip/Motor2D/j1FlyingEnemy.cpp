@@ -49,7 +49,6 @@ FlyingEnemy::FlyingEnemy(iPoint pos) : Entity(entityType::FLYING_ENEMY)
 	idle.speed = 0.15f;
 
 	Current_Animation = &idle;
-	PositionCollider();
 }
 
 bool FlyingEnemy::Update(float dt)

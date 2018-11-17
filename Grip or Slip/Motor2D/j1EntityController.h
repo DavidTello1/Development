@@ -37,8 +37,6 @@ public:
 	p2SString		texture_path;
 	SDL_Texture*	texture;
 	p2List<Entity*> Entities;
-
-	bool godmode = false;
 };
 
 #endif //

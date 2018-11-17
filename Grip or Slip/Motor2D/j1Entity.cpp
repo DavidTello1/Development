@@ -205,9 +205,15 @@ void Entity::PositionCollider()
 	Collider.w = size.x;
 	Collider.h = size.y;
 
-	if (type != PLAYER && type != GRID)
+	if (type == FLYING_ENEMY)
 	{
-		SightCollider.x = position.x - SightCollider.w / 3;
-		SightCollider.y = position.y - SightCollider.h / 3;
+		SightCollider.x = position.x - SightCollider.w / 2 + size.x / 2;
+		SightCollider.y = position.y - SightCollider.h / 2 + size.y / 2;
 	}
+	else if (type == LAND_ENEMY)
+	{
+		SightCollider.x = position.x - SightCollider.w / 2 + size.x / 2;
+		SightCollider.y = position.y - SightCollider.h / 2 + size.y / 2;
+	}
+
 }

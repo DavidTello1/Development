@@ -240,7 +240,7 @@ void j1Scene::SpawnEnemies()
 
 				else if (objectdata->data->name == "LandEnemy")
 				{
-					//App->entitycontroller->AddEntity(Entity::entityType::LAND_ENEMY, { objectdata->data->x, objectdata->data->y }, { objectdata->data->width, objectdata->data->height });
+					App->entitycontroller->AddEntity(Entity::entityType::LAND_ENEMY, { objectdata->data->x, objectdata->data->y }, { 0,0 });
 				}
 			}
 		}

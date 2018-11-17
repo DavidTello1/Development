@@ -383,18 +383,13 @@ bool j1Player::Update(float dt)
 			grip_anim.ResetLoops();
 			gripping = false;
 		}
-		if (end_attacking.Finished())
+		if (attacking.Finished())
 		{
-			start_attacking.Reset();
 			attacking.Reset();
-			end_attacking.Reset();
-			start_attacking.ResetLoops();
 			attacking.ResetLoops();
-			end_attacking.ResetLoops();
 			attack = false;
 			gravity_active = true;
 		}
-
 
 		ChangeAnimation();
 
@@ -542,17 +537,7 @@ void j1Player::ChangeAnimation()
 		}
 		if (attack)
 		{
-			Current_Animation = &start_attacking;
-			if (start_attacking.Finished() == true && attacking.Finished() == false)
-			{
-				Current_Animation = &attacking;
-				is_attacking = true;
-			}
-			if (start_attacking.Finished() == true && attacking.Finished() == true)
-			{
-				Current_Animation = &end_attacking;
-				is_attacking = false;
-			}
+			Current_Animation = &attacking;
 		}
 	}
 	else
@@ -619,31 +604,19 @@ void j1Player::LoadAnimations()
 
 	dying.PushBack({ 64, 96, size.x, size.y });
 
-	start_attacking.PushBack({ 0, 160, size.x, size.y });
-	//start_attacking.PushBack({ 416, 160, size.x, size.y });
-	start_attacking.PushBack({ 384, 160, size.x, size.y });
-	//start_attacking.PushBack({ 352, 160, size.x, size.y });
-	start_attacking.PushBack({ 320, 160, size.x, size.y });
-	//start_attacking.PushBack({ 288, 160, size.x, size.y });
-	start_attacking.PushBack({ 256, 160, size.x, size.y });
-	start_attacking.loop = false;
-	start_attacking.speed = 0.5f;
-
+	attacking.PushBack({ 0, 160, size.x, size.y });
+	attacking.PushBack({ 384, 160, size.x, size.y });
+	attacking.PushBack({ 320, 160, size.x, size.y });
+	attacking.PushBack({ 256, 160, size.x, size.y });
 	attacking.PushBack({ 224, 160, size.x, size.y });
 	attacking.PushBack({ 192, 160, size.x, size.y });
 	attacking.PushBack({ 224, 160, size.x, size.y });
 	attacking.PushBack({ 192, 160, size.x, size.y });
 	attacking.PushBack({ 224, 160, size.x, size.y });
 	attacking.PushBack({ 192, 160, size.x, size.y });
+	attacking.PushBack({ 128, 160, size.x, size.y });
+	attacking.PushBack({ 64, 160, size.x, size.y });
+	attacking.PushBack({ 0, 160, size.x, size.y });
 	attacking.loop = false;
-	attacking.speed = 0.4f;
-
-	//end_attacking.PushBack({ 160, 160, size.x, size.y });
-	end_attacking.PushBack({ 128, 160, size.x, size.y });
-	//end_attacking.PushBack({ 96, 160, size.x, size.y });
-	end_attacking.PushBack({ 64, 160, size.x, size.y });
-	//end_attacking.PushBack({ 32, 160, size.x, size.y });
-	end_attacking.PushBack({ 0, 160, size.x, size.y });
-	end_attacking.loop = false;
-	end_attacking.speed = 0.5f;
+	attacking.speed = 0.5f;
 }
