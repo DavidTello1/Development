@@ -57,12 +57,6 @@ bool LandEnemy::Update(float dt)
 			if (lives <= 0)
 			{
 				dead = true;
-				pugi::xml_document	config_file;
-				pugi::xml_node		config;
-				config = App->LoadConfig(config_file);
-				config = config.child("entitycontroller");
-
-				Save(config);
 				return true;
 			}
 			p2List_item<Entity*>* player = nullptr;
