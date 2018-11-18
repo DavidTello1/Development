@@ -99,6 +99,7 @@ bool j1App::Awake()
 		title.create(app_config.child("title").child_value());
 		organization.create(app_config.child("organization").child_value());
 		framerate_cap = app_config.attribute("framerate_cap").as_int();
+		vsyncON = config.child("renderer").child("vsync").attribute("value").as_bool();
 	}
 
 	if(ret == true)
@@ -184,7 +185,7 @@ void j1App::PrepareUpdate()
 	frame_count++;
 	last_sec_frame_count++;
 
-	dt = frame_time.ReadSec();
+	dt = frame_time.ReadSec()*30;
 	frame_time.Start();
 
 }
@@ -213,8 +214,22 @@ void j1App::FinishUpdate()
 	uint32 frames_on_last_update = prev_last_sec_frame_count;
 
 	static char title[256];
-	sprintf_s(title, 256, "Av.FPS: %.2f Last Frame Ms: %02u Last sec frames: %i  Time since startup: %.3f Frame Count: %lu ",
-		avg_fps, last_frame_ms, frames_on_last_update, seconds_since_startup, frame_count);
+	if (fpsCapON && vsyncON) {
+		sprintf_s(title, 256, "FPS: %i | Av.FPS: %.2f | MsLastFrame: %02u ms | FPS_Cap: ON | Vsync: ON",
+			frames_on_last_update, avg_fps, last_frame_ms);
+	}
+	else if (fpsCapON && !vsyncON){
+		sprintf_s(title, 256, "FPS: %i | Av.FPS: %.2f | MsLastFrame: %02u ms | FPS_Cap: ON | Vsync: OFF",
+			frames_on_last_update, avg_fps, last_frame_ms);
+	}
+	else if (!fpsCapON && vsyncON) {
+		sprintf_s(title, 256, "FPS: %i | Av.FPS: %.2f | MsLastFrame: %02u ms | FPS_Cap: OFF | Vsync: ON",
+			frames_on_last_update, avg_fps, last_frame_ms);
+	}
+	else if (!fpsCapON && !vsyncON) {
+		sprintf_s(title, 256, "FPS: %i | Av.FPS: %.2f | MsLastFrame: %02u ms | FPS_Cap: OFF | Vsync: OFF",
+			frames_on_last_update, avg_fps, last_frame_ms);
+	}
 	App->win->SetTitle(title);
 
 	if (fpsCapON) {

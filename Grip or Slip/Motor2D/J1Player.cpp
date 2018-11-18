@@ -114,17 +114,17 @@ bool j1Player::Update(float dt)
 				if (grid == true)
 				{
 					grid_moving = true;
-					position.x -= speed.x / 2;
+					position.x -= ceilf((speed.x / 2)*dt);
 				}
 				else
 				{
 					left = true;
-					if (position.x - speed.x <= 0) {
+					if ((position.x - ceilf(speed.x*dt)) <= 0) {
 						position.x = 0;
 					}
 					else
 					{
-						position.x -= speed.x;
+						position.x -= ceilf(speed.x*dt);
 					}
 					if (wall_left == true && grounded == false) {
 						sliding = true;
@@ -141,17 +141,17 @@ bool j1Player::Update(float dt)
 
 				if (grid == true) {
 					grid_moving = true;
-					position.x += speed.x / 2;
+					position.x += ceilf((speed.x / 2)*dt);
 				}
 				else
 				{
 					right = true;
-					if (position.x + speed.x >= (App->map->data.width - 1) * App->map->data.tile_width) {
+					if (position.x + ceilf(speed.x*dt) >= (App->map->data.width - 1) * App->map->data.tile_width) {
 						position.x = (App->map->data.width - 1) * App->map->data.tile_width;
 					}
 					else
 					{
-						position.x += speed.x;
+						position.x += ceilf(speed.x*dt);
 					}
 					if (wall_right == true && grounded == false) {
 						sliding = true;
@@ -165,16 +165,16 @@ bool j1Player::Update(float dt)
 			if (grid == true && ceiling == false && top_grid == false)
 			{
 				grid_moving = true;
-				position.y -= speed.x / 2;
+				position.y -= ceilf((speed.x / 2)*dt);
 			}
 			else if (App->scene->godmode == true)
 			{
-				if (position.y - speed.x <= 0) {
+				if (position.y - ceilf(speed.x*dt) <= 0) {
 					position.y = 0;
 				}
 				else
 				{
-					position.y -= speed.x;
+					position.y -= ceilf(speed.x*dt);
 				}
 			}
 		}
@@ -184,16 +184,16 @@ bool j1Player::Update(float dt)
 			if (grid == true)
 			{
 				grid_moving = true;
-				position.y += speed.x / 2;
+				position.y += ceilf((speed.x / 2)*dt);
 			}
 			else if (App->scene->godmode == true)
 			{
-				if (position.y + speed.x >= (App->map->data.height - 1) * App->map->data.tile_height) {
+				if (position.y + ceilf(speed.x*dt) >= (App->map->data.height - 1) * App->map->data.tile_height) {
 					position.y = (App->map->data.height - 1) * App->map->data.tile_height;
 				}
 				else
 				{
-					position.y += speed.x;
+					position.y += ceilf(speed.x*dt);
 				}
 			}
 		}
@@ -236,16 +236,16 @@ bool j1Player::Update(float dt)
 		{
 			if (flip)
 			{
-				if (position.x + speed.x <= (App->map->data.width - 1)*App->map->data.tile_width)
+				if (position.x + ceilf(speed.x*dt) <= (App->map->data.width - 1)*App->map->data.tile_width)
 				{
-					position.x += speed.x;
+					position.x += ceilf(speed.x*dt);
 				}
 			}
 			else
 			{
-				if (position.x - speed.x >= 0)
+				if (position.x - ceilf(speed.x*dt) >= 0)
 				{
-					position.x -= speed.x;
+					position.x -= ceilf(speed.x*dt);
 				}
 			}
 		}
@@ -278,27 +278,27 @@ bool j1Player::Update(float dt)
 					{
 						if (!ceiling)
 						{
-							position.y -= grid_speed.y;
+							position.y -= ceilf(grid_speed.y*dt);
 						}
 						else
 						{
-							position.y += grid_speed.y;
+							position.y += ceilf(grid_speed.y*dt);
 						}
 					}
 					if (flip_ver == false) //hide_down
 					{
-						position.y += grid_speed.y;
+						position.y += ceilf(grid_speed.y*dt);
 					}
 				}
 				if (vertical == false)
 				{
 					if (flip_hor == true) //hide_left
 					{
-						position.x -= grid_speed.x;
+						position.x -= ceilf(grid_speed.x*dt);
 					}
 					if (flip_hor == false) //hide_right
 					{
-						position.x += grid_speed.x;
+						position.x += ceilf(grid_speed.x*dt);
 					}
 				}
 			}
@@ -314,14 +314,14 @@ bool j1Player::Update(float dt)
 		if (jumping == true) //jumping
 		{
 			gravity_active = true;
-			if (position.y - jumpSpeed <= 0) //up-limit
+			if (position.y - ceilf(jumpSpeed*dt) <= 0) //up-limit
 			{
 				position.y = 0;
 			}
 			if (jumpSpeed > 0)
 			{
-				jumpSpeed--;
-				position.y -= jumpSpeed;
+				jumpSpeed -= 1;
+				position.y -= ceilf(jumpSpeed*dt);
 			}
 		}
 
@@ -330,20 +330,20 @@ bool j1Player::Update(float dt)
 			jumpSpeed = 0;
 			if (grid == true)
 			{
-				position.y += speed.x / 2;
+				position.y += ceilf((speed.x / 2)*dt);
 			}
 			ceiling = false;
 		}
 
 		if (wall_left == true && App->scene->godmode == false) //wall left
 		{
-			position.x += speed.x;
+			position.x += ceilf(speed.x*dt);
 			wall_left = false;
 		}
 
 		if (wall_right == true && App->scene->godmode == false) //wall right
 		{
-			position.x -= speed.x;
+			position.x -= ceilf(speed.x*dt);
 			wall_right = false;
 		}
 
@@ -351,7 +351,6 @@ bool j1Player::Update(float dt)
 		{
 			if (App->scene->godmode == false)
 			{
-
 				if (position.y + gravity >= (App->map->data.height - 1) * App->map->data.tile_height)
 				{
 					position.y = (App->map->data.height - 1) * App->map->data.tile_height;

@@ -93,6 +93,7 @@ public:
 	j1EntityController* entitycontroller;
 
 
+	bool vsyncON;
 	bool fpsCapON = true;
 private:
 
