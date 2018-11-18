@@ -3,6 +3,7 @@
 
 #include "p2Point.h"
 #include "p2Log.h"
+#include "p2DynArray.h"
 #include "p2Animation.h"
 #include "j1Map.h"
 #include "j1App.h"
@@ -50,16 +51,22 @@ public:
 	iPoint position;
 	iPoint size;
 	iPoint speed;
+	fPoint current_speed;
 	int jumpSpeed;
 	int gravity;
 	int lives;
 
 	SDL_Rect Collider;
 	SDL_Rect SightCollider;
+	
+	p2DynArray<iPoint> entityPath;
 
 	bool flip = false;
 	bool chasing_player = false;
 	bool hurt;
+
+	bool moving_left = false;
+	bool moving_right = true;
 
 	bool left;
 	bool right;
@@ -70,6 +77,7 @@ public:
 	bool grid;
 	bool sliding;
 	bool landing;
+	bool falling;
 	bool gripping;
 	bool wall_left, wall_right;
 	bool gravity_active;

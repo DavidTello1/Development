@@ -1,6 +1,7 @@
 #include "j1EntityController.h"
 #include "j1App.h"
 #include "j1Render.h"
+#include "j1Pathfinding.h"
 #include "j1Scene.h"
 #include "j1SceneChange.h"
 #include "j1Entity.h"
@@ -35,6 +36,7 @@ bool j1EntityController::Start()
 {
 	bool ret = true;
 	texture = App->tex->Load(PATH(folder.GetString(), texture_path.GetString()));
+	debug_tex = App->tex->Load("maps/pathfinding.png");
 
 	return ret;
 }
@@ -70,8 +72,19 @@ bool j1EntityController::PostUpdate()
 	while (tmp != nullptr)
 	{
 		tmp->data->PostUpdate();
+
+		if (App->entitycontroller->draw_path) {
+			const p2DynArray<iPoint>* path = &tmp->data->entityPath;
+			for (uint i = 0; i < path->Count(); ++i)
+			{
+				iPoint pos = App->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+				App->render->Blit(debug_tex, pos.x, pos.y);
+			}
+		}
 		tmp = tmp->next;
 	}
+
+	
 	return ret;
 }
 
@@ -167,7 +180,6 @@ bool j1EntityController::Restart()
 
 	DeleteEnemies();
 	App->scene->SpawnEnemies();
-
 	p2List_item<Entity*>* tmp = Entities.end;
 	while (tmp != nullptr)
 	{

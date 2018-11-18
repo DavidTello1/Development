@@ -27,6 +27,7 @@ Entity::~Entity()
 
 void Entity::Draw(float dt)
 {
+
 	if (type == GRID)
 	{
 		if (flip_ver)

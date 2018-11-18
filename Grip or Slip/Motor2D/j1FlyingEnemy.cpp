@@ -9,7 +9,7 @@
 #include "j1EntityController.h"
 #include "j1FlyingEnemy.h"
 #include "p2Log.h"
-//#include "j1PathFinding.h"
+#include "j1PathFinding.h"
 #include "Brofiler\Brofiler.h"
 #include <time.h>
 
@@ -66,8 +66,10 @@ bool FlyingEnemy::Update(float dt)
 			return true;
 		}
 
-		//if (!Calculate_Path())
-		//{
+		if (!chasing_player) {
+			standardPath();
+		}
+
 		//	if (!counting)
 		//	{
 		//		doStandardPath.Start();
@@ -78,9 +80,11 @@ bool FlyingEnemy::Update(float dt)
 		//		standardPath();
 		//		slowerPath = true;
 		//	}
-		//}
-		//else
-		//{
+
+		else {
+			followPath();
+		}
+
 		//	counting = false;
 		//	slowerPath = false;
 		//}
@@ -96,7 +100,6 @@ bool FlyingEnemy::Update(float dt)
 
 	return true;
 }
-
 
 void FlyingEnemy::CleanUp()
 {
@@ -139,68 +142,77 @@ void FlyingEnemy::Save(pugi::xml_node& data) const
 
 void FlyingEnemy::followPath()
 {
-	//iPoint curr_cell;
-	//iPoint next_cell;
-
-	//curr_cell = *entityPath.At(1);
-	//if (entityPath.Count() > 2)
-	//{
-	//	next_cell = *entityPath.At(2);
-	//}
-	//iPoint map_pos(position.x + collider_offset.x + collider->rect.w / 2, position.y + collider_offset.y + collider->rect.h / 2);
-	//iPoint map_cell = App->map->WorldToMap(map_pos.x, map_pos.y);
-
-	//iPoint curr_pos = App->map->MapToWorld(curr_cell.x, curr_cell.y);
-	//curr_pos = { curr_pos.x + App->map->data.tile_width / 2, curr_pos.y + App->map->data.tile_height / 2 };
-
-	//iPoint next_pos = App->map->MapToWorld(next_cell.x, next_cell.y);
-	//next_pos = { next_pos.x + App->map->data.tile_width / 2, next_pos.y + App->map->data.tile_height / 2 };
-
-	//float usingSpeed = (slowerPath) ? (speed.x / 2) : speed.x;
-
-	//if (curr_pos.x > map_pos.x)
-	//{
-	//	v.x = usingSpeed;
-	//	if (curr_cell.x > map_cell.x)
-	//		state = RIGHT;
-	//}
-	//else if (curr_pos.x < map_pos.x)
-	//{
-	//	v.x = -usingSpeed;
-	//	if (curr_cell.x < map_cell.x)
-	//		state = LEFT;
-	//}
-	//else
-	//	v.x = 0;
-
-	//if (curr_pos.y > map_pos.y || (next_pos.y > map_pos.y && !App->pathfinding->isTouchingGround({ map_cell.x, map_cell.y + 1 })))
-	//{
-	//	v.y = -usingSpeed;
-	//}
-	//else if (curr_pos.y < map_pos.y || (next_pos.y < map_pos.y && !App->pathfinding->isTouchingGround({ map_cell.x, map_cell.y - 2 })))
-	//{
-	//	v.y = usingSpeed;
-	//}
-	//else
-	//	v.y = 0;
+	p2List_item<Entity*>* player = nullptr;
+	for (p2List_item<Entity*>* i = App->entitycontroller->Entities.start; i != nullptr; i = i->next)
+	{
+		if (i->data->type == Entity::entityType::PLAYER)
+		{
+			player = i;
+			break;
+		}
+	}
+	if (&player->data->position != entityPath.At(entityPath.Count())) {
+		entityPath.Clear();
+		App->pathfinding->CreatePath(App->map->WorldToMap(position.x, position.y),
+			App->map->WorldToMap(player->data->position.x + (player->data->Collider.w / 2), player->data->position.y + (player->data->Collider.w / 2)), entityPath);
+	}
+	iPoint curr_cell;
+	iPoint* next_cell = nullptr;
+	if (entityPath.Count() > 0) {
+		if (App->map->WorldToMap(position.x, position.y) !=
+			App->map->WorldToMap(player->data->position.x + (player->data->Collider.w / 2), player->data->position.y + (player->data->Collider.w / 2))) {
+			curr_cell = *entityPath.At(1);
+			if (entityPath.Count() > 1)
+				next_cell = entityPath.At(2);
+			iPoint map_pos = App->map->WorldToMap(position.x + rect.w / 2, position.y + rect.h / 2);
+			if (curr_cell.x > map_pos.x) //going right
+			{
+				position.x += speed.x / 4;
+			}
+			else if (curr_cell.x < map_pos.x) //going left
+			{
+				position.x -= speed.x / 4;
+			}
+			//|| (next_cell != nullptr && next_cell->y > map_pos.y && !App->pathfinding->isTouchingGround({ map_pos.x, map_pos.y + 1 }))
+			if (curr_cell.y > map_pos.y) //going up
+			{
+				position.y += speed.y / 4;
+			}
+			// || (next_cell != nullptr && next_cell->y < map_pos.y && !App->pathfinding->isTouchingGround({ map_pos.x, map_pos.y - 2 }))
+			else if (curr_cell.y < map_pos.y)
+			{
+				position.y -= speed.y / 4;
+			}
+		}
+	}
 }
 
 void FlyingEnemy::standardPath()
 {
-	//srand(time(NULL));
-
-	//int newPosX = rand() % 10;
-	//newPosX = (newPosX < 5) ? 1 : -1;
-	//int newPosY = rand() % 10;
-	//newPosY = (newPosY < 5) ? 1 : -1;
-
-	//iPoint curr_pos = App->map->WorldToMap(position.x + collider_offset.x + collider->rect.w / 2, position.y + collider_offset.y + collider->rect.h / 2);
-
-	//curr_pos = { curr_pos.x + newPosX, curr_pos.y + newPosY }; // 1
-	//if (App->pathfinding->isWalkable(curr_pos))
-	//	entityPath.PushBack(curr_pos);
-
-	//curr_pos = { curr_pos.x + newPosX, curr_pos.y + newPosY }; // 2
-	//if (App->pathfinding->isWalkable(curr_pos))
-	//	entityPath.PushBack(curr_pos);
+	//iPoint curr_cell;
+	//iPoint* next_cell = nullptr;
+	//if (App->map->WorldToMap(position.x, position.y) != App->map->WorldToMap(position.x, position.y)) {
+	//	curr_cell = *entityPath.At(1);
+	//	if (entityPath.Count() > 1)
+	//		next_cell = entityPath.At(2);
+	//	iPoint map_pos = App->map->WorldToMap(position.x + rect.w / 2, position.y + rect.h / 2);
+	//	if (curr_cell.x > map_pos.x) //going right
+	//	{
+	//		position.x += speed.x / 4;
+	//	}
+	//	else if (curr_cell.x < map_pos.x) //going left
+	//	{
+	//		position.x -= speed.x / 4;
+	//	}
+	//	//|| (next_cell != nullptr && next_cell->y > map_pos.y && !App->pathfinding->isTouchingGround({ map_pos.x, map_pos.y + 1 }))
+	//	if (curr_cell.y > map_pos.y) //going up
+	//	{
+	//		position.y += speed.y / 4;
+	//	}
+	//	// || (next_cell != nullptr && next_cell->y < map_pos.y && !App->pathfinding->isTouchingGround({ map_pos.x, map_pos.y - 2 }))
+	//	else if (curr_cell.y < map_pos.y)
+	//	{
+	//		position.y -= speed.y / 4;
+	//	}
+	//}
 }

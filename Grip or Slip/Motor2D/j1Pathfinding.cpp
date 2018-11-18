@@ -42,6 +42,11 @@ bool j1PathFinding::CheckBoundaries(const iPoint& pos) const
 		pos.y >= 0 && pos.y <= (int)height);
 }
 
+bool j1PathFinding::IsTouchingGround(iPoint coords) const
+{
+	return !IsWalkable({ coords.x, coords.y + 1 });
+}
+
 // Utility: returns true is the tile is walkable
 bool j1PathFinding::IsWalkable(const iPoint& pos) const
 {
@@ -62,6 +67,12 @@ uchar j1PathFinding::GetTileAt(const iPoint& pos) const
 const p2DynArray<iPoint>* j1PathFinding::GetLastPath() const
 {
 	return &last_path;
+}
+
+void j1PathFinding::ResetPath(p2DynArray<iPoint>& path_to_reset)
+{
+	path_to_reset.Clear();
+	last_path.Clear();
 }
 
 // PathList ------------------------------------------------------------------------
@@ -165,13 +176,15 @@ int PathNode::CalculateF(const iPoint& destination)
 // ----------------------------------------------------------------------------------
 // Actual A* algorithm: return number of steps in the creation of the path or -1 ----
 // ----------------------------------------------------------------------------------
-int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
+int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination, p2DynArray<iPoint>& path_to_fill)
 {
 	// if origin or destination are not walkable, return -1
 	if (IsWalkable(origin) == false || IsWalkable(destination) == false) {
 		LOG("Not possible to create Path");
 		return -1;
 	}
+
+	ResetPath(path_to_fill);
 
 	// Create two lists: open, close
 	// Add the origin tile to open
@@ -212,6 +225,7 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 			steps++;
 
 			last_path.Flip();
+			path_to_fill = *GetLastPath();
 			return steps;
 		}
 		// Fill a list of all adjancent nodes
@@ -247,6 +261,7 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 		}
 		open.list.del(current_node);
 	}
+
 
 	return -1;
 }
