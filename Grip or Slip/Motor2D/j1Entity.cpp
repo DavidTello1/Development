@@ -191,8 +191,12 @@ void Entity::Collider_Overlay()
 						{
 							top_grid = true;
 						}
-
 					}
+					else if (objectdata->data->name == "Finish")
+					{
+						App->scene->to_end = true;
+					}
+
 				}
 			}
 		}

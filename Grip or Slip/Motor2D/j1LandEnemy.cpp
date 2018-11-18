@@ -41,6 +41,8 @@ LandEnemy::LandEnemy(iPoint pos) : Entity(entityType::LAND_ENEMY)
 	SightCollider.h = config.child("sightCollider").attribute("height").as_int();
 	dead = config.child("dead").attribute("value").as_bool();
 	lives = config.child("lives").attribute("value").as_int();
+	
+	gravity = 8;
 
 	LoadAnimations();
 	Current_Animation = &idle;
@@ -55,7 +57,58 @@ bool LandEnemy::Update(float dt)
 		PositionCollider();
 		App->entitycontroller->EnemyColliderCheck();
 
-		
+		SDL_Rect ObjectRect;
+		SDL_Rect result;
+		for (p2List_item<ObjectsGroup*>* object = App->map->data.objLayers.start; object; object = object->next) //objects colliders
+		{
+			if (object->data->name == ("Collision"))
+			{
+				for (p2List_item<ObjectsData*>* objectdata = object->data->objects.start; objectdata; objectdata = objectdata->next)
+				{
+					ObjectRect.x = objectdata->data->x;
+					ObjectRect.y = objectdata->data->y;
+					ObjectRect.w = objectdata->data->width;
+					ObjectRect.h = objectdata->data->height;
+
+					if (SDL_IntersectRect(&Collider, &ObjectRect, &result))
+					{
+						if (objectdata->data->name == "Floor")
+						{
+							if (position.y + Collider.h - gravity <= ObjectRect.y)
+							{
+								if (result.h <= result.w || position.x + Collider.w >= ObjectRect.x)
+								{
+									position.y -= result.h - 1;
+									grounded = true;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		if (grounded == true)
+		{
+			gravity_active = false;
+		}
+		else
+		{
+			gravity_active = true;
+		}
+
+		if (gravity_active == true)
+		{
+			if (position.y + gravity >= (App->map->data.height - 1) * App->map->data.tile_height)
+			{
+				position.y = (App->map->data.height - 1) * App->map->data.tile_height;
+			}
+			else
+			{
+				position.y += gravity;
+			}
+		}
+
 		if (hurt == true)
 		{
 			if (lives <= 0)
@@ -70,18 +123,6 @@ bool LandEnemy::Update(float dt)
 			LOG("Doing standard path");
 			standardPath();
 		}
-
-		//	if (!counting)
-		//	{
-		//		doStandardPath.Start();
-		//		counting = true;
-		//	}
-		//	if (doStandardPath.Read() >= 1500)
-		//	{
-		//		standardPath();
-		//		slowerPath = true;
-		//	}
-
 		else {
 			followPath();
 		}
@@ -92,6 +133,9 @@ bool LandEnemy::Update(float dt)
 	{
 		App->entitycontroller->DeleteEntity(this);
 	}
+
+	grounded = false;
+
 	return true;
 }
 void LandEnemy::CleanUp()
