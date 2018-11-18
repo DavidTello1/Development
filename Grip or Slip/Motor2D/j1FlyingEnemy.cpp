@@ -156,35 +156,33 @@ void FlyingEnemy::followPath()
 		App->pathfinding->CreatePath(App->map->WorldToMap(position.x, position.y),
 			App->map->WorldToMap(player->data->position.x + (player->data->Collider.w / 2), player->data->position.y + (player->data->Collider.w / 2)), entityPath);
 	}
-	/*iPoint curr_cell;
+	iPoint curr_cell;
 	iPoint* next_cell = nullptr;
-
-	curr_cell = *entityPath.At(1);
-	if (entityPath.Count() > 1)
-		next_cell = entityPath.At(2);
-	iPoint map_pos = App->map->WorldToMap(position.x + collider_offset.x + collider->rect.w / 2, position.y + collider_offset.y + collider->rect.h / 2);
-	if (curr_cell.x > map_pos.x)
-	{
-		v.x = speed;
-		state = RIGHT;
+	if (App->map->WorldToMap(position.x, position.y) !=
+		App->map->WorldToMap(player->data->position.x + (player->data->Collider.w / 2), player->data->position.y + (player->data->Collider.w / 2))) {
+		curr_cell = *entityPath.At(1);
+		if (entityPath.Count() > 1)
+			next_cell = entityPath.At(2);
+		iPoint map_pos = App->map->WorldToMap(position.x + rect.w / 2, position.y + rect.h / 2);
+		if (curr_cell.x > map_pos.x) //going right
+		{
+			position.x += speed.x / 4;
+		}
+		else if (curr_cell.x < map_pos.x) //going left
+		{
+			position.x -= speed.x / 4;
+		}
+		//|| (next_cell != nullptr && next_cell->y > map_pos.y && !App->pathfinding->isTouchingGround({ map_pos.x, map_pos.y + 1 }))
+		if (curr_cell.y > map_pos.y) //going up
+		{
+			position.y += speed.y / 4;
+		}
+		// || (next_cell != nullptr && next_cell->y < map_pos.y && !App->pathfinding->isTouchingGround({ map_pos.x, map_pos.y - 2 }))
+		else if (curr_cell.y < map_pos.y)
+		{
+			position.y -= speed.y / 4;
+		}
 	}
-	else if (curr_cell.x < map_pos.x)
-	{
-		v.x = -speed;
-		state = LEFT;
-	}
-	else
-		v.x = 0;
-	if (curr_cell.y > map_pos.y || (next_cell != nullptr && next_cell->y > map_pos.y && !App->pathfinding->isTouchingGround({ map_pos.x, map_pos.y + 1 })))
-	{
-		v.y = -speed;
-	}
-	else if (curr_cell.y < map_pos.y || (next_cell != nullptr && next_cell->y < map_pos.y && !App->pathfinding->isTouchingGround({ map_pos.x, map_pos.y - 2 })))
-	{
-		v.y = speed;
-	}
-	else
-		v.y = 0;*/
 }
 
 void FlyingEnemy::standardPath()

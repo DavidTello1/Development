@@ -51,6 +51,7 @@ public:
 	iPoint position;
 	iPoint size;
 	iPoint speed;
+	fPoint current_speed;
 	int jumpSpeed;
 	int gravity;
 	int lives;

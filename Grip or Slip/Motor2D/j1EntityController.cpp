@@ -180,13 +180,11 @@ bool j1EntityController::Restart()
 
 	DeleteEnemies();
 	App->scene->SpawnEnemies();
-
 	p2List_item<Entity*>* tmp = Entities.end;
 	while (tmp != nullptr)
 	{
 		if (tmp->data->type == Entity::entityType::PLAYER)
 		{
-			tmp->data->entityPath.Clear();
 			tmp->data->Restart();
 			break;
 		}
