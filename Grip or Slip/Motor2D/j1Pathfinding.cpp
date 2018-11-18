@@ -42,6 +42,11 @@ bool j1PathFinding::CheckBoundaries(const iPoint& pos) const
 		pos.y >= 0 && pos.y <= (int)height);
 }
 
+bool j1PathFinding::IsTouchingGround(iPoint coords) const
+{
+	return !IsWalkable({ coords.x, coords.y + 1 });
+}
+
 // Utility: returns true is the tile is walkable
 bool j1PathFinding::IsWalkable(const iPoint& pos) const
 {
@@ -66,7 +71,8 @@ const p2DynArray<iPoint>* j1PathFinding::GetLastPath() const
 
 void j1PathFinding::ResetPath(p2DynArray<iPoint>& path_to_reset)
 {
-	path_to_reset.Clear();	
+	path_to_reset.Clear();
+	last_path.Clear();
 }
 
 // PathList ------------------------------------------------------------------------

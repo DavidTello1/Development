@@ -5,6 +5,7 @@
 #include "j1Window.h"
 #include "j1Textures.h"
 #include "j1Input.h"
+#include "j1Pathfinding.h"
 #include "j1Scene.h"
 #include "j1EntityController.h"
 #include "j1LandEnemy.h"
@@ -54,6 +55,7 @@ bool LandEnemy::Update(float dt)
 		PositionCollider();
 		App->entitycontroller->EnemyColliderCheck();
 
+		
 		if (hurt == true)
 		{
 			if (lives <= 0)
@@ -61,49 +63,35 @@ bool LandEnemy::Update(float dt)
 				dead = true;
 				return true;
 			}
-			p2List_item<Entity*>* player = nullptr;
-			for (p2List_item<Entity*>* i = App->entitycontroller->Entities.start; i != nullptr; i = i->next)
-			{
-				if (i->data->type == Entity::entityType::PLAYER)
-				{
-					player = i;
-					break;
-				}
-			}
 
-			if (player->data->attack == false)
-			{
-				hurt = false;
-			}
 		}
-		else
-		{
-			//if (!Calculate_Path())
-			//{
-			//	if (!counting)
-			//	{
-			//		doStandardPath.Start();
-			//		counting = true;
-			//	}
-			//	if (doStandardPath.Read() >= 1500)
-			//	{
-			//		standardPath();
-			//		slowerPath = true;
-			//	}
-			//}
-			//else
-			//{
-			//	counting = false;
-			//	slowerPath = false;
-			//}
 
-			//if (entityPath.Count() > 1)
-			//	followPath();
+		if (!chasing_player) {
+			LOG("Doing standard path");
+			standardPath();
 		}
+
+		//	if (!counting)
+		//	{
+		//		doStandardPath.Start();
+		//		counting = true;
+		//	}
+		//	if (doStandardPath.Read() >= 1500)
+		//	{
+		//		standardPath();
+		//		slowerPath = true;
+		//	}
+
+		else {
+			followPath();
+		}
+
+		ChangeAnimation();
 	}
-
-	ChangeAnimation();
-
+	else
+	{
+		App->entitycontroller->DeleteEntity(this);
+	}
 	return true;
 }
 void LandEnemy::CleanUp()
@@ -147,40 +135,43 @@ void LandEnemy::Save(pugi::xml_node& data) const
 
 void LandEnemy::followPath()
 {
-	//iPoint next_cell;
-	//next_cell = *entityPath.At(1);
-	//next_cell = App->map->MapToWorld(next_cell.x, next_cell.y);
-	//next_cell = { next_cell.x + App->map->data.tile_width / 2, next_cell.y };
-	//iPoint map_pos(position.x + collider_offset.x + collider->rect.w / 2, position.y + collider_offset.y + collider->rect.h / 2);
+	p2List_item<Entity*>* player = nullptr;
+	for (p2List_item<Entity*>* i = App->entitycontroller->Entities.start; i != nullptr; i = i->next)
+	{
+		if (i->data->type == Entity::entityType::PLAYER)
+		{
+			player = i;
+			break;
+		}
+	}
+	if (&player->data->position != entityPath.At(entityPath.Count())) {
+		entityPath.Clear();
+		App->pathfinding->CreatePath(App->map->WorldToMap(position.x, position.y),
+			App->map->WorldToMap(player->data->position.x + (player->data->Collider.w / 2), player->data->position.y + (player->data->Collider.w / 2)), entityPath);
+	}
+	iPoint curr_cell;
+	iPoint* next_cell = nullptr;
+	if (entityPath.Count() > 0) {
+		if (App->map->WorldToMap(position.x, position.y) !=
+			App->map->WorldToMap(player->data->position.x + (player->data->Collider.w / 2), player->data->position.y + (player->data->Collider.w / 2))) {
+			curr_cell = *entityPath.At(1);
+			if (entityPath.Count() > 1)
+				next_cell = entityPath.At(2);
+			iPoint map_pos = App->map->WorldToMap(position.x + rect.w / 2, position.y + rect.h / 2);
+			Collider_Overlay();
 
-	//float usingSpeed = (slowerPath) ? (speed / 2) : speed;
+			if (curr_cell.x > map_pos.x) //going right
+			{
+				position.x += speed.x / 4;
+			}
+			else if (curr_cell.x < map_pos.x) //going left
+			{
+				position.x -= speed.x / 4;
+			}
 
-	//if (next_cell.x > map_pos.x)
-	//{
-	//	v.x = usingSpeed;
-	//	state = RIGHT;
-	//	going_right = true;
-	//	going_left = false;
-	//}
-	//else if (next_cell.x < map_pos.x)
-	//{
-	//	v.x = -usingSpeed;
-	//	state = LEFT;
-	//	going_left = true;
-	//	going_right = false;
-	//}
-	//else
-	//{
-	//	v.x = 0;
-	//	going_right = false;
-	//	going_left = false;
-	//}
 
-	//if (next_cell.y > map_pos.y)
-	//{
-	//	state = FALLING;
-	//	going_down = true;
-	//}
+		}
+	}
 }
 
 void LandEnemy::standardPath()

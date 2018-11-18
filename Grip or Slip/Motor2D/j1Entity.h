@@ -65,6 +65,9 @@ public:
 	bool chasing_player = false;
 	bool hurt;
 
+	bool moving_left = false;
+	bool moving_right = true;
+
 	bool left;
 	bool right;
 	bool grid_moving;
@@ -74,6 +77,7 @@ public:
 	bool grid;
 	bool sliding;
 	bool landing;
+	bool falling;
 	bool gripping;
 	bool wall_left, wall_right;
 	bool gravity_active;
