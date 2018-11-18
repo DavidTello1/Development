@@ -68,4 +68,4 @@ SOFTWARE.
 
 - David Tello: EntitySystem, Player(Attack, animations, godmode), Grid, Enemies (without pathfinding), Brofiler, UML, Map Rotation
 
-- Marc Garcia: FrameCap, Pathfinding, Enemies pathfinding
+- Marc Garcia: FrameCap, Pathfinding, Enemies pathfinding, Normalized movement.
