@@ -3,6 +3,7 @@
 
 #include "p2Point.h"
 #include "p2Log.h"
+#include "p2DynArray.h"
 #include "p2Animation.h"
 #include "j1Map.h"
 #include "j1App.h"
@@ -56,6 +57,8 @@ public:
 
 	SDL_Rect Collider;
 	SDL_Rect SightCollider;
+	
+	p2DynArray<iPoint> entityPath;
 
 	bool flip = false;
 	bool chasing_player = false;

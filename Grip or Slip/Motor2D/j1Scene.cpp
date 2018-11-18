@@ -75,26 +75,26 @@ bool j1Scene::PreUpdate()
 
 	//LOG("IsChanging: %i", App->scenechange->IsChanging());
 
-	// debug pathfing ------------------
-	static iPoint origin;
-	static bool origin_selected = false;
-	int x, y;
-	App->input->GetMousePosition(x, y);
-	iPoint p = App->render->ScreenToWorld(x, y);
-	p = App->map->WorldToMap(p.x, p.y);
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
-	{
-		if (origin_selected == true)
-		{
-			App->pathfinding->CreatePath(origin, p);
-			origin_selected = false;
-		}
-		else
-		{
-			origin = p;
-			origin_selected = true;
-		}
-	}
+	//// debug pathfing ------------------
+	//static iPoint origin;
+	//static bool origin_selected = false;
+	//int x, y;
+	//App->input->GetMousePosition(x, y);
+	//iPoint p = App->render->ScreenToWorld(x, y);
+	//p = App->map->WorldToMap(p.x, p.y);
+	//if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+	//{
+	//	if (origin_selected == true)
+	//	{
+	//		App->pathfinding->CreatePath(origin, p);
+	//		origin_selected = false;
+	//	}
+	//	else
+	//	{
+	//		origin = p;
+	//		origin_selected = true;
+	//	}
+	//}
 	return true;
 }
 
@@ -138,6 +138,7 @@ bool j1Scene::Update(float dt)
 	else if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) //View colliders
 	{
 		App->map->debug = !App->map->debug;
+		App->entitycontroller->draw_path = !App->entitycontroller->draw_path;
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) //Godmode
 	{
@@ -155,27 +156,22 @@ bool j1Scene::Update(float dt)
 
 	int x, y;
 	App->input->GetMousePosition(x, y);
-	
-	iPoint map_coordinates = App->map->WorldToMap(x - App->render->camera.x, y - App->render->camera.y);
-	p2SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d Tile:%d,%d",
-		App->map->data.width, App->map->data.height,
-		App->map->data.tile_width, App->map->data.tile_height,
-		App->map->data.tilesets.count(),
-		map_coordinates.x, map_coordinates.y);
 
 	// Debug pathfinding ------------------------------
 	//int x, y;
-	App->input->GetMousePosition(x, y);
+	/*App->input->GetMousePosition(x, y);
 	iPoint p = App->render->ScreenToWorld(x, y);
 	p = App->map->WorldToMap(p.x, p.y);
 	p = App->map->MapToWorld(p.x, p.y);
 	App->render->Blit(debug_tex, p.x, p.y);
-	const p2DynArray<iPoint>* path = App->pathfinding->GetLastPath();
-	for (uint i = 0; i < path->Count(); ++i)
-	{
-		iPoint pos = App->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-		App->render->Blit(debug_tex, pos.x, pos.y); 
-	}
+	if (App->entitycontroller->draw_path) {
+		const p2DynArray<iPoint>* path = App->pathfinding->GetLastPath();
+		for (uint i = 0; i < path->Count(); ++i)
+		{
+			iPoint pos = App->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+			App->render->Blit(debug_tex, pos.x, pos.y);
+		}
+	}*/
 
 	return true;
 }

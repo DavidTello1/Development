@@ -9,7 +9,7 @@
 #include "j1EntityController.h"
 #include "j1FlyingEnemy.h"
 #include "p2Log.h"
-//#include "j1PathFinding.h"
+#include "j1PathFinding.h"
 #include "Brofiler\Brofiler.h"
 #include <time.h>
 
@@ -66,8 +66,11 @@ bool FlyingEnemy::Update(float dt)
 			return true;
 		}
 
-		//if (!Calculate_Path())
-		//{
+		if (!chasing_player) {
+			LOG("Doing standard path");
+			standardPath();
+		}
+
 		//	if (!counting)
 		//	{
 		//		doStandardPath.Start();
@@ -78,9 +81,11 @@ bool FlyingEnemy::Update(float dt)
 		//		standardPath();
 		//		slowerPath = true;
 		//	}
-		//}
-		//else
-		//{
+
+		else {
+			followPath();
+		}
+
 		//	counting = false;
 		//	slowerPath = false;
 		//}
@@ -96,7 +101,6 @@ bool FlyingEnemy::Update(float dt)
 
 	return true;
 }
-
 
 void FlyingEnemy::CleanUp()
 {
@@ -139,50 +143,48 @@ void FlyingEnemy::Save(pugi::xml_node& data) const
 
 void FlyingEnemy::followPath()
 {
-	//iPoint curr_cell;
-	//iPoint next_cell;
+	p2List_item<Entity*>* player = nullptr;
+	for (p2List_item<Entity*>* i = App->entitycontroller->Entities.start; i != nullptr; i = i->next)
+	{
+		if (i->data->type == Entity::entityType::PLAYER)
+		{
+			player = i;
+			break;
+		}
+	}
+	if (&player->data->position != entityPath.At(entityPath.Count())) {
+		App->pathfinding->CreatePath(App->map->WorldToMap(position.x, position.y),
+			App->map->WorldToMap(player->data->position.x + (player->data->Collider.w / 2), player->data->position.y + (player->data->Collider.w / 2)), entityPath);
+	}
+	/*iPoint curr_cell;
+	iPoint* next_cell = nullptr;
 
-	//curr_cell = *entityPath.At(1);
-	//if (entityPath.Count() > 2)
-	//{
-	//	next_cell = *entityPath.At(2);
-	//}
-	//iPoint map_pos(position.x + collider_offset.x + collider->rect.w / 2, position.y + collider_offset.y + collider->rect.h / 2);
-	//iPoint map_cell = App->map->WorldToMap(map_pos.x, map_pos.y);
-
-	//iPoint curr_pos = App->map->MapToWorld(curr_cell.x, curr_cell.y);
-	//curr_pos = { curr_pos.x + App->map->data.tile_width / 2, curr_pos.y + App->map->data.tile_height / 2 };
-
-	//iPoint next_pos = App->map->MapToWorld(next_cell.x, next_cell.y);
-	//next_pos = { next_pos.x + App->map->data.tile_width / 2, next_pos.y + App->map->data.tile_height / 2 };
-
-	//float usingSpeed = (slowerPath) ? (speed.x / 2) : speed.x;
-
-	//if (curr_pos.x > map_pos.x)
-	//{
-	//	v.x = usingSpeed;
-	//	if (curr_cell.x > map_cell.x)
-	//		state = RIGHT;
-	//}
-	//else if (curr_pos.x < map_pos.x)
-	//{
-	//	v.x = -usingSpeed;
-	//	if (curr_cell.x < map_cell.x)
-	//		state = LEFT;
-	//}
-	//else
-	//	v.x = 0;
-
-	//if (curr_pos.y > map_pos.y || (next_pos.y > map_pos.y && !App->pathfinding->isTouchingGround({ map_cell.x, map_cell.y + 1 })))
-	//{
-	//	v.y = -usingSpeed;
-	//}
-	//else if (curr_pos.y < map_pos.y || (next_pos.y < map_pos.y && !App->pathfinding->isTouchingGround({ map_cell.x, map_cell.y - 2 })))
-	//{
-	//	v.y = usingSpeed;
-	//}
-	//else
-	//	v.y = 0;
+	curr_cell = *entityPath.At(1);
+	if (entityPath.Count() > 1)
+		next_cell = entityPath.At(2);
+	iPoint map_pos = App->map->WorldToMap(position.x + collider_offset.x + collider->rect.w / 2, position.y + collider_offset.y + collider->rect.h / 2);
+	if (curr_cell.x > map_pos.x)
+	{
+		v.x = speed;
+		state = RIGHT;
+	}
+	else if (curr_cell.x < map_pos.x)
+	{
+		v.x = -speed;
+		state = LEFT;
+	}
+	else
+		v.x = 0;
+	if (curr_cell.y > map_pos.y || (next_cell != nullptr && next_cell->y > map_pos.y && !App->pathfinding->isTouchingGround({ map_pos.x, map_pos.y + 1 })))
+	{
+		v.y = -speed;
+	}
+	else if (curr_cell.y < map_pos.y || (next_cell != nullptr && next_cell->y < map_pos.y && !App->pathfinding->isTouchingGround({ map_pos.x, map_pos.y - 2 })))
+	{
+		v.y = speed;
+	}
+	else
+		v.y = 0;*/
 }
 
 void FlyingEnemy::standardPath()
@@ -194,13 +196,13 @@ void FlyingEnemy::standardPath()
 	//int newPosY = rand() % 10;
 	//newPosY = (newPosY < 5) ? 1 : -1;
 
-	//iPoint curr_pos = App->map->WorldToMap(position.x + collider_offset.x + collider->rect.w / 2, position.y + collider_offset.y + collider->rect.h / 2);
+	//iPoint curr_pos = App->map->WorldToMap(position.x + rect.w / 2, position.y + rect.h / 2);
 
 	//curr_pos = { curr_pos.x + newPosX, curr_pos.y + newPosY }; // 1
-	//if (App->pathfinding->isWalkable(curr_pos))
+	//if (App->pathfinding->IsWalkable(curr_pos))
 	//	entityPath.PushBack(curr_pos);
 
 	//curr_pos = { curr_pos.x + newPosX, curr_pos.y + newPosY }; // 2
-	//if (App->pathfinding->isWalkable(curr_pos))
+	//if (App->pathfinding->IsWalkable(curr_pos))
 	//	entityPath.PushBack(curr_pos);
 }

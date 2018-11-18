@@ -38,6 +38,9 @@ public:
 	SDL_Texture*	texture;
 	p2List<Entity*> Entities;
 
+	SDL_Texture*	debug_tex;
+
+	bool draw_path = false;
 	bool godmode = false;
 };
 

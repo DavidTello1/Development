@@ -30,10 +30,12 @@ public:
 	void SetMap(uint width, uint height, uchar* data);
 
 	// Main function to request a path from A to B
-	int CreatePath(const iPoint& origin, const iPoint& destination);
+	int CreatePath(const iPoint& origin, const iPoint& destination, p2DynArray<iPoint>& path_to_fill);
 
 	// To request all tiles involved in the last generated path
 	const p2DynArray<iPoint>* GetLastPath() const;
+
+	void ResetPath(p2DynArray<iPoint>& path_to_reset);
 
 	// Utility: return true if pos is inside the map boundaries
 	bool CheckBoundaries(const iPoint& pos) const;
@@ -53,6 +55,7 @@ private:
 	uchar* map;
 	// we store the created path here
 	p2DynArray<iPoint> last_path;
+
 };
 
 // forward declaration
