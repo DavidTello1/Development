@@ -13,7 +13,13 @@ This is a little game made by two second year students of the Videogame Design a
 ### Debug Controls
 F1: Load the first level. F2: Restart the current level. F3: Load the second level. F5: Load the saved game. F6: Save the current game. F7: Rotate Maps. F9: View collider logic. F10: Activate/Deactivate God Mode.
 
-### Autors
+### Innovation Features
+-Moving Grids that the player can grip to and move.
+
+-Land Enemy sprite stays in map after death.
+
+
+### Authors
 -David Tello Panea
 
 -Marc Garcia Reig
@@ -56,3 +62,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+###Accomplishments
+
+- David Tello: EntitySystem, Player(Attack, animations, godmode), Grid, Enemies (without pathfinding), Brofiler, UML, Map Rotation
+
+- Marc Garcia: FrameCap, Pathfinding, Enemies pathfinding
