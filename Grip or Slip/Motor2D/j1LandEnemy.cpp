@@ -10,7 +10,7 @@
 #include "j1EntityController.h"
 #include "j1LandEnemy.h"
 #include "p2Log.h"
-//#include "j1PathFinding.h"
+#include "j1PathFinding.h"
 #include "Brofiler\Brofiler.h"
 #include <time.h>
 
@@ -56,6 +56,16 @@ bool LandEnemy::Update(float dt)
 	{
 		PositionCollider();
 		App->entitycontroller->EnemyColliderCheck();
+
+		p2List_item<Entity*>* player = nullptr;
+		for (p2List_item<Entity*>* i = App->entitycontroller->Entities.start; i != nullptr; i = i->next)
+		{
+			if (i->data->type == Entity::entityType::PLAYER)
+			{
+				player = i;
+				break;
+			}
+		}
 
 		SDL_Rect ObjectRect;
 		SDL_Rect result;
@@ -111,33 +121,31 @@ bool LandEnemy::Update(float dt)
 
 		if (hurt == true)
 		{
-			if (lives <= 0)
+			if (player->data->attack == false)
 			{
-				dead = true;
-				return true;
+				hurt = false;
 			}
-
+		}
+		if (lives <= 0)
+		{
+			dead = true;
 		}
 
 		if (!chasing_player) {
 			LOG("Doing standard path");
-			standardPath();
+			//standardPath();
 		}
 		else {
-			followPath();
+			//followPath();
 		}
-
-		ChangeAnimation();
-	}
-	else
-	{
-		App->entitycontroller->DeleteEntity(this);
 	}
 
+	ChangeAnimation();
 	grounded = false;
 
 	return true;
 }
+
 void LandEnemy::CleanUp()
 {
 	LOG("---LandEnemy Deleted");
@@ -272,13 +280,13 @@ void LandEnemy::LoadAnimations()
 	idle.PushBack({ 480, 160, size.x, size.y });
 	idle.PushBack({ 512, 160, size.x, size.y });
 	idle.loop = true;
-	idle.speed = 0.15f;
+	idle.speed = 5.0f;
 
 	attacking.PushBack({ 448, 128, size.x, size.y });
 	attacking.PushBack({ 480, 128, size.x, size.y });
 	attacking.PushBack({ 512, 128, size.x, size.y });
 	attacking.loop = true;
-	attacking.speed = 0.15f;
+	attacking.speed = 5.0f;
 
 	damage.PushBack({ 544, 160, size.x, size.y });
 

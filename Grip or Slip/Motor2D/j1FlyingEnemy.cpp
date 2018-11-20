@@ -67,31 +67,11 @@ bool FlyingEnemy::Update(float dt)
 		}
 
 		if (!chasing_player) {
-			standardPath();
+			//standardPath();
 		}
-
-		//	if (!counting)
-		//	{
-		//		doStandardPath.Start();
-		//		counting = true;
-		//	}
-		//	if (doStandardPath.Read() >= 1500)
-		//	{
-		//		standardPath();
-		//		slowerPath = true;
-		//	}
-
 		else {
-			followPath();
+			//followPath();
 		}
-
-		//	counting = false;
-		//	slowerPath = false;
-		//}
-
-		//if (entityPath.Count() > 1)
-		//	followPath();
-
 	}
 	else
 	{

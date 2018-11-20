@@ -60,33 +60,35 @@ bool j1Grid::Update(float dt)
 	BROFILER_CATEGORY("Grid Update", Profiler::Color::SandyBrown);
 
 	GetType();
-	if (size.x > initial_size.x || size.x <= 32)
+	prev_size = size;
+
+	if (size.x - speed.x*dt > initial_size.x || size.x - speed.x*dt <= 32)
 	{
 		speed.x *= -1;
 	}
-	if (size.y > initial_size.y || size.y <= 32)
+	if (size.y - speed.y *dt > initial_size.y || size.y - speed.y*dt <= 32)
 	{
 		speed.y *= -1;
 	}
 
 	if (grid_type == "Hide_up" || grid_type == "Hide_down")
 	{
-		size.y -= speed.y;
 		flip_ver = true;
+		size.y -= speed.y*dt;
 		if (grid_type == "Hide_down")
 		{
-			position.y += speed.y;
 			flip_ver = false;
+			position.y -= size.y - prev_size.y;
 		}
 	}
 	if (grid_type == "Hide_left" || grid_type == "Hide_right")
 	{
-		size.x -= speed.x;
 		flip_hor = true;
+		size.x -= speed.x*dt;
 		if (grid_type == "Hide_right")
 		{
-			position.x += speed.x;
 			flip_hor = false;
+			position.x -= size.x - prev_size.x;
 		}
 
 	}

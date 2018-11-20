@@ -51,6 +51,7 @@ public:
 	iPoint position;
 	iPoint size;
 	iPoint speed;
+	iPoint final_speed;
 	fPoint current_speed;
 	int jumpSpeed;
 	int gravity;
@@ -90,6 +91,7 @@ public:
 
 	p2SString grid_type;
 	iPoint initial_size;
+	iPoint prev_size;
 	iPoint grid_speed;
 	int frame = 0;
 	SDL_Rect rect;

@@ -74,6 +74,8 @@ bool j1Player::Update(float dt)
 		PositionCollider();
 		Collider_Overlay();
 
+		final_speed = { 0,0 };
+
 		if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN) //attack
 		{
 			if (attack == false && attack_able == true)
@@ -81,7 +83,7 @@ bool j1Player::Update(float dt)
 				attack = true;
 				attack_able = false;
 				grid = false;
-				jumpSpeed = 0;
+				final_speed.y = 0;
 			}
 			if (App->scene->godmode == true)
 			{
@@ -114,19 +116,14 @@ bool j1Player::Update(float dt)
 				if (grid == true)
 				{
 					grid_moving = true;
-					position.x -= ceilf((speed.x / 2)*dt);
+					final_speed.x -= speed.x / 2;
 				}
 				else
 				{
 					left = true;
-					if ((position.x - ceilf(speed.x*dt)) <= 0) {
-						position.x = 0;
-					}
-					else
+					final_speed.x -= speed.x;
+					if (wall_left == true && grounded == false)
 					{
-						position.x -= ceilf(speed.x*dt);
-					}
-					if (wall_left == true && grounded == false) {
 						sliding = true;
 					}
 				}
@@ -141,19 +138,14 @@ bool j1Player::Update(float dt)
 
 				if (grid == true) {
 					grid_moving = true;
-					position.x += ceilf((speed.x / 2)*dt);
+					final_speed.x += speed.x / 2;
 				}
 				else
 				{
 					right = true;
-					if (position.x + ceilf(speed.x*dt) >= (App->map->data.width - 1) * App->map->data.tile_width) {
-						position.x = (App->map->data.width - 1) * App->map->data.tile_width;
-					}
-					else
+					final_speed.x += speed.x;
+					if (wall_right == true && grounded == false)
 					{
-						position.x += ceilf(speed.x*dt);
-					}
-					if (wall_right == true && grounded == false) {
 						sliding = true;
 					}
 				}
@@ -165,17 +157,11 @@ bool j1Player::Update(float dt)
 			if (grid == true && ceiling == false && top_grid == false)
 			{
 				grid_moving = true;
-				position.y -= ceilf((speed.x / 2)*dt);
+				final_speed.y -= speed.x / 2;
 			}
 			else if (App->scene->godmode == true)
 			{
-				if (position.y - ceilf(speed.x*dt) <= 0) {
-					position.y = 0;
-				}
-				else
-				{
-					position.y -= ceilf(speed.x*dt);
-				}
+				final_speed.y -= speed.x;
 			}
 		}
 
@@ -184,17 +170,11 @@ bool j1Player::Update(float dt)
 			if (grid == true)
 			{
 				grid_moving = true;
-				position.y += ceilf((speed.x / 2)*dt);
+				final_speed.y += speed.x / 2;
 			}
 			else if (App->scene->godmode == true)
 			{
-				if (position.y + ceilf(speed.x*dt) >= (App->map->data.height - 1) * App->map->data.tile_height) {
-					position.y = (App->map->data.height - 1) * App->map->data.tile_height;
-				}
-				else
-				{
-					position.y += ceilf(speed.x*dt);
-				}
+				final_speed.y += speed.x;
 			}
 		}
 
@@ -236,18 +216,13 @@ bool j1Player::Update(float dt)
 		{
 			if (flip)
 			{
-				if (position.x + ceilf(speed.x*dt) <= (App->map->data.width - 1)*App->map->data.tile_width)
-				{
-					position.x += ceilf(speed.x*dt);
-				}
+				final_speed.x += speed.x;
 			}
 			else
 			{
-				if (position.x - ceilf(speed.x*dt) >= 0)
-				{
-					position.x -= ceilf(speed.x*dt);
-				}
+				final_speed.x -= speed.x;
 			}
+			jumpSpeed = 0;
 		}
 
 		if (grounded == true) //grounded
@@ -276,29 +251,22 @@ bool j1Player::Update(float dt)
 				{
 					if (flip_ver == true) //hide_up
 					{
-						if (!ceiling)
-						{
-							position.y -= ceilf(grid_speed.y*dt);
-						}
-						else
-						{
-							position.y += ceilf(grid_speed.y*dt);
-						}
+						final_speed.y -= grid_speed.y;
 					}
 					if (flip_ver == false) //hide_down
 					{
-						position.y += ceilf(grid_speed.y*dt);
+						final_speed.y += grid_speed.y;
 					}
 				}
 				if (vertical == false)
 				{
 					if (flip_hor == true) //hide_left
 					{
-						position.x -= ceilf(grid_speed.x*dt);
+						final_speed.x -= grid_speed.x;
 					}
 					if (flip_hor == false) //hide_right
 					{
-						position.x += ceilf(grid_speed.x*dt);
+						final_speed.x += grid_speed.x;
 					}
 				}
 			}
@@ -314,63 +282,65 @@ bool j1Player::Update(float dt)
 		if (jumping == true) //jumping
 		{
 			gravity_active = true;
-			if (position.y - ceilf(jumpSpeed*dt) <= 0) //up-limit
-			{
-				position.y = 0;
-			}
 			if (jumpSpeed > 0)
 			{
-				jumpSpeed -= 1;
-				position.y -= ceilf(jumpSpeed*dt);
+				jumpSpeed -= gravity / 15;
+				final_speed.y -= jumpSpeed;
 			}
-		}
-
-		if (ceiling == true) //ceiling
-		{
-			jumpSpeed = 0;
-			if (grid == true)
-			{
-				position.y += ceilf((speed.x / 2)*dt);
-			}
-			ceiling = false;
 		}
 
 		if (wall_left == true && App->scene->godmode == false) //wall left
 		{
-			position.x += ceilf(speed.x*dt);
+			final_speed.x += speed.x;
 			wall_left = false;
 		}
 
 		if (wall_right == true && App->scene->godmode == false) //wall right
 		{
-			position.x -= ceilf(speed.x*dt);
+			final_speed.x -= speed.x;
 			wall_right = false;
+		}
+
+		if (ceiling == true) //ceiling
+		{
+			jumpSpeed = 0;
+			if (final_speed.y < 0)
+			{
+				final_speed.y = 0;
+			}
+			ceiling = false;
 		}
 
 		if (gravity_active == true) //gravity
 		{
 			if (App->scene->godmode == false)
 			{
-				if (position.y + gravity >= (App->map->data.height - 1) * App->map->data.tile_height)
+				if (grounded == false && grid == false && attack == false)
 				{
-					position.y = (App->map->data.height - 1) * App->map->data.tile_height;
-				}
-				else
-				{
-					if (grounded == false && grid == false && attack == false)
+					if (sliding == true)
 					{
-						if (sliding == true)
-						{
-							position.y += gravity / 4;
-						}
-						if (sliding == false)
-						{
-							position.y += gravity;
-						}
+						final_speed.y += gravity / 6;
+					}
+					if (sliding == false)
+					{
+						final_speed.y += gravity / 2;
 					}
 				}
 			}
 		}
+
+		if (position.x + final_speed.x * dt <= 0 || position.x + final_speed.x * dt > (App->map->data.width -1)*App->map->data.tile_width)
+		{
+			final_speed.x = 0;
+		}
+		if (position.y + final_speed.y * dt <= 0 || position.y + final_speed.y * dt > (App->map->data.height - 1)*App->map->data.tile_height)
+		{
+			final_speed.y = 0;
+		}
+		position.x += final_speed.x *dt;
+		position.y += final_speed.y *dt;
+
+
 
 		if (landing == true && landing_anim.Finished())
 		{
@@ -557,7 +527,7 @@ void j1Player::LoadAnimations()
 	idle.PushBack({ 64, 0, size.x, size.y });
 	idle.PushBack({ 96, 0, size.x, size.y });
 	idle.loop = true;
-	idle.speed = 0.15f;
+	idle.speed = 5.0f;
 
 	move_anim.PushBack({ 0, 32, size.x, size.y });
 	move_anim.PushBack({ 32, 32, size.x, size.y });
@@ -568,24 +538,24 @@ void j1Player::LoadAnimations()
 	move_anim.PushBack({ 192, 32, size.x, size.y });
 	move_anim.PushBack({ 224, 32, size.x, size.y });
 	move_anim.loop = true;
-	move_anim.speed = 0.15f;
+	move_anim.speed = 5.0f;
 
 	jump_anim.PushBack({ 224, 64, size.x, size.y });
 	jump_anim.PushBack({ 192, 64, size.x, size.y });
 	jump_anim.loop = true;
-	jump_anim.speed = 0.15f;
+	jump_anim.speed = 5.0f;
 
 	falling_anim.PushBack({ 160, 64, size.x, size.y });
 	falling_anim.PushBack({ 128, 64, size.x, size.y });
 	falling_anim.loop = false;
-	falling_anim.speed = 0.15f;
+	falling_anim.speed = 5.0f;
 
 	landing_anim.PushBack({ 96, 64, size.x, size.y });
 	landing_anim.PushBack({ 64, 64, size.x, size.y });
 	landing_anim.PushBack({ 32, 64, size.x, size.y });
 	landing_anim.PushBack({ 0, 64, size.x, size.y });
 	landing_anim.loop = false;
-	landing_anim.speed = 0.15f;
+	landing_anim.speed = 5.0f;
 
 	grip_idle.PushBack({ 160, 0, size.x, size.y });
 
@@ -594,7 +564,7 @@ void j1Player::LoadAnimations()
 	grip_anim.PushBack({ 128, 0, size.x, size.y });
 	grip_anim.PushBack({ 192, 0, size.x, size.y });
 	grip_anim.loop = false;
-	grip_anim.speed = 0.4f;
+	grip_anim.speed = 12.5f;
 
 	grip_move.PushBack({ 224, 0, size.x, size.y });
 	grip_move.PushBack({ 192, 0, size.x, size.y });
@@ -602,7 +572,7 @@ void j1Player::LoadAnimations()
 	grip_move.PushBack({ 160, 96, size.x, size.y });
 	grip_move.PushBack({ 192, 96, size.x, size.y });
 	grip_move.loop = true;
-	grip_move.speed = 0.15f;
+	grip_move.speed = 5.0f;
 
 	slide_anim.PushBack({ 128, 96, size.x, size.y });
 
@@ -614,11 +584,9 @@ void j1Player::LoadAnimations()
 	attacking.PushBack({ 256, 160, size.x, size.y });
 	attacking.PushBack({ 224, 160, size.x, size.y });
 	attacking.PushBack({ 192, 160, size.x, size.y });
-	attacking.PushBack({ 224, 160, size.x, size.y });
-	attacking.PushBack({ 192, 160, size.x, size.y });
 	attacking.PushBack({ 128, 160, size.x, size.y });
 	attacking.PushBack({ 64, 160, size.x, size.y });
 	attacking.PushBack({ 0, 160, size.x, size.y });
 	attacking.loop = false;
-	attacking.speed = 0.6f;
+	attacking.speed = 15.0f;
 }

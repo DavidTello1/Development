@@ -11,7 +11,7 @@
   </renderer>
 
   <window>
-    <resolution width="1024" height="768" scale="1"/>
+    <resolution width="1024" height="708" scale="1"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="true"/>
@@ -32,8 +32,8 @@
     <player>
       <size width="32" height="32"/>
       <position x="64" y="500"/>
-      <gravity value="15"/>
-      <speed x="6" y="26"/>
+      <gravity value="600"/>
+      <speed x="200" y="725"/>
       <grounded value ="false"/>
       <sliding value="false"/>
       <jumping value="true"/>
@@ -41,7 +41,7 @@
       <gravity_active value="true"/>
     </player>
     <grid>
-      <speed x="1" y="1"/>
+      <speed x="40" y="40"/>
     </grid>
     <flying_enemy>
       <size width="32" height="32"/>

@@ -52,8 +52,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	// render last to swap buffer
 	AddModule(render);
 
-	save_game = load_game = "save_game.xml";
-
 	PERF_PEEK(ptimer);
 }
 
@@ -88,7 +86,9 @@ bool j1App::Awake()
 	pugi::xml_node		app_config;
 
 	bool ret = false;
-		
+
+	save_game = load_game = "save_game.xml";
+
 	config = LoadConfig(config_file);
 
 	if(config.empty() == false)
@@ -98,8 +98,13 @@ bool j1App::Awake()
 		app_config = config.child("app");
 		title.create(app_config.child("title").child_value());
 		organization.create(app_config.child("organization").child_value());
-		framerate_cap = app_config.attribute("framerate_cap").as_int();
+		framerate_cap = config.child("app").attribute("framerate_cap").as_int(-1);
 		vsyncON = config.child("renderer").child("vsync").attribute("value").as_bool();
+
+		if (framerate_cap > 0)
+		{
+			ms_capped = 1000 / framerate_cap;
+		}
 	}
 
 	if(ret == true)
@@ -146,6 +151,8 @@ bool j1App::Start()
 // Called each loop iteration
 bool j1App::Update()
 {
+	BROFILER_CATEGORY("App Update", Profiler::Color::DarkTurquoise);
+
 	bool ret = true;
 	PrepareUpdate();
 
@@ -185,18 +192,16 @@ void j1App::PrepareUpdate()
 	frame_count++;
 	last_sec_frame_count++;
 
-	dt = frame_time.ReadSec()*30;
-	frame_time.Start();
-
+	ptimer.Start();
 }
 
 // ---------------------------------------------
 void j1App::FinishUpdate()
 {
-	if(want_to_save == true)
+	if (want_to_save == true)
 		SavegameNow();
 
-	if(want_to_load == true)
+	if (want_to_load == true)
 		LoadGameNow();
 
 	// Framerate calculations --
@@ -208,37 +213,26 @@ void j1App::FinishUpdate()
 		last_sec_frame_count = 0;
 	}
 
-	float avg_fps = float(frame_count) / startup_time.ReadSec();
-	float seconds_since_startup = startup_time.ReadSec();
-	uint32 last_frame_ms = frame_time.Read();
-	uint32 frames_on_last_update = prev_last_sec_frame_count;
-
-	static char title[256];
-	if (fpsCapON && vsyncON) {
-		sprintf_s(title, 256, "FPS: %i | Av.FPS: %.2f | MsLastFrame: %02u ms | FPS_Cap: ON | Vsync: ON",
-			frames_on_last_update, avg_fps, last_frame_ms);
-	}
-	else if (fpsCapON && !vsyncON){
-		sprintf_s(title, 256, "FPS: %i | Av.FPS: %.2f | MsLastFrame: %02u ms | FPS_Cap: ON | Vsync: OFF",
-			frames_on_last_update, avg_fps, last_frame_ms);
-	}
-	else if (!fpsCapON && vsyncON) {
-		sprintf_s(title, 256, "FPS: %i | Av.FPS: %.2f | MsLastFrame: %02u ms | FPS_Cap: OFF | Vsync: ON",
-			frames_on_last_update, avg_fps, last_frame_ms);
-	}
-	else if (!fpsCapON && !vsyncON) {
-		sprintf_s(title, 256, "FPS: %i | Av.FPS: %.2f | MsLastFrame: %02u ms | FPS_Cap: OFF | Vsync: OFF",
-			frames_on_last_update, avg_fps, last_frame_ms);
-	}
-	App->win->SetTitle(title);
+	avg_fps = float(frame_count) / startup_time.ReadSec();
+	seconds_since_startup = startup_time.ReadSec();
+	uint32 current_ms_frame = ptimer.ReadMs();
+	last_frame_ms = current_ms_frame;
 
 	if (fpsCapON) {
-		ptimer.Start();
-		SDL_Delay(abs((float)(1000 / framerate_cap) - last_frame_ms));
 
-		LOG("We waited for : %f and got back in : %lf", (float)(1000 / framerate_cap) - last_frame_ms, ptimer.ReadMs());
+		if (ms_capped > 0 && last_frame_ms < ms_capped) {
+			j1PerfTimer timer;
+			SDL_Delay(ms_capped - last_frame_ms);
+			LOG("We waited for %d milliseconds and got back in %f", ms_capped - last_frame_ms, timer.ReadMs());
+		}
 	}
 
+	framerate = 1000.0f / ptimer.ReadMs();
+	dt = 1.0f / framerate;
+
+	p2SString title("FPS: %i | Av.FPS: %.2f | MsLastFrame: %02u ms | FPS_Cap: %i | Vsync: %i",
+		prev_last_sec_frame_count, avg_fps, last_frame_ms, fpsCapON, vsyncON, App->map->data.width, App->map->data.height, App->scene->godmode);
+	App->win->SetTitle(title.GetString());
 }
 
 // Call modules before each loop iteration
