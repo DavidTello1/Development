@@ -132,7 +132,7 @@ bool LandEnemy::Update(float dt)
 		}
 
 		if (!chasing_player) {
-			LOG("Doing standard path");
+			//LOG("Doing standard path");
 			//standardPath();
 		}
 		else {

@@ -101,6 +101,7 @@ void Entity::Collider_Overlay()
 
 				grid_speed.x = tmp->data->speed.x;
 				grid_speed.y = tmp->data->speed.y;
+				grid_direction = tmp->data->direction;
 
 			}
 		}

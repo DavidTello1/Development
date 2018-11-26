@@ -204,8 +204,8 @@ void j1App::FinishUpdate()
 	if (want_to_load == true)
 		LoadGameNow();
 
-	// Framerate calculations --
 
+	// Framerate calculations
 	if (last_sec_frame_time.Read() > 1000)
 	{
 		last_sec_frame_time.Start();
@@ -218,9 +218,10 @@ void j1App::FinishUpdate()
 	uint32 current_ms_frame = ptimer.ReadMs();
 	last_frame_ms = current_ms_frame;
 
-	if (fpsCapON) {
-
-		if (ms_capped > 0 && last_frame_ms < ms_capped) {
+	if (fpsCapON)
+	{
+		if (ms_capped > 0 && last_frame_ms < ms_capped)
+		{
 			j1PerfTimer timer;
 			SDL_Delay(ms_capped - last_frame_ms);
 			LOG("We waited for %d milliseconds and got back in %f", ms_capped - last_frame_ms, timer.ReadMs());
@@ -230,8 +231,8 @@ void j1App::FinishUpdate()
 	framerate = 1000.0f / ptimer.ReadMs();
 	dt = 1.0f / framerate;
 
-	p2SString title("FPS: %i | Av.FPS: %.2f | MsLastFrame: %02u ms | FPS_Cap: %i | Vsync: %i",
-		prev_last_sec_frame_count, avg_fps, last_frame_ms, fpsCapON, vsyncON, App->map->data.width, App->map->data.height, App->scene->godmode);
+	p2SString title("FPS: %i | Av.FPS: %.2f | MsLastFrame: %02u ms | Last dt: %.5f | FPS_Cap: %i | Vsync: %i",
+		prev_last_sec_frame_count, avg_fps, last_frame_ms, dt,  fpsCapON, vsyncON);
 	App->win->SetTitle(title.GetString());
 }
 

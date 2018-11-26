@@ -49,6 +49,7 @@ bool j1Scene::Start()
 	to_end = false;
 	App->map->Load(map_names.start->data->GetString());
 	currentMap = 0;
+
 	int w, h;
 	uchar* data = NULL;
 	if (App->map->CreateWalkabilityMap(w, h, &data))

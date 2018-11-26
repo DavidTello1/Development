@@ -37,6 +37,8 @@ bool j1Player::Awake(pugi::xml_node & config)
 	gravity = config.child("gravity").attribute("value").as_int();
 	gravity_active = config.child("gravity_active").attribute("value").as_bool();
 
+	final_speed = { 0,0 };
+
 	return ret;
 }
 
@@ -73,7 +75,6 @@ bool j1Player::Update(float dt)
 	{
 		PositionCollider();
 		Collider_Overlay();
-
 		final_speed = { 0,0 };
 
 		if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN) //attack
@@ -122,7 +123,7 @@ bool j1Player::Update(float dt)
 				{
 					left = true;
 					final_speed.x -= speed.x;
-					if (wall_left == true && grounded == false)
+					if (wall_left == true && grounded == false && jumpSpeed < gravity)
 					{
 						sliding = true;
 					}
@@ -144,7 +145,7 @@ bool j1Player::Update(float dt)
 				{
 					right = true;
 					final_speed.x += speed.x;
-					if (wall_right == true && grounded == false)
+					if (wall_right == true && grounded == false && jumpSpeed < gravity)
 					{
 						sliding = true;
 					}
@@ -251,22 +252,22 @@ bool j1Player::Update(float dt)
 				{
 					if (flip_ver == true) //hide_up
 					{
-						final_speed.y -= grid_speed.y;
+						final_speed.y += grid_speed.y * grid_direction;
 					}
 					if (flip_ver == false) //hide_down
 					{
-						final_speed.y += grid_speed.y;
+						final_speed.y -= grid_speed.y * grid_direction;
 					}
 				}
 				if (vertical == false)
 				{
 					if (flip_hor == true) //hide_left
 					{
-						final_speed.x -= grid_speed.x;
+						final_speed.x += grid_speed.x * grid_direction;
 					}
 					if (flip_hor == false) //hide_right
 					{
-						final_speed.x += grid_speed.x;
+						final_speed.x -= grid_speed.x * grid_direction;
 					}
 				}
 			}
@@ -284,7 +285,7 @@ bool j1Player::Update(float dt)
 			gravity_active = true;
 			if (jumpSpeed > 0)
 			{
-				jumpSpeed -= gravity / 15;
+				jumpSpeed -= gravity / 8;
 				final_speed.y -= jumpSpeed;
 			}
 		}
@@ -319,29 +320,46 @@ bool j1Player::Update(float dt)
 				{
 					if (sliding == true)
 					{
-						final_speed.y += gravity / 6;
+						final_speed.y += gravity / 3;
 					}
 					if (sliding == false)
 					{
-						final_speed.y += gravity / 2;
+						final_speed.y += gravity;
 					}
 				}
 			}
 		}
 
-		if (position.x + final_speed.x * dt <= 0 || position.x + final_speed.x * dt > (App->map->data.width -1)*App->map->data.tile_width)
+		//limits
+		if (position.x + ceilf(final_speed.x*dt) <= 0 || position.x + ceilf(final_speed.x*dt) > (App->map->data.width - 1)*App->map->data.tile_width) //x axis
 		{
 			final_speed.x = 0;
 		}
-		if (position.y + final_speed.y * dt <= 0 || position.y + final_speed.y * dt > (App->map->data.height - 1)*App->map->data.tile_height)
+		if (position.y + ceilf(final_speed.y*dt) <= 0 || position.y + ceilf(final_speed.y*dt) > (App->map->data.height - 1)*App->map->data.tile_height) //y axis
 		{
 			final_speed.y = 0;
 		}
-		position.x += final_speed.x *dt;
-		position.y += final_speed.y *dt;
+
+		if (final_speed.x > 0) //going right
+		{
+			position.x += ceilf(final_speed.x*dt);
+		}
+		else if (final_speed.x < 0) //going left
+		{
+			position.x -= ceilf(abs(final_speed.x*dt));
+		}
+
+		if (final_speed.y > 0) //going down
+		{
+			position.y += ceilf(final_speed.y*dt);
+		}
+		else if (final_speed.y < 0) //going up
+		{
+			position.y -= ceilf(abs(final_speed.y*dt));
+		}
 
 
-
+		//Animations and vars reset
 		if (landing == true && landing_anim.Finished())
 		{
 			landing_anim.Reset();
@@ -382,6 +400,8 @@ bool j1Player::Update(float dt)
 bool j1Player::PostUpdate()
 {
 	BROFILER_CATEGORY("Player PostUpdate", Profiler::Color::Black);
+
+	PositionCollider();
 
 	if (dead && !App->scenechange->IsChanging())
 	{
@@ -527,7 +547,7 @@ void j1Player::LoadAnimations()
 	idle.PushBack({ 64, 0, size.x, size.y });
 	idle.PushBack({ 96, 0, size.x, size.y });
 	idle.loop = true;
-	idle.speed = 5.0f;
+	idle.speed = 6.0f;
 
 	move_anim.PushBack({ 0, 32, size.x, size.y });
 	move_anim.PushBack({ 32, 32, size.x, size.y });
@@ -538,24 +558,24 @@ void j1Player::LoadAnimations()
 	move_anim.PushBack({ 192, 32, size.x, size.y });
 	move_anim.PushBack({ 224, 32, size.x, size.y });
 	move_anim.loop = true;
-	move_anim.speed = 5.0f;
+	move_anim.speed = 8.0f;
 
 	jump_anim.PushBack({ 224, 64, size.x, size.y });
 	jump_anim.PushBack({ 192, 64, size.x, size.y });
 	jump_anim.loop = true;
-	jump_anim.speed = 5.0f;
+	jump_anim.speed = 6.0f;
 
 	falling_anim.PushBack({ 160, 64, size.x, size.y });
 	falling_anim.PushBack({ 128, 64, size.x, size.y });
 	falling_anim.loop = false;
-	falling_anim.speed = 5.0f;
+	falling_anim.speed = 6.0f;
 
 	landing_anim.PushBack({ 96, 64, size.x, size.y });
 	landing_anim.PushBack({ 64, 64, size.x, size.y });
 	landing_anim.PushBack({ 32, 64, size.x, size.y });
 	landing_anim.PushBack({ 0, 64, size.x, size.y });
 	landing_anim.loop = false;
-	landing_anim.speed = 5.0f;
+	landing_anim.speed = 6.0f;
 
 	grip_idle.PushBack({ 160, 0, size.x, size.y });
 
@@ -572,7 +592,7 @@ void j1Player::LoadAnimations()
 	grip_move.PushBack({ 160, 96, size.x, size.y });
 	grip_move.PushBack({ 192, 96, size.x, size.y });
 	grip_move.loop = true;
-	grip_move.speed = 5.0f;
+	grip_move.speed = 8.0f;
 
 	slide_anim.PushBack({ 128, 96, size.x, size.y });
 

@@ -51,6 +51,8 @@ j1Grid::j1Grid(iPoint pos, iPoint Size, p2SString Type) : Entity(entityType::GRI
 		type_int = 4;
 	}
 
+	direction = 1;
+
 	ChangeAnimation();
 	PositionCollider();
 }
@@ -62,36 +64,41 @@ bool j1Grid::Update(float dt)
 	GetType();
 	prev_size = size;
 
-	if (size.x - speed.x*dt > initial_size.x || size.x - speed.x*dt <= 32)
+	if (size.x - ceilf(speed.y*dt) * direction > initial_size.x || size.y - ceilf(speed.y*dt) * direction > initial_size.y)
 	{
-		speed.x *= -1;
+		direction = -1;
 	}
-	if (size.y - speed.y *dt > initial_size.y || size.y - speed.y*dt <= 32)
+	if (size.x - ceilf(speed.y*dt) * direction <= 32 || size.y - ceilf(speed.y*dt) * direction <= 32)
 	{
-		speed.y *= -1;
+		direction = 1;
 	}
 
-	if (grid_type == "Hide_up" || grid_type == "Hide_down")
+	if (grid_type == "Hide_up")
 	{
 		flip_ver = true;
-		size.y -= speed.y*dt;
-		if (grid_type == "Hide_down")
-		{
-			flip_ver = false;
-			position.y -= size.y - prev_size.y;
-		}
+		size.y += ceilf(speed.y*dt) * direction;
 	}
-	if (grid_type == "Hide_left" || grid_type == "Hide_right")
+
+	if (grid_type == "Hide_down")
+	{
+		flip_ver = false;
+		size.y += ceilf(speed.y*dt) * direction;
+		position.y -= size.y - prev_size.y;
+	}
+
+	if (grid_type == "Hide_left")
 	{
 		flip_hor = true;
-		size.x -= speed.x*dt;
-		if (grid_type == "Hide_right")
-		{
-			flip_hor = false;
-			position.x -= size.x - prev_size.x;
-		}
-
+		size.x += ceilf(speed.x*dt) * direction;
 	}
+
+	if (grid_type == "Hide_right")
+	{
+		flip_hor = false;
+		size.x += ceilf(speed.x*dt) * direction;
+		position.x -= size.x - prev_size.x;
+	}
+
 	ChangeAnimation();
 	PositionCollider();
 

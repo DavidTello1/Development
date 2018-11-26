@@ -53,7 +53,7 @@ public:
 	iPoint speed;
 	iPoint final_speed;
 	fPoint current_speed;
-	int jumpSpeed;
+	int direction; // 1 right, -1 left
 	int gravity;
 	int lives;
 
@@ -69,6 +69,7 @@ public:
 	bool moving_left = false;
 	bool moving_right = true;
 
+	int jumpSpeed;
 	bool left;
 	bool right;
 	bool grid_moving;
@@ -88,11 +89,12 @@ public:
 	bool landed;
 	bool attack;
 	bool attack_able;
+	iPoint grid_speed;
+	int grid_direction;
 
 	p2SString grid_type;
 	iPoint initial_size;
 	iPoint prev_size;
-	iPoint grid_speed;
 	int frame = 0;
 	SDL_Rect rect;
 	bool flip_ver = false;

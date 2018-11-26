@@ -32,8 +32,8 @@
     <player>
       <size width="32" height="32"/>
       <position x="64" y="500"/>
-      <gravity value="600"/>
-      <speed x="200" y="725"/>
+      <gravity value="300"/>
+      <speed x="150" y="750"/>
       <grounded value ="false"/>
       <sliding value="false"/>
       <jumping value="true"/>
@@ -41,7 +41,7 @@
       <gravity_active value="true"/>
     </player>
     <grid>
-      <speed x="40" y="40"/>
+      <speed x="30" y="30"/>
     </grid>
     <flying_enemy>
       <size width="32" height="32"/>

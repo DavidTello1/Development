@@ -239,7 +239,10 @@ bool j1EntityController::Draw(float dt)
 		}
 		tmp = tmp->next;
 	}
-	tmp2->data->Draw(dt); //draw player last
+	if (tmp2 != nullptr)
+	{
+		tmp2->data->Draw(dt); //draw player last
+	}
 
 	return ret;
 }
