@@ -7,11 +7,11 @@
 	<map />
 	<pathfinding />
 	<scene>
-		<currentMap num="1" />
+		<currentMap num="0" />
 	</scene>
 	<scenechange />
 	<entitycontroller>
-		<map_2>
+		<map_1>
 			<flying_enemy>
 				<position x="128" y="1088" />
 				<size width="32" height="32" />
@@ -21,7 +21,7 @@
 				<lives value="1" />
 			</flying_enemy>
 			<land_enemy>
-				<position x="1440" y="1217" />
+				<position x="1120" y="1217" />
 				<size width="32" height="32" />
 				<speed x="5" y="5" />
 				<sightCollider width="160" height="96" />
@@ -29,7 +29,7 @@
 				<lives value="3" />
 			</land_enemy>
 			<land_enemy>
-				<position x="96" y="769" />
+				<position x="1088" y="737" />
 				<size width="32" height="32" />
 				<speed x="5" y="5" />
 				<sightCollider width="160" height="96" />
@@ -37,91 +37,61 @@
 				<lives value="3" />
 			</land_enemy>
 			<grid>
-				<position x="1120" y="896" />
-				<size width="303" height="96" />
-				<speed x="-40" y="40" />
+				<position x="1566" y="736" />
+				<size width="-222" height="96" />
+				<speed x="30" y="30" />
+				<type value="4" />
+			</grid>
+			<grid>
+				<position x="1598" y="992" />
+				<size width="-254" height="96" />
+				<speed x="30" y="30" />
+				<type value="4" />
+			</grid>
+			<grid>
+				<position x="1152" y="480" />
+				<size width="96" height="56" />
+				<speed x="30" y="30" />
+				<type value="1" />
+			</grid>
+			<grid>
+				<position x="1246" y="384" />
+				<size width="-126" height="96" />
+				<speed x="30" y="30" />
+				<type value="4" />
+			</grid>
+			<grid>
+				<position x="32" y="608" />
+				<size width="32" height="96" />
+				<speed x="30" y="30" />
 				<type value="3" />
 			</grid>
 			<grid>
-				<position x="1499" y="736" />
-				<size width="-155" height="96" />
-				<speed x="40" y="40" />
-				<type value="4" />
-			</grid>
-			<grid>
-				<position x="1129" y="960" />
-				<size width="279" height="96" />
-				<speed x="-40" y="40" />
-				<type value="4" />
-			</grid>
-			<grid>
-				<position x="1550" y="1120" />
-				<size width="-46" height="96" />
-				<speed x="40" y="40" />
-				<type value="4" />
-			</grid>
-			<grid>
-				<position x="1184" y="480" />
-				<size width="96" height="303" />
-				<speed x="40" y="-40" />
-				<type value="1" />
-			</grid>
-			<grid>
-				<position x="1024" y="384" />
-				<size width="96" height="303" />
-				<speed x="40" y="-40" />
-				<type value="1" />
+				<position x="32" y="768" />
+				<size width="180" height="96" />
+				<speed x="30" y="30" />
+				<type value="3" />
 			</grid>
 			<grid>
 				<position x="96" y="384" />
-				<size width="96" height="-184" />
-				<speed x="40" y="40" />
+				<size width="96" height="56" />
+				<speed x="30" y="30" />
 				<type value="1" />
-			</grid>
-			<grid>
-				<position x="32" y="544" />
-				<size width="-184" height="96" />
-				<speed x="40" y="40" />
-				<type value="3" />
-			</grid>
-			<grid>
-				<position x="32" y="672" />
-				<size width="303" height="96" />
-				<speed x="-40" y="40" />
-				<type value="3" />
-			</grid>
-			<grid>
-				<position x="256" y="384" />
-				<size width="96" height="-184" />
-				<speed x="40" y="40" />
-				<type value="1" />
-			</grid>
-			<grid>
-				<position x="960" y="1041" />
-				<size width="96" height="303" />
-				<speed x="40" y="-40" />
-				<type value="2" />
-			</grid>
-			<grid>
-				<position x="1152" y="1499" />
-				<size width="96" height="-155" />
-				<speed x="40" y="40" />
-				<type value="2" />
 			</grid>
 			<player>
 				<size width="32" height="32" />
-				<position x="257" y="398" />
-				<gravity value="600" />
-				<speed x="200" y="725" />
+				<position x="1270" y="1153" />
+				<gravity value="300" />
+				<speed x="150" y="750" />
 				<grounded value="false" />
 				<sliding value="false" />
 				<jumping value="false" />
 				<grid value="false" />
 				<gravity_active value="true" />
 			</player>
-		</map_2>
+		</map_1>
 	</entitycontroller>
 	<renderer>
-		<camera x="0" y="-44" />
+		<camera x="-512" y="-636" />
 	</renderer>
 </game_state>

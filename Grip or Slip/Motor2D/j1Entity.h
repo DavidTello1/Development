@@ -51,7 +51,7 @@ public:
 	iPoint position;
 	iPoint size;
 	iPoint speed;
-	iPoint final_speed;
+	fPoint final_speed;
 	fPoint current_speed;
 	int direction; // 1 right, -1 left
 	int gravity;

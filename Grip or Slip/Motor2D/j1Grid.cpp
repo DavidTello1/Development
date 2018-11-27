@@ -64,39 +64,61 @@ bool j1Grid::Update(float dt)
 	GetType();
 	prev_size = size;
 
-	if (size.x - ceilf(speed.y*dt) * direction > initial_size.x || size.y - ceilf(speed.y*dt) * direction > initial_size.y)
+	if (size.x - speed.y*dt * direction > initial_size.x || size.y - speed.y*dt * direction > initial_size.y)
 	{
 		direction = -1;
 	}
-	if (size.x - ceilf(speed.y*dt) * direction <= 32 || size.y - ceilf(speed.y*dt) * direction <= 32)
+	if (size.x - speed.y*dt * direction <= 32 || size.y - speed.y*dt * direction <= 32)
 	{
 		direction = 1;
 	}
 
-	if (grid_type == "Hide_up")
+	if (grid_type == "Hide_up" || grid_type == "Hide_down")
 	{
 		flip_ver = true;
-		size.y += ceilf(speed.y*dt) * direction;
+
+		final_speed.y += speed.y*dt;
+		if (final_speed.y >= 1)
+		{
+			if (direction == 1)
+			{
+				size.y++;
+			}
+			else if (direction == -1)
+			{
+				size.y--;
+			}
+			final_speed.y--;
+		}
+		if (grid_type == "Hide_down")
+		{
+			flip_ver = false;
+			position.y -= size.y - prev_size.y;
+		}
 	}
 
-	if (grid_type == "Hide_down")
-	{
-		flip_ver = false;
-		size.y += ceilf(speed.y*dt) * direction;
-		position.y -= size.y - prev_size.y;
-	}
-
-	if (grid_type == "Hide_left")
+	if (grid_type == "Hide_left" || grid_type == "Hide_right")
 	{
 		flip_hor = true;
-		size.x += ceilf(speed.x*dt) * direction;
-	}
 
-	if (grid_type == "Hide_right")
-	{
-		flip_hor = false;
-		size.x += ceilf(speed.x*dt) * direction;
-		position.x -= size.x - prev_size.x;
+		final_speed.x += speed.x*dt;
+		if (final_speed.x >= 1)
+		{
+			if (direction == 1)
+			{
+				size.x++;
+			}
+			else if (direction == -1)
+			{
+				size.x--;
+			}
+			final_speed.x--;
+		}
+		if (grid_type == "Hide_right")
+		{
+			flip_hor = false;
+			position.x -= size.x - prev_size.x;
+		}
 	}
 
 	ChangeAnimation();
