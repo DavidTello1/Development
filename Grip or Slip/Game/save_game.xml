@@ -12,6 +12,17 @@
 	<scenechange />
 	<entitycontroller>
 		<map_1>
+			<player>
+				<size width="32" height="32" />
+				<position x="994" y="1249" />
+				<gravity value="250" />
+				<speed x="150" y="600" />
+				<grounded value="false" />
+				<sliding value="false" />
+				<jumping value="false" />
+				<grid value="false" />
+				<gravity_active value="true" />
+			</player>
 			<flying_enemy>
 				<position x="128" y="1088" />
 				<size width="32" height="32" />
@@ -25,8 +36,8 @@
 				<size width="32" height="32" />
 				<speed x="5" y="5" />
 				<sightCollider width="160" height="96" />
-				<dead value="false" />
-				<lives value="3" />
+				<dead value="true" />
+				<lives value="0" />
 			</land_enemy>
 			<land_enemy>
 				<position x="1088" y="737" />
@@ -37,58 +48,47 @@
 				<lives value="3" />
 			</land_enemy>
 			<grid>
-				<position x="1566" y="736" />
-				<size width="-222" height="96" />
+				<position x="1250" y="736" />
+				<size width="94" height="96" />
 				<speed x="30" y="30" />
 				<type value="4" />
 			</grid>
 			<grid>
-				<position x="1598" y="992" />
-				<size width="-254" height="96" />
+				<position x="1298" y="992" />
+				<size width="46" height="96" />
 				<speed x="30" y="30" />
 				<type value="4" />
 			</grid>
 			<grid>
 				<position x="1152" y="480" />
-				<size width="96" height="56" />
+				<size width="96" height="134" />
 				<speed x="30" y="30" />
 				<type value="1" />
 			</grid>
 			<grid>
-				<position x="1246" y="384" />
-				<size width="-126" height="96" />
+				<position x="914" y="384" />
+				<size width="206" height="96" />
 				<speed x="30" y="30" />
 				<type value="4" />
 			</grid>
 			<grid>
 				<position x="32" y="608" />
-				<size width="32" height="96" />
+				<size width="46" height="96" />
 				<speed x="30" y="30" />
 				<type value="3" />
 			</grid>
 			<grid>
 				<position x="32" y="768" />
-				<size width="180" height="96" />
+				<size width="206" height="96" />
 				<speed x="30" y="30" />
 				<type value="3" />
 			</grid>
 			<grid>
 				<position x="96" y="384" />
-				<size width="96" height="56" />
+				<size width="96" height="134" />
 				<speed x="30" y="30" />
 				<type value="1" />
 			</grid>
-			<player>
-				<size width="32" height="32" />
-				<position x="1270" y="1153" />
-				<gravity value="300" />
-				<speed x="150" y="750" />
-				<grounded value="false" />
-				<sliding value="false" />
-				<jumping value="false" />
-				<grid value="false" />
-				<gravity_active value="true" />
-			</player>
 		</map_1>
 	</entitycontroller>
 	<renderer>

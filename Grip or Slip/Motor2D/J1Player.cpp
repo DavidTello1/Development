@@ -250,24 +250,62 @@ bool j1Player::Update(float dt)
 			{
 				if (vertical == true)
 				{
-					if (flip_ver == true) //hide_up
+					current_speed.y += grid_speed.y*dt;
+					if (current_speed.y >= 1)
 					{
-						final_speed.y += grid_speed.y * grid_direction;
-					}
-					if (flip_ver == false) //hide_down
-					{
-						final_speed.y -= grid_speed.y * grid_direction;
+						if (flip_ver == true) //hide_up
+						{
+							if (grid_direction == 1)
+							{
+								position.y++;
+							}
+							else if (grid_direction == -1 && ceiling == false)
+							{
+								position.y--;
+							}
+						}
+						else if (flip_ver == false) //hide_down
+						{
+							if (grid_direction == 1)
+							{
+								position.y--;
+							}
+							else if (grid_direction == -1)
+							{
+								position.y++;
+							}
+						}
+						current_speed.y--;
 					}
 				}
 				if (vertical == false)
 				{
-					if (flip_hor == true) //hide_left
+					current_speed.x += grid_speed.x*dt;
+					if (current_speed.x >= 1)
 					{
-						final_speed.x += grid_speed.x * grid_direction;
-					}
-					if (flip_hor == false) //hide_right
-					{
-						final_speed.x -= grid_speed.x * grid_direction;
+						if (flip_hor == true) //hide_left
+						{
+							if (grid_direction == 1)
+							{
+								position.x++;
+							}
+							else if (grid_direction == -1 && wall_left == false)
+							{
+								position.x--;
+							}
+						}
+						else if (flip_hor == false) //hide_right
+						{
+							if (grid_direction == 1)
+							{
+								position.x--;
+							}
+							else if (grid_direction == -1 && wall_right == false)
+							{
+								position.x++;
+							}
+						}
+						current_speed.x--;
 					}
 				}
 			}
@@ -280,25 +318,32 @@ bool j1Player::Update(float dt)
 			grid = false;
 		}
 
-		if (jumping == true) //jumping
+		if (jumping == true && App->scene->godmode == false) //jumping
 		{
-			gravity_active = true;
-			if (jumpSpeed > 0)
+			gravity_active = false;
+			jumpSpeed -= gravity / 5;
+			if (jumpSpeed <= -gravity)
 			{
-				jumpSpeed -= gravity / 8;
-				final_speed.y -= jumpSpeed;
+				jumpSpeed = -gravity;
 			}
+			final_speed.y -= jumpSpeed;
 		}
 
 		if (wall_left == true && App->scene->godmode == false) //wall left
 		{
-			final_speed.x += speed.x;
+			if (final_speed.x < 0)
+			{
+				final_speed.x = 0;
+			}
 			wall_left = false;
 		}
 
 		if (wall_right == true && App->scene->godmode == false) //wall right
 		{
-			final_speed.x -= speed.x;
+			if (final_speed.x > 0)
+			{
+				final_speed.x = 0;
+			}
 			wall_right = false;
 		}
 

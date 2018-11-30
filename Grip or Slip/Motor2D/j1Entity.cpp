@@ -134,7 +134,7 @@ void Entity::Collider_Overlay()
 					}
 					else if (objectdata->data->name == "Floor")
 					{
-						if (position.y + Collider.h - gravity*App->dt <= ObjectRect.y)
+						if (position.y + Collider.h - ceil(gravity*App->dt) <= ObjectRect.y)
 						{
 							if (result.h <= result.w || position.x + Collider.w >= ObjectRect.x)
 							{
@@ -154,7 +154,7 @@ void Entity::Collider_Overlay()
 							}
 							else
 							{
-								wall_right = true;
+  								wall_right = true;
 							}
 							jumpSpeed = 0;
 						}
