@@ -32,6 +32,9 @@ public:
 	void DeleteEntities();
 	void EnemyColliderCheck();
 
+	bool CopySave(pugi::xml_node&);
+	bool AppendSave(pugi::xml_node& source, pugi::xml_node& destiny);
+
 public:
 	p2SString		folder;
 	p2SString		texture_path;

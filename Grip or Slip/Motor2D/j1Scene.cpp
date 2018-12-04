@@ -149,12 +149,15 @@ bool j1Scene::Update(float dt)
 	{
 		App->fpsCapON = !App->fpsCapON;
 	}
+
+	//----
 	App->map->Draw();
 	if (change == false)
 	{
 		App->entitycontroller->Draw(dt);
 	}
 
+	//----
 	int x, y;
 	App->input->GetMousePosition(x, y);
 
@@ -184,26 +187,56 @@ bool j1Scene::PostUpdate()
 
 	bool ret = true;
 
-	if (change == true)
+	if (change == true) //rotate map and change
 	{
 		if (App->map->rotate == false)
 		{
-			if (App->map->rotate_end == true) 
+			if (App->map->rotate_end == true)
 			{
 				change = false;
 			}
 			else if (App->map->rotate_back == false && App->map->rotate_end == false)
 			{
-				if (currentMap == 0)
+				pugi::xml_document data;  //savegame.xml data
+				pugi::xml_node root;
+				pugi::xml_parse_result result = data.load_file("save_game.xml");
+				root = data.child("game_state").child("entitycontroller");
+
+				pugi::xml_document copy_data; //copysave.xml data
+				pugi::xml_node file;
+				file = copy_data.append_child("game_state");
+
+				App->entitycontroller->CopySave(file); //write currentmap data to copysave.xml
+				copy_data.save_file("copysave.xml");
+
+				if (currentMap == 0) //change to map 2
 				{
-					Load_level(1);
-					currentMap = 1;
+					currentMap = 1; //switch to and load map 2
+					App->entitycontroller->DeleteEntities();
+					App->map->SwitchMaps(map_names[1]);
+					SpawnEntities();
+
+					if (root.child("map_2").child("player") != NULL)
+					{
+						App->entitycontroller->Load(root);
+					}
 				}
-				else if (currentMap == 1)
+				else if (currentMap == 1) //change to map 1
 				{
-					Load_level(0);
-					currentMap = 0;
+					currentMap = 0; //switch to and load map 1
+					App->entitycontroller->DeleteEntities();
+					App->map->SwitchMaps(map_names[0]);
+					SpawnEntities();
+
+					if (root.child("map_1").child("player") != NULL)
+					{
+						App->entitycontroller->Load(root);
+					}
 				}
+
+				file = copy_data.child("game_state");
+				App->entitycontroller->AppendSave(file, root); //write copysave.xml data to savegame.xml
+				copy_data.reset();
 			}
 		}
 	}

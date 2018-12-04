@@ -54,6 +54,7 @@
       <size width="32" height="32"/>
       <speed x="5" y="5"/>
       <sightCollider width ="160" height="96"/>
+      <gravity value="250"/>
       <dead value="false"/>
       <lives value="3"/>
     </land_enemy>

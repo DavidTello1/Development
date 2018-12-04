@@ -84,7 +84,7 @@ bool j1Player::Update(float dt)
 				attack = true;
 				attack_able = false;
 				grid = false;
-				final_speed.y = 0;
+				jumping = false;
 			}
 			if (App->scene->godmode == true)
 			{
@@ -224,6 +224,7 @@ bool j1Player::Update(float dt)
 				final_speed.x -= speed.x;
 			}
 			jumpSpeed = 0;
+			final_speed.y = 0;
 		}
 
 		if (grounded == true) //grounded

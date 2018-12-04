@@ -52,6 +52,7 @@ public:
 private:
 
 	SDL_Texture * debug_tex;
+	bool copy;
 
 };
 

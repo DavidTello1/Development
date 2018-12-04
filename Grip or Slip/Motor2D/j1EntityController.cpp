@@ -98,13 +98,14 @@ bool j1EntityController::CleanUp()
 bool j1EntityController::Save(pugi::xml_node& file) const
 {
 	bool ret = true;
+
 	if (App->scene->currentMap == 0)
 	{
-		file = file.append_child("map_1");
+		pugi::xml_node param = file.append_child("map_1");
 		p2List_item<Entity*>* tmp = Entities.start;
 		while (tmp != nullptr)
 		{
-			tmp->data->Save(file);
+			tmp->data->Save(param);
 			tmp = tmp->next;
 		}
 	}
@@ -118,6 +119,50 @@ bool j1EntityController::Save(pugi::xml_node& file) const
 			tmp = tmp->next;
 		}
 	}
+	return ret;
+}
+
+bool j1EntityController::CopySave(pugi::xml_node& file)
+{
+	bool ret = true;
+
+	p2List_item<Entity*>* tmp = Entities.start;
+	while (tmp != nullptr)
+	{
+		tmp->data->Save(file);
+		tmp = tmp->next;
+	}
+
+	return ret;
+}
+
+bool j1EntityController::AppendSave(pugi::xml_node& source, pugi::xml_node& destiny)
+{
+	bool ret = true;
+
+	if (App->scene->currentMap == 1)
+	{
+		destiny = destiny.insert_child_before("map_1", destiny.child("map_2"));  //append map1 before map2
+	}
+	else if (App->scene->currentMap == 0)
+	{
+		destiny = destiny.insert_child_after("map_2", destiny.child("map_1")); //append map2 after map1
+	}
+
+	for (pugi::xml_node tmp = source.first_child(); tmp; tmp = tmp.next_sibling()) //traverse copysave.xml (entity type)
+	{
+		destiny.append_child(tmp.name()); //append child to savegame.xml
+		for (pugi::xml_node tmp2 = tmp.first_child(); tmp2; tmp2 = tmp2.next_sibling()) //traverse copysave.xml (variable names)
+		{
+			destiny.append_child(tmp2.name()); //append child to savegame.xml
+
+			for (pugi::xml_attribute attr = tmp2.first_attribute(); attr; attr = attr.next_attribute()) //traverse copysave.xml (attributes)
+			{
+				destiny.append_attribute(attr.name()) = attr.value(); //append attribute to save_game.xml
+			}
+		}
+	}
+
 	return ret;
 }
 
@@ -198,11 +243,10 @@ void j1EntityController::DeleteEnemies()
 	p2List_item<Entity*>* tmp = Entities.end;
 	while (tmp != nullptr)
 	{
-		p2List_item<Entity*>* tmp2 = tmp;
 		if (tmp->data->type != Entity::entityType::PLAYER)
 		{
+			Entities.del(tmp);
 			RELEASE(tmp->data);
-			Entities.del(tmp2);
 			tmp = tmp->prev;
 		}
 		else
