@@ -209,34 +209,38 @@ bool j1Scene::PostUpdate()
 				App->entitycontroller->CopySave(file); //write currentmap data to copysave.xml
 				copy_data.save_file("copysave.xml");
 
-				if (currentMap == 0) //change to map 2
+				if (currentMap == 0) //change to map2
 				{
-					currentMap = 1; //switch to and load map 2
+					currentMap = 1; //switch to and load map2
 					App->entitycontroller->DeleteEntities();
 					App->map->SwitchMaps(map_names[1]);
 					SpawnEntities();
 
-					if (root.child("map_2").child("player") != NULL)
+					if (root.child("map_2").child("player") != NULL) // if map2 data exists loads it from savegame.xml
 					{
 						App->entitycontroller->Load(root);
+						root = data.child("game_state").child("entitycontroller");
 					}
 				}
-				else if (currentMap == 1) //change to map 1
+				else if (currentMap == 1) //change to map1
 				{
-					currentMap = 0; //switch to and load map 1
+					currentMap = 0; //switch to and load map1
 					App->entitycontroller->DeleteEntities();
 					App->map->SwitchMaps(map_names[0]);
 					SpawnEntities();
 
-					if (root.child("map_1").child("player") != NULL)
+					if (root.child("map_1").child("player") != NULL) //if map1 data exists loads it from savegame.xml
 					{
 						App->entitycontroller->Load(root);
+						root = data.child("game_state").child("entitycontroller");
 					}
 				}
 
 				file = copy_data.child("game_state");
 				App->entitycontroller->AppendSave(file, root); //write copysave.xml data to savegame.xml
+				data.save_file("save_game.xml");
 				copy_data.reset();
+				data.reset();
 			}
 		}
 	}
