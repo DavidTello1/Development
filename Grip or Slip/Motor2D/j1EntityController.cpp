@@ -140,7 +140,6 @@ bool j1EntityController::AppendSave(pugi::xml_node& source, pugi::xml_node& dest
 {
 	bool ret = true;
 
-	foo(destiny);
 	if (App->scene->currentMap == 1)
 	{
 		if (destiny.child("map_1") != NULL) //map1 data already exists (not to date)
@@ -198,16 +197,21 @@ bool j1EntityController::AppendSave(pugi::xml_node& source, pugi::xml_node& dest
 		}
 	}
 
+	int counter = 0;
+	int counter2 = 0;
+	pugi::xml_node destiny_source = destiny;
+
 	for (pugi::xml_node tmp = source.first_child(); tmp; tmp = tmp.next_sibling()) //traverse copysave.xml (entity type)
 	{
-		destiny.append_child(tmp.name()); //append child to savegame.xml
+		destiny = destiny_source.append_child(tmp.name()); //append child to savegame.xml
+
 		for (pugi::xml_node tmp2 = tmp.first_child(); tmp2; tmp2 = tmp2.next_sibling()) //traverse copysave.xml (variable names)
 		{
-			destiny.child(tmp.name()).append_child(tmp2.name()); //append child to savegame.xml
+			destiny.append_child(tmp2.name()); //append child to savegame.xml
 
 			for (pugi::xml_attribute attr = tmp2.first_attribute(); attr; attr = attr.next_attribute()) //traverse copysave.xml (attributes)
 			{
-				destiny.child(tmp.name()).child(tmp2.name()).append_attribute(attr.name()) = attr.value(); //append attribute to save_game.xml
+				destiny.child(tmp2.name()).append_attribute(attr.name()) = attr.value(); //append attribute to save_game.xml
 			}
 		}
 	}

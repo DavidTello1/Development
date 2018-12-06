@@ -35,8 +35,6 @@ public:
 	bool CopySave(pugi::xml_node&);
 	bool AppendSave(pugi::xml_node& source, pugi::xml_node& destiny);
 
-	void foo(const pugi::xml_node& n) { pugi::xml_node nc = n; }
-
 public:
 	p2SString		folder;
 	p2SString		texture_path;
