@@ -580,14 +580,6 @@ void j1Map::RotateMaps()
 {
 	BROFILER_CATEGORY("RotateMaps", Profiler::Color::Purple);
 
-	pugi::xml_document save_data;  //savegame.xml data
-	pugi::xml_node root;
-	pugi::xml_parse_result result = save_data.load_file("save_game.xml");
-	if (result == false)
-	{
-		App->SaveGame();
-	}
-
 	if (rotate == true) //rotate
 	{
 		if (angle >= 90)
@@ -622,7 +614,7 @@ void j1Map::RotateMaps()
 					}
 				}
 			}
-			angle += 0.5;
+			angle += 0.75;
 		}
 	}
 	else if (rotated == true)
@@ -664,7 +656,7 @@ void j1Map::RotateMaps()
 					}
 				}
 			}
-			angle += 0.5;
+			angle += 0.75;
 		}
 	}
 }

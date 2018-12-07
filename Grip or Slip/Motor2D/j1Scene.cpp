@@ -130,6 +130,13 @@ bool j1Scene::Update(float dt)
 	{
 		if (change == false)
 		{
+			pugi::xml_document save_data;  //savegame.xml data
+			pugi::xml_parse_result result = save_data.load_file("save_game.xml");
+			if (result == false)
+			{
+				App->SaveGame();
+			}
+
 			App->map->angle = 0.0;
 			App->map->rotate = true;
 			App->map->rotate_end = false;
@@ -197,50 +204,7 @@ bool j1Scene::PostUpdate()
 			}
 			else if (App->map->rotate_back == false && App->map->rotate_end == false)
 			{
-				pugi::xml_document data;  //savegame.xml data
-				pugi::xml_node root;
-				pugi::xml_parse_result result = data.load_file("save_game.xml");
-				root = data.child("game_state").child("entitycontroller");
-
-				pugi::xml_document copy_data; //copysave.xml data
-				pugi::xml_node file;
-				file = copy_data.append_child("game_state");
-
-				App->entitycontroller->CopySave(file); //write currentmap data to copysave.xml
-				copy_data.save_file("copysave.xml");
-
-				if (currentMap == 0) //change to map2
-				{
-					currentMap = 1; //switch to and load map2
-					App->entitycontroller->DeleteEntities();
-					App->map->SwitchMaps(map_names[1]);
-					SpawnEntities();
-
-					if (root.child("map_2").child("player") != NULL) // if map2 data exists loads it from savegame.xml
-					{
-						App->entitycontroller->Load(root);
-						root = data.child("game_state").child("entitycontroller");
-					}
-				}
-				else if (currentMap == 1) //change to map1
-				{
-					currentMap = 0; //switch to and load map1
-					App->entitycontroller->DeleteEntities();
-					App->map->SwitchMaps(map_names[0]);
-					SpawnEntities();
-
-					if (root.child("map_1").child("player") != NULL) //if map1 data exists loads it from savegame.xml
-					{
-						App->entitycontroller->Load(root);
-						root = data.child("game_state").child("entitycontroller");
-					}
-				}
-
-				file = copy_data.child("game_state");
-				App->entitycontroller->AppendSave(file, root); //write copysave.xml data to savegame.xml
-				data.save_file("save_game.xml");
-				copy_data.reset();
-				data.reset();
+				SaveAndChange();
 			}
 		}
 	}
@@ -350,4 +314,55 @@ void j1Scene::SpawnEnemies()
 			}
 		}
 	}
+}
+
+void j1Scene::SaveAndChange()
+{
+	pugi::xml_document data;  //savegame.xml data
+	pugi::xml_node root;
+	pugi::xml_parse_result result = data.load_file("save_game.xml");
+	data.child("game_state").child("scene").child("currentMap").attribute("num").set_value(currentMap);
+	data.save_file("save_game.xml");
+
+	root = data.child("game_state").child("entitycontroller");
+
+	pugi::xml_document copy_data; //copysave.xml data
+	pugi::xml_node file;
+	file = copy_data.append_child("game_state");
+
+	App->entitycontroller->CopySave(file); //write currentmap data to copysave.xml
+	copy_data.save_file("copysave.xml");
+
+	if (currentMap == 0) //change to map2
+	{
+		currentMap = 1; //switch to and load map2
+		App->entitycontroller->DeleteEntities();
+		App->map->SwitchMaps(map_names[1]);
+		SpawnEntities();
+
+		if (root.child("map_2").child("player") != NULL) // if map2 data exists loads it from savegame.xml
+		{
+			App->entitycontroller->Load(root);
+			root = data.child("game_state").child("entitycontroller");
+		}
+	}
+	else if (currentMap == 1) //change to map1
+	{
+		currentMap = 0; //switch to and load map1
+		App->entitycontroller->DeleteEntities();
+		App->map->SwitchMaps(map_names[0]);
+		SpawnEntities();
+
+		if (root.child("map_1").child("player") != NULL) //if map1 data exists loads it from savegame.xml
+		{
+			App->entitycontroller->Load(root);
+			root = data.child("game_state").child("entitycontroller");
+		}
+	}
+
+	file = copy_data.child("game_state");
+	App->entitycontroller->AppendSave(file, root); //write copysave.xml data to savegame.xml
+	data.save_file("save_game.xml");
+	copy_data.reset();
+	data.reset();
 }

@@ -98,7 +98,6 @@ bool j1EntityController::CleanUp()
 bool j1EntityController::Save(pugi::xml_node& file) const
 {
 	bool ret = true;
-
 	if (App->scene->currentMap == 0)
 	{
 		pugi::xml_node param = file.append_child("map_1");
@@ -144,63 +143,58 @@ bool j1EntityController::AppendSave(pugi::xml_node& source, pugi::xml_node& dest
 	{
 		if (destiny.child("map_1") != NULL) //map1 data already exists (not to date)
 		{
-			for (pugi::xml_node tmp = destiny.first_child(); tmp; tmp = tmp.next_sibling()) //traverse copysave.xml (entity type)
+			for (pugi::xml_node tmp = destiny.child("map_1"); tmp; tmp = tmp.next_sibling()) //remove map1 data
 			{
-				destiny.remove_child(tmp.name()); //append child to savegame.xml
-				for (pugi::xml_node tmp2 = tmp.first_child(); tmp2; tmp2 = tmp2.next_sibling()) //traverse copysave.xml (variable names)
+				destiny.remove_child(tmp.name());
+				for (pugi::xml_node tmp2 = tmp.first_child(); tmp2; tmp2 = tmp2.next_sibling())
 				{
-					destiny.remove_child(tmp2.name()); //append child to savegame.xml
+					destiny.remove_child(tmp2.name());
 
-					for (pugi::xml_attribute attr = tmp2.first_attribute(); attr; attr = attr.next_attribute()) //traverse copysave.xml (attributes)
+					for (pugi::xml_attribute attr = tmp2.first_attribute(); attr; attr = attr.next_attribute())
 					{
-						destiny.remove_attribute(attr.name()); //append attribute to save_game.xml
+						destiny.remove_attribute(attr.name());
 					}
 				}
 			}
-			destiny = destiny.append_child("map_1"); //if there is no map data append map1
 		}
-		else if (destiny.child("map_2") != NULL) //map2 data already exists
+		if (destiny.child("map_2") != NULL) //map2 data already exists
 		{
 			destiny = destiny.insert_child_before("map_1", destiny.child("map_2"));  //append map1 before map2
 		}
 		else
 		{
-			destiny = destiny.append_child("map_1"); //if there is no map data append map1
+			destiny = destiny.append_child("map_1"); //if there is no map2 data append map1
 		}
 	}
 	else if (App->scene->currentMap == 0)
 	{
 		if (destiny.child("map_2") != NULL) //map2 data already exists (not to date)
 		{
-			for (pugi::xml_node tmp = destiny.first_child(); tmp; tmp = tmp.next_sibling()) //traverse copysave.xml (entity type)
+			for (pugi::xml_node tmp = destiny.child("map_2"); tmp; tmp = tmp.next_sibling()) //remove map2 data
 			{
-				destiny.remove_child(tmp.name()); //append child to savegame.xml
-				for (pugi::xml_node tmp2 = tmp.first_child(); tmp2; tmp2 = tmp2.next_sibling()) //traverse copysave.xml (variable names)
+				destiny.remove_child(tmp.name());
+				for (pugi::xml_node tmp2 = tmp.first_child(); tmp2; tmp2 = tmp2.next_sibling())
 				{
-					destiny.remove_child(tmp2.name()); //append child to savegame.xml
+					destiny.remove_child(tmp2.name());
 
-					for (pugi::xml_attribute attr = tmp2.first_attribute(); attr; attr = attr.next_attribute()) //traverse copysave.xml (attributes)
+					for (pugi::xml_attribute attr = tmp2.first_attribute(); attr; attr = attr.next_attribute())
 					{
-						destiny.remove_attribute(attr.name()); //append attribute to save_game.xml
+						destiny.remove_attribute(attr.name());
 					}
 				}
 			}
-			destiny = destiny.append_child("map_2"); //if there is no map data append map1
 		}
-		else if (destiny.child("map_1") != NULL) //map1 data already exists
+		if (destiny.child("map_1") != NULL) //map1 data already exists
 		{
 			destiny = destiny.insert_child_after("map_2", destiny.child("map_1"));  //append map2 after map1
 		}
 		else
 		{
-			destiny = destiny.append_child("map_2"); //if there is no map data append map2
+			destiny = destiny.append_child("map_2"); //if there is no map1 data append map2
 		}
 	}
 
-	int counter = 0;
-	int counter2 = 0;
 	pugi::xml_node destiny_source = destiny;
-
 	for (pugi::xml_node tmp = source.first_child(); tmp; tmp = tmp.next_sibling()) //traverse copysave.xml (entity type)
 	{
 		destiny = destiny_source.append_child(tmp.name()); //append child to savegame.xml

@@ -389,6 +389,10 @@ bool j1App::LoadGameNow()
 
 		while(item != NULL && ret == true)
 		{
+			if (item->data->name == "scene")
+			{
+				root.child("scene").child("currentMap").attribute("num").set_value(scene->currentMap);
+			}
 			ret = item->data->Load(root.child(item->data->name.GetString()));
 			item = item->next;
 		}
@@ -415,11 +419,21 @@ bool j1App::SavegameNow() const
 	// xml object were we will store all data
 	pugi::xml_document data;
 	pugi::xml_node root;
-	
 	root = data.append_child("game_state");
 
-	p2List_item<j1Module*>* item = modules.start;
+	pugi::xml_document save_data;
+	pugi::xml_parse_result result = save_data.load_file(save_game.GetString());
+	pugi::xml_document copy_data;
+	pugi::xml_node copy_root;
+	if (result == true)
+	{
+		copy_root = copy_data.append_child("game_state");
 
+		entitycontroller->CopySave(copy_root); //write currentmap data to copysave.xml
+		copy_data.save_file("copysave.xml");
+	}
+
+	p2List_item<j1Module*>* item = modules.start; //save all modules
 	while(item != NULL && ret == true)
 	{
 		if (item->data->active)
@@ -429,11 +443,40 @@ bool j1App::SavegameNow() const
 		item = item->next;
 	}
 
-	if(ret == true)
+	if (ret == true)
 	{
-		data.save_file(save_game.GetString());
-		// we are done, so write data to disk
-		//fs->Save(save_game.GetString(), stream.str().c_str(), stream.str().length());
+		data.save_file(save_game.GetString()); //save file
+
+		if (result == true) //if there was a previous save_game.xml
+		{
+			pugi::xml_node save_root = save_data.child("game_state").child("entitycontroller");
+			
+			copy_root = copy_data.child("game_state");
+
+			if (scene->currentMap == 0)
+			{
+				scene->currentMap = 1;
+			}
+			else if (scene->currentMap == 1)
+			{
+				scene->currentMap = 0;
+			}
+
+			entitycontroller->AppendSave(copy_root, save_root); //write copysave.xml data to savegame.xml
+
+			if (scene->currentMap == 0)
+			{
+				scene->currentMap = 1;
+			}
+			else if (scene->currentMap == 1)
+			{
+				scene->currentMap = 0;
+			}
+			save_data.child("game_state").child("scene").child("currentMap").attribute("num").set_value(scene->currentMap);
+
+			save_data.save_file(save_game.GetString()); //save save_game with copysave data in it
+		}
+
 		LOG("... finished saving", save_game.GetString());
 	}
 	else

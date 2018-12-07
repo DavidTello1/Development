@@ -26,85 +26,85 @@
 	</land_enemy>
 	<grid>
 		<position x="1120" y="896" />
-		<size width="134" height="96" />
+		<size width="47" height="96" />
 		<speed x="30" y="30" />
 		<type value="3" />
 	</grid>
 	<grid>
-		<position x="1250" y="736" />
-		<size width="94" height="96" />
+		<position x="1287" y="736" />
+		<size width="57" height="96" />
 		<speed x="30" y="30" />
 		<type value="4" />
 	</grid>
 	<grid>
-		<position x="1362" y="960" />
-		<size width="46" height="96" />
+		<position x="1371" y="960" />
+		<size width="37" height="96" />
 		<speed x="30" y="30" />
 		<type value="4" />
 	</grid>
 	<grid>
-		<position x="1402" y="1120" />
-		<size width="102" height="96" />
+		<position x="1437" y="1120" />
+		<size width="67" height="96" />
 		<speed x="30" y="30" />
 		<type value="4" />
 	</grid>
 	<grid>
 		<position x="1184" y="480" />
-		<size width="96" height="134" />
+		<size width="96" height="47" />
 		<speed x="30" y="30" />
 		<type value="1" />
 	</grid>
 	<grid>
 		<position x="1024" y="384" />
-		<size width="96" height="134" />
+		<size width="96" height="47" />
 		<speed x="30" y="30" />
 		<type value="1" />
 	</grid>
 	<grid>
 		<position x="96" y="384" />
-		<size width="96" height="90" />
+		<size width="96" height="95" />
 		<speed x="30" y="30" />
 		<type value="1" />
 	</grid>
 	<grid>
 		<position x="32" y="544" />
-		<size width="90" height="96" />
+		<size width="95" height="96" />
 		<speed x="30" y="30" />
 		<type value="3" />
 	</grid>
 	<grid>
 		<position x="32" y="672" />
-		<size width="134" height="96" />
+		<size width="47" height="96" />
 		<speed x="30" y="30" />
 		<type value="3" />
 	</grid>
 	<grid>
 		<position x="256" y="384" />
-		<size width="96" height="90" />
+		<size width="96" height="95" />
 		<speed x="30" y="30" />
 		<type value="1" />
 	</grid>
 	<grid>
-		<position x="960" y="1210" />
-		<size width="96" height="134" />
+		<position x="960" y="1297" />
+		<size width="96" height="47" />
 		<speed x="30" y="30" />
 		<type value="2" />
 	</grid>
 	<grid>
-		<position x="1152" y="1250" />
-		<size width="96" height="94" />
+		<position x="1152" y="1287" />
+		<size width="96" height="57" />
 		<speed x="30" y="30" />
 		<type value="2" />
 	</grid>
 	<player>
 		<size width="32" height="32" />
-		<position x="355" y="1209" />
+		<position x="685" y="1281" />
 		<gravity value="250" />
 		<speed x="150" y="500" />
 		<grounded value="false" />
 		<sliding value="false" />
 		<jumping value="false" />
-		<grid value="true" />
-		<gravity_active value="false" />
+		<grid value="false" />
+		<gravity_active value="true" />
 	</player>
 </game_state>
