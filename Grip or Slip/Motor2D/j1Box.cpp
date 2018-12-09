@@ -61,14 +61,12 @@ j1Box::j1Box(iPoint pos, iPoint Size, p2SString Type, p2SString side) : Entity(e
 
 
 	idle.PushBack({ 352, 96, size.x, size.y });
-	gripped.PushBack({ 387, 96, size.x, size.y });
+	gripped.PushBack({ 384, 96, size.x, size.y });
 
 	Current_Animation = &idle;
 	CheckBounds();
 	PositionCollider();
 	CheckSide();
-
-	end_moving = true;
 }
 
 bool j1Box::Update(float dt)
@@ -81,29 +79,60 @@ bool j1Box::Update(float dt)
 		box_flag = true;
 	}
 
-	if (left == true && box_moving == false)
-	{
-		direction = 1;
-	}
-	else if (left == false && box_moving == false)
-	{
-		direction = -1;
-	}
-
 	final_speed = { 0,0 };
 	PositionCollider();
 
-	if (end_moving == true)
+	if (App->scene->currentMap == 0)
 	{
-		if (left == true)
+		if (left == true && box_moving == false)
 		{
-			position.x = Bounds.x;
-			position.y = Bounds.y;
+			direction = 1;
 		}
-		else if (left == false)
+		else if (left == false && box_moving == false)
 		{
-			position.x = Bounds.x + Bounds.w - Collider.w;
-			position.y = Bounds.y + Bounds.h - Collider.h;
+			direction = -1;
+		}
+	}
+	else if (App->scene->currentMap == 1)
+	{
+		if (left == true && box_moving == false)
+		{
+			direction = -1;
+		}
+		else if (left == false && box_moving == false)
+		{
+			direction = 1;
+		}
+	}
+
+	if (box_moving == false)
+	{
+		if (App->scene->currentMap == 0)
+		{
+			if (left == true)
+			{
+				position.x = Bounds.x;
+				position.y = Bounds.y;
+			}
+			else if (left == false)
+			{
+				position.x = Bounds.x + Bounds.w - Collider.w;
+				position.y = Bounds.y + Bounds.h - Collider.h;
+			}
+		}
+		else if (App->scene->currentMap == 1)
+		{
+			if (left == true)
+			{
+				position.x = Bounds.x + Bounds.w - Collider.w;
+				position.y = Bounds.y + Bounds.h - Collider.h;
+			}
+			else if (left == false)
+			{
+				position.x = Bounds.x;
+				position.y = Bounds.y;
+			}
+
 		}
 	}
 
@@ -124,7 +153,7 @@ bool j1Box::Update(float dt)
 	{
 		box_collision = false;
 	}
-
+	
 	if (player->data->gripping == true)
 	{
 		end_moving = false;
@@ -141,7 +170,7 @@ bool j1Box::Update(float dt)
 		box_moving = false;
 	}
 
-	if (box_moving == true && end_moving == false)
+	if (box_moving == true)
 	{
 		if (direction == 1) //going right
 		{
@@ -173,7 +202,14 @@ bool j1Box::Update(float dt)
 			}
 			else
 			{
-				left = false;
+				if (App->scene->currentMap == 0)
+				{
+					left = false;
+				}
+				else if (App->scene->currentMap == 1)
+				{
+					left = true;
+				}
 				box_moving = false;
 				end_moving = true;
 			}
@@ -186,7 +222,14 @@ bool j1Box::Update(float dt)
 			}
 			else
 			{
-				left = true;
+				if (App->scene->currentMap == 0)
+				{
+					left = true;
+				}
+				else if (App->scene->currentMap == 1)
+				{
+					left = false;
+				}
 				box_moving = false;
 				end_moving = true;
 			}
@@ -211,10 +254,9 @@ bool j1Box::Update(float dt)
 		}
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN)
-	{
-		UpdateSide();
-	}
+	//if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN)
+	//{
+	UpdateSide();
 
 	return true;
 }
@@ -238,7 +280,6 @@ void j1Box::Load(pugi::xml_node& data)
 	Bounds.h = data.child("Bounds").attribute("height").as_int();
 	left = data.child("side").attribute("value").as_bool();
 	box_moving = data.child("box_moving").attribute("value").as_bool();
-	end_moving = data.child("end_moving").attribute("value").as_bool();
 
 	LOG("--- Box Loaded");
 }
@@ -259,117 +300,46 @@ void j1Box::Save(pugi::xml_node& data) const
 	box.child("Bounds").append_attribute("height") = Bounds.h;
 	box.append_child("side").append_attribute("value") = left;
 	box.append_child("box_moving").append_attribute("value") = box_moving;
-	box.append_child("end_moving").append_attribute("value") = end_moving;
 
 	LOG("--- Box Saved");
 }
 
 void j1Box::UpdateSide()
 {
-	if (App->scene->currentMap == 0)
+	if (type_int == 1)
 	{
-		if (type_int == 1)
-		{
-			App->scene->box_1_side = left;
-		}
-		else if (type_int == 2)
-		{
-			App->scene->box_2_side = left;
-		}
-		else if (type_int == 3)
-		{
-			App->scene->box_3_side = left;
-		}
-		else if (type_int == 4)
-		{
-			App->scene->box_4_side = left;
-		}
+		App->scene->box_1_side = left;
 	}
-	else if (App->scene->currentMap == 1)
+	else if (type_int == 2)
 	{
-		if (type_int == 1)
-		{
-			App->scene->box_1_side = !left;
-		}
-		else if (type_int == 2)
-		{
-			App->scene->box_2_side = !left;
-		}
-		else if (type_int == 3)
-		{
-			App->scene->box_3_side = !left;
-		}
-		else if (type_int == 4)
-		{
-			App->scene->box_4_side = !left;
-		}
+		App->scene->box_2_side = left;
+	}
+	else if (type_int == 3)
+	{
+		App->scene->box_3_side = left;
+	}
+	else if (type_int == 4)
+	{
+		App->scene->box_4_side = left;
 	}
 }
 
 void j1Box::CheckSide()
 {
-	if (App->scene->currentMap == 0)
+	if (type_int == 1)
 	{
-		if (type_int == 1)
-		{
-			left = App->scene->box_1_side;
-		}
-		else if (type_int == 2)
-		{
-			left = App->scene->box_2_side;
-		}
-		else if (type_int == 3)
-		{
-			left = App->scene->box_3_side;
-		}
-		else if (type_int == 4)
-		{
-			left = App->scene->box_4_side;
-		}
+		left = App->scene->box_1_side;
 	}
-	else if (App->scene->currentMap == 1)
+	else if (type_int == 2)
 	{
-		if (type_int == 1)
-		{
-			left = !App->scene->box_1_side;
-		}
-		else if (type_int == 2)
-		{
-			left = !App->scene->box_2_side;
-		}
-		else if (type_int == 3)
-		{
-			left = !App->scene->box_3_side;
-		}
-		else if (type_int == 4)
-		{
-			left = !App->scene->box_4_side;
-		}
+		left = App->scene->box_2_side;
 	}
-}
-
-void j1Box::LoadSide()
-{
-	pugi::xml_document data;
-	pugi::xml_node root;
-	pugi::xml_parse_result result = data.load_file("save_game.xml");
-
-	if (App->scene->currentMap == 0)
+	else if (type_int == 3)
 	{
-		root = data.child("game_state").child("entitycontroller").child("map_1");
+		left = App->scene->box_3_side;
 	}
-	else if (App->scene->currentMap == 1)
+	else if (type_int == 4)
 	{
-		root = data.child("game_state").child("entitycontroller").child("map_2");
+		left = App->scene->box_4_side;
 	}
-	root = root.child("box");
-
-	for (int i = type_int; i > 1; i--)
-	{
-		root = root.next_sibling("box");
-	}
-
-	left = root.child("side").attribute("value").as_bool();
-	UpdateSide();
-	box_flag = true;
 }

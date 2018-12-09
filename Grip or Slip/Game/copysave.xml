@@ -25,86 +25,82 @@
 		<lives value="3" />
 	</land_enemy>
 	<grid>
-		<position x="1227" y="736" />
-		<size width="117" height="96" />
+		<position x="1313" y="736" />
+		<size width="31" height="96" />
 		<speed x="30" y="30" />
 		<type value="4" />
 	</grid>
 	<grid>
-		<position x="1281" y="992" />
-		<size width="63" height="96" />
+		<position x="1285" y="992" />
+		<size width="59" height="96" />
 		<speed x="30" y="30" />
 		<type value="4" />
 	</grid>
 	<grid>
 		<position x="1152" y="480" />
-		<size width="96" height="111" />
+		<size width="96" height="75" />
 		<speed x="30" y="30" />
 		<type value="1" />
 	</grid>
 	<grid>
-		<position x="995" y="384" />
-		<size width="125" height="96" />
+		<position x="977" y="384" />
+		<size width="143" height="96" />
 		<speed x="30" y="30" />
 		<type value="4" />
 	</grid>
 	<grid>
 		<position x="32" y="608" />
-		<size width="63" height="96" />
+		<size width="59" height="96" />
 		<speed x="30" y="30" />
 		<type value="3" />
 	</grid>
 	<grid>
 		<position x="32" y="768" />
-		<size width="125" height="96" />
+		<size width="143" height="96" />
 		<speed x="30" y="30" />
 		<type value="3" />
 	</grid>
 	<grid>
 		<position x="96" y="384" />
-		<size width="96" height="111" />
+		<size width="96" height="75" />
 		<speed x="30" y="30" />
 		<type value="1" />
 	</grid>
 	<box>
-		<position x="349" y="1213" />
-		<size width="35" height="35" />
+		<position x="192" y="1152" />
+		<size width="32" height="32" />
 		<speed x="50" y="50" />
-		<Bounds x="192" y="1152" width="192" height="96" />
-		<side value="false" />
+		<Bounds x="192" y="1152" width="192" height="128" />
+		<side value="true" />
 		<box_moving value="false" />
-		<end_moving value="true" />
 	</box>
 	<box>
-		<position x="925" y="733" />
-		<size width="35" height="35" />
+		<position x="928" y="736" />
+		<size width="32" height="32" />
 		<speed x="50" y="50" />
 		<Bounds x="768" y="672" width="192" height="96" />
 		<side value="false" />
 		<box_moving value="false" />
-		<end_moving value="true" />
 	</box>
 	<box>
 		<position x="640" y="544" />
-		<size width="35" height="35" />
+		<size width="32" height="32" />
 		<speed x="50" y="50" />
 		<Bounds x="640" y="544" width="128" height="96" />
 		<side value="true" />
 		<box_moving value="false" />
-		<end_moving value="true" />
 	</box>
 	<box>
-		<position x="541" y="765" />
-		<size width="35" height="35" />
+		<position x="320" y="608" />
+		<size width="32" height="32" />
 		<speed x="50" y="50" />
 		<Bounds x="320" y="608" width="256" height="192" />
-		<side value="false" />
+		<side value="true" />
 		<box_moving value="false" />
-		<end_moving value="true" />
 	</box>
 	<player>
 		<size width="32" height="32" />
-		<position x="442" y="1217" />
+		<position x="1343" y="289" />
 		<gravity value="250" />
 		<speed x="150" y="500" />
 		<grounded value="false" />

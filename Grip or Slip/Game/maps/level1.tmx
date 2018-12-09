@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="48" height="42" tilewidth="32" tileheight="32" nextobjectid="106">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="48" height="42" tilewidth="32" tileheight="32" nextobjectid="119">
  <properties>
   <property name="Terrain" value="Non-Walkable"/>
  </properties>
@@ -3031,7 +3031,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="3"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -3079,7 +3079,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="2"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -3127,9 +3127,9 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -3497,10 +3497,10 @@
    <tile gid="34"/>
    <tile gid="34"/>
    <tile gid="34"/>
-   <tile gid="34"/>
-   <tile gid="34"/>
-   <tile gid="34"/>
-   <tile gid="34"/>
+   <tile gid="17"/>
+   <tile gid="24"/>
+   <tile gid="24"/>
+   <tile gid="16"/>
    <tile gid="34"/>
    <tile gid="34"/>
    <tile gid="34"/>
@@ -3545,10 +3545,10 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="23"/>
+   <tile gid="24"/>
+   <tile gid="24"/>
+   <tile gid="25"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -3593,10 +3593,10 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="23"/>
+   <tile gid="24"/>
+   <tile gid="24"/>
+   <tile gid="25"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -3641,10 +3641,10 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="23"/>
+   <tile gid="24"/>
+   <tile gid="24"/>
+   <tile gid="25"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -3689,10 +3689,10 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="33"/>
+   <tile gid="34"/>
+   <tile gid="34"/>
+   <tile gid="35"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -3737,10 +3737,10 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="4"/>
+   <tile gid="4"/>
+   <tile gid="4"/>
+   <tile gid="4"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -3834,8 +3834,8 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="11"/>
+   <tile gid="11"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -3882,8 +3882,8 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="21"/>
+   <tile gid="21"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -3977,10 +3977,10 @@
    <tile gid="14"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="23"/>
@@ -4025,10 +4025,10 @@
    <tile gid="25"/>
    <tile gid="3"/>
    <tile gid="3"/>
-   <tile gid="3"/>
-   <tile gid="3"/>
-   <tile gid="3"/>
-   <tile gid="3"/>
+   <tile gid="13"/>
+   <tile gid="14"/>
+   <tile gid="14"/>
+   <tile gid="15"/>
    <tile gid="3"/>
    <tile gid="3"/>
    <tile gid="23"/>
@@ -6176,15 +6176,25 @@
   <object id="94" name="Wall" type="Wall_right" x="928" y="528" width="16" height="48"/>
   <object id="96" name="Spikes" x="1248" y="736" width="96" height="24"/>
   <object id="101" name="Wall" type="Wall_right" x="1088" y="1264" width="32" height="32"/>
-  <object id="102" name="Box1" type="right" x="348" y="1212" width="35" height="35"/>
-  <object id="103" name="Box2" type="right" x="923.5" y="731.5" width="35" height="35"/>
-  <object id="104" name="Box3" type="left" x="640" y="544" width="35" height="35"/>
-  <object id="105" name="Box4" type="right" x="540" y="764" width="35" height="35"/>
+  <object id="102" name="Box1" type="right" x="352" y="1248" width="32" height="32"/>
+  <object id="103" name="Box2" type="right" x="928" y="736" width="32" height="32"/>
+  <object id="104" name="Box3" type="left" x="640" y="544" width="32" height="32"/>
+  <object id="105" name="Box4" type="right" x="544" y="768" width="32" height="32"/>
+  <object id="106" name="Floor" x="256" y="1184" width="64" height="64"/>
+  <object id="109" name="Spikes" x="672" y="648" width="32" height="24"/>
+  <object id="110" name="Floor" x="704" y="704" width="64" height="32"/>
+  <object id="111" name="Wall" type="Wall_right" x="672" y="672" width="16" height="64"/>
+  <object id="112" name="Wall" type="Wall_left" x="688" y="672" width="16" height="64"/>
+  <object id="113" name="Spikes" x="224" y="1120" width="128" height="24"/>
+  <object id="114" name="Spikes" x="224" y="1288" width="128" height="24"/>
+  <object id="116" name="Wall" type="Wall_right" x="224" y="992" width="32" height="128"/>
+  <object id="117" name="Wall" type="Wall_left" x="320" y="992" width="32" height="128"/>
+  <object id="118" name="Ceiling" x="256" y="1232" width="64" height="16"/>
  </objectgroup>
- <objectgroup name="Boundaries">
+ <objectgroup name="Boundaries" visible="0">
   <object id="85" name="Box2" x="768" y="672" width="192" height="96"/>
   <object id="87" name="Box4" x="320" y="608" width="256" height="192"/>
   <object id="86" name="Box3" x="640" y="544" width="128" height="96"/>
-  <object id="77" name="Box1" x="192" y="1152" width="192" height="96"/>
+  <object id="77" name="Box1" x="192" y="1152" width="192" height="128"/>
  </objectgroup>
 </map>

@@ -17,7 +17,6 @@ public:
 
 	void UpdateSide();
 	void CheckSide();
-	void LoadSide();
 
 public:
 	Animation idle;

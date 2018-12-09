@@ -39,7 +39,7 @@ public:
 	virtual void Restart() {};
 	virtual void LoadAnimations() {};
 	virtual void ChangeAnimation() {};
-	virtual void LoadSide() {};
+	virtual void UpdateSide() {};
 
 	void Collider_Overlay();
 	void PositionCollider();
@@ -71,6 +71,10 @@ public:
 	bool moving_left = false;
 	bool moving_right = true;
 
+	iPoint grid_speed;
+	iPoint box_speed;
+	iPoint box_position;
+	int grid_direction;
 	int jumpSpeed;
 	bool left;
 	bool right;
@@ -93,21 +97,17 @@ public:
 	bool attack_able;
 	bool box_collision;
 	bool gripped;
-	iPoint grid_speed;
-	iPoint box_speed;
-	int grid_direction;
-	int box_direction;
 
 	p2SString grid_type;
 	iPoint initial_size;
 	iPoint prev_size;
-	int frame = 0;
 	SDL_Rect rect;
+	int frame = 0;
+	int type_int;
 	bool flip_ver = false;
 	bool flip_hor = false;
 	bool vertical;
 	bool is_static;
-	int type_int;
 
 	SDL_Rect Bounds;
 	bool box_moving = false;

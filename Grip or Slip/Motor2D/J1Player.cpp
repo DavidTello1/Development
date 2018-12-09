@@ -97,7 +97,7 @@ bool j1Player::Update(float dt)
 
 		if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN) //attack
 		{
-			if (attack == false && attack_able == true)
+			if (attack == false && attack_able == true && box_moving == false)
 			{
 				attack = true;
 				attack_able = false;
@@ -184,7 +184,7 @@ bool j1Player::Update(float dt)
 			}
 			else if (gripped == true && box_moving == false)
 			{
-				final_speed.y -= speed.x;
+				final_speed.y -= speed.y;
 			}
 		}
 
@@ -201,7 +201,7 @@ bool j1Player::Update(float dt)
 			}
 			else if (gripped == true && box_moving == false)
 			{
-				final_speed.y += speed.x;
+				final_speed.y += speed.y;
 			}
 		}
 
@@ -283,22 +283,11 @@ bool j1Player::Update(float dt)
 
 			if (box_moving == true)
 			{
-				if (box_direction == 1) //going right
-				{
-					final_speed.x += box_speed.x;
-				}
-				else if (box_direction == -1) //going left
-				{
-					final_speed.x -= box_speed.x;
-				}
-				else if (box_direction == 2) //going down
-				{
-					final_speed.y += box_speed.y;
-				}
-				else if (box_direction == -2) //going up
-				{
-					final_speed.y -= box_speed.y;
-				}
+				position = box_position;
+			}
+			else
+			{
+				attack_able = true;
 			}
 		}
 

@@ -110,8 +110,7 @@ void Entity::Collider_Overlay()
 			if (SDL_IntersectRect(&Collider, &tmp->data->Collider, &result))
 			{
 				box_collision = true;
-				box_speed = tmp->data->speed;
-				box_direction = tmp->data->direction;
+				box_position = tmp->data->position;
 				box_moving = tmp->data->box_moving;
 			}
 		}
@@ -150,11 +149,14 @@ void Entity::Collider_Overlay()
 							if (result.h <= result.w || position.x + Collider.w >= ObjectRect.x)
 							{
 								position.y -= result.h - 1;
-								if (landed == false)
+								if (box_moving == false)
 								{
-									landing = true;
+									if (landed == false)
+									{
+										landing = true;
+									}
+									grounded = true;
 								}
-								grounded = true;
 							}
 						}
 						else

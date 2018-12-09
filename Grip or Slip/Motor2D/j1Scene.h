@@ -40,7 +40,6 @@ public:
 	void SpawnEntities();
 	void SaveAndChange();
 	void ResetBoxPos();
-	void SetBoxFlag();
 
 public:
 

@@ -64,6 +64,7 @@ bool j1Scene::Start()
 
 	debug_tex = App->tex->Load("maps/pathfinding.png");
 
+	ResetBoxPos();
 	SpawnEntities();
 
 	return true;
@@ -127,8 +128,6 @@ bool j1Scene::Update(float dt)
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) //Load game state
 	{
-		App->LoadGame();
-		SetBoxFlag();
 		App->LoadGame();
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) //View colliders
@@ -362,21 +361,8 @@ void j1Scene::SaveAndChange()
 
 void j1Scene::ResetBoxPos()
 {
-	box_1_side = false;
+ 	box_1_side = false;
 	box_2_side = false;
 	box_3_side = true;
 	box_4_side = false;
-}
-
-void j1Scene::SetBoxFlag()
-{
-	p2List_item<Entity*>* tmp = App->entitycontroller->Entities.end;
-	while (tmp != nullptr)
-	{
-		if (tmp->data->type == Entity::entityType::BOX)
-		{
-			tmp->data->LoadSide();
-		}
-		tmp = tmp->prev;
-	}
 }
