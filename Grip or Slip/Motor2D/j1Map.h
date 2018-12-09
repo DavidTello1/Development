@@ -148,6 +148,9 @@ public:
 	//Unloads the current map and loads a new one 
 	bool SwitchMaps(p2SString* new_map);
 
+	//same as switchmaps but without scene->to_end
+	bool SwitchMaps2(p2SString* new_map);
+
 	iPoint MapToWorld(int x, int y) const;
 	iPoint WorldToMap(int x, int y) const;
 

@@ -77,6 +77,24 @@ bool j1Player::Update(float dt)
 		Collider_Overlay();
 		final_speed = { 0,0 };
 
+		if (App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN) //change map
+		{
+			if (App->scene->change == false && gripped == false && attack == false && jumping == false)
+			{
+				pugi::xml_document save_data;  //savegame.xml data
+				pugi::xml_parse_result result = save_data.load_file("save_game.xml");
+				if (result == false)
+				{
+					App->SaveGame();
+				}
+
+				App->map->angle = 0.0;
+				App->map->rotate = true;
+				App->map->rotate_end = false;
+				App->scene->change = true;
+			}
+		}
+
 		if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN) //attack
 		{
 			if (attack == false && attack_able == true)
@@ -94,7 +112,7 @@ bool j1Player::Update(float dt)
 
 		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) //jump
 		{
-			if (attack == false && App->scene->godmode == false)
+			if (attack == false && App->scene->godmode == false && box_moving == false)
 			{
 				if (jumping == false)
 				{
@@ -110,7 +128,7 @@ bool j1Player::Update(float dt)
 
 		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) //left
 		{
-			if (attack == false)
+			if (attack == false && box_moving == false)
 			{
 				flip = false;
 
@@ -133,7 +151,7 @@ bool j1Player::Update(float dt)
 
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) //right
 		{
-			if (attack == false)
+			if (attack == false && box_moving == false)
 			{
 				flip = true;
 
@@ -164,6 +182,10 @@ bool j1Player::Update(float dt)
 			{
 				final_speed.y -= speed.x;
 			}
+			else if (gripped == true && box_moving == false)
+			{
+				final_speed.y -= speed.x;
+			}
 		}
 
 		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) //down
@@ -177,6 +199,10 @@ bool j1Player::Update(float dt)
 			{
 				final_speed.y += speed.x;
 			}
+			else if (gripped == true && box_moving == false)
+			{
+				final_speed.y += speed.x;
+			}
 		}
 
 		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) //grip
@@ -187,6 +213,14 @@ bool j1Player::Update(float dt)
 				grid = true;
 				jumping = false;
 				attack_able = true;
+			}
+			else if (box_collision == true && gripped == false)
+			{
+				gripping = true;
+				gripped = true;
+				jumping = false;
+				attack = false;
+				attack_able = false;
 			}
 		}
 
@@ -234,9 +268,47 @@ bool j1Player::Update(float dt)
 			attack_able = true;
 		}
 
+		if (box_collision == false) //box collision
+		{
+			gripped = false;
+			box_moving = false;
+		}
+
+		if (gripped == true) //box gripped
+		{
+			gravity_active = false;
+			grounded = false;
+			sliding = false;
+			landed = false;
+
+			if (box_moving == true)
+			{
+				if (box_direction == 1) //going right
+				{
+					final_speed.x += box_speed.x;
+				}
+				else if (box_direction == -1) //going left
+				{
+					final_speed.x -= box_speed.x;
+				}
+				else if (box_direction == 2) //going down
+				{
+					final_speed.y += box_speed.y;
+				}
+				else if (box_direction == -2) //going up
+				{
+					final_speed.y -= box_speed.y;
+				}
+			}
+		}
+
 		if (grid_collision == false) //grid collision
 		{
 			grid = false;
+		}
+
+		if (grid_collision == false && box_collision == false)
+		{
 			gravity_active = true;
 		}
 
@@ -432,6 +504,7 @@ bool j1Player::Update(float dt)
 		grounded = false;
 		sliding = false;
 		grid_collision = false;
+		box_collision = false;
 		top_grid = false;
 	}
 	else
@@ -470,6 +543,7 @@ void j1Player::Load(pugi::xml_node& data)
 	sliding = data.child("sliding").attribute("value").as_bool();
 	jumping = data.child("jumping").attribute("value").as_bool();
 	grid = data.child("grid").attribute("value").as_bool();
+	gripped = data.child("gripped").attribute("value").as_bool();
 	gravity_active = data.child("gravity_active").attribute("value").as_bool();
 	
 	LOG("--- Player Loaded");
@@ -491,6 +565,7 @@ void j1Player::Save(pugi::xml_node& data) const
 	player.append_child("sliding").append_attribute("value") = sliding;
 	player.append_child("jumping").append_attribute("value") = jumping;
 	player.append_child("grid").append_attribute("value") = grid;
+	player.append_child("gripped").append_attribute("value") = gripped;
 	player.append_child("gravity_active").append_attribute("value") = gravity_active;
 
 	LOG("---Player Saved");
@@ -562,6 +637,10 @@ void j1Player::ChangeAnimation()
 			{
 				Current_Animation = &grip_move;
 			}
+		}
+		if (box_moving && !gripping)
+		{
+			Current_Animation = &grip_idle;
 		}
 		if (sliding)
 		{

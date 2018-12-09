@@ -576,6 +576,14 @@ bool j1Map::SwitchMaps(p2SString* new_map)
 	return true;
 }
 
+bool j1Map::SwitchMaps2(p2SString* new_map)
+{
+	CleanUp();
+	Load(new_map->GetString());
+
+	return true;
+}
+
 void j1Map::RotateMaps()
 {
 	BROFILER_CATEGORY("RotateMaps", Profiler::Color::Purple);

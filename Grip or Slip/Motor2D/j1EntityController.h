@@ -27,7 +27,7 @@ public:
 	bool Draw(float dt);
 	bool DebugDraw();
 
-	Entity* AddEntity(Entity::entityType type, iPoint position, iPoint Size, p2SString Type = "0");
+	Entity* AddEntity(Entity::entityType type, iPoint position, iPoint Size, p2SString Type = "0", p2SString Side = "0");
 	bool DeleteEntity(Entity* entity);
 	void DeleteEntities();
 	void EnemyColliderCheck();

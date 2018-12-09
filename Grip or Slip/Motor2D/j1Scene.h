@@ -50,6 +50,11 @@ public:
 
 	bool godmode = false;
 
+	bool box_1_side;
+	bool box_2_side;
+	bool box_3_side;
+	bool box_4_side;
+
 private:
 
 	SDL_Texture * debug_tex;

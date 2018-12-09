@@ -40,8 +40,9 @@ public:
 	virtual void LoadAnimations() {};
 	virtual void ChangeAnimation() {};
 	
-	void Collider_Overlay(); //Detects if the player is colliding with something
+	void Collider_Overlay();
 	void PositionCollider();
+	void CheckBounds();
 	void Draw(float dt);
 
 public:
@@ -89,8 +90,12 @@ public:
 	bool landed;
 	bool attack;
 	bool attack_able;
+	bool box_collision;
+	bool gripped;
 	iPoint grid_speed;
+	iPoint box_speed;
 	int grid_direction;
+	int box_direction;
 
 	p2SString grid_type;
 	iPoint initial_size;
@@ -102,6 +107,10 @@ public:
 	bool vertical;
 	bool is_static;
 	int type_int;
+
+	bool box_moving;
+	bool end_moving = false;
+	SDL_Rect Bounds;
 };
 
 #endif

@@ -9,6 +9,7 @@
 #include "j1Grid.h"
 #include "j1FlyingEnemy.h"
 #include "j1LandEnemy.h"
+#include "j1Box.h"
 #include "j1Textures.h"
 #include "Brofiler\Brofiler.h"
 
@@ -51,13 +52,17 @@ bool j1EntityController::Update(float dt)
 	{
 		DebugDraw();
 	}
-	EnemyColliderCheck();
 
-	p2List_item<Entity*>* tmp = Entities.start;
-	while (tmp != nullptr)
+	if (App->scene->change == false)
 	{
-		ret = tmp->data->Update(dt);
-		tmp = tmp->next;
+		EnemyColliderCheck();
+
+		p2List_item<Entity*>* tmp = Entities.start;
+		while (tmp != nullptr)
+		{
+			ret = tmp->data->Update(dt);
+			tmp = tmp->next;
+		}
 	}
 
 	return ret;
@@ -282,6 +287,7 @@ bool j1EntityController::Restart()
 		}
 		tmp = tmp->prev;
 	}
+
 	return ret;
 }
 
@@ -294,10 +300,8 @@ void j1EntityController::DeleteEnemies()
 		{
 			Entities.del(tmp);
 			RELEASE(tmp->data);
-			tmp = tmp->prev;
 		}
-		else
-			tmp = tmp->prev;
+		tmp = tmp->prev;
 	}
 }
 
@@ -359,7 +363,7 @@ bool j1EntityController::DebugDraw()
 				col2.y = tmp->data->SightCollider.y;
 				col2.h = tmp->data->SightCollider.h;
 				col2.w = tmp->data->SightCollider.w;
-				App->render->DrawQuad(col2, 255, 0, 0, 50);
+				App->render->DrawQuad(col2, 255, 0, 0, 50); //red
 			}
 		}
 		tmp = tmp->next;
@@ -368,14 +372,14 @@ bool j1EntityController::DebugDraw()
 	return true;
 }
 
-Entity* j1EntityController::AddEntity(Entity::entityType type, iPoint position, iPoint Size, p2SString Type)
+Entity* j1EntityController::AddEntity(Entity::entityType type, iPoint position, iPoint Size, p2SString Type, p2SString side)
 {
 	Entity* tmp = nullptr;
 
 	switch (type)
 	{
 	case Entity::entityType::BOX:
-		//tmp = new box(position);
+		tmp = new j1Box(position, Size, Type, side);
 		break;
 
 	case Entity::entityType::FLYING_ENEMY:

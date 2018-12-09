@@ -99,12 +99,23 @@ void Entity::Collider_Overlay()
 					flip_hor = false;
 				}
 
-				grid_speed.x = tmp->data->speed.x;
-				grid_speed.y = tmp->data->speed.y;
+				grid_speed = tmp->data->speed;
 				grid_direction = tmp->data->direction;
 
 			}
 		}
+
+		if (tmp->data->type == Entity::entityType::BOX)
+		{
+			if (SDL_IntersectRect(&Collider, &tmp->data->Collider, &result))
+			{
+				box_collision = true;
+				box_speed = tmp->data->speed;
+				box_direction = tmp->data->direction;
+				box_moving = tmp->data->box_moving;
+			}
+		}
+
 		tmp = tmp->next;
 	}
 
@@ -173,16 +184,6 @@ void Entity::Collider_Overlay()
 							ceiling = true;
 						}
 					}
-					else if (objectdata->data->name == "Box")
-					{
-						grid_collision = true;
-						is_static = true;
-
-						if (Collider.y + (3 * Collider.h / 4) <= objectdata->data->y)
-						{
-							top_grid = true;
-						}
-					}
 					else if (objectdata->data->name == "Grid" && objectdata->data->type == "Static") 
 					{
 						grid_collision = true;
@@ -222,4 +223,27 @@ void Entity::PositionCollider()
 		SightCollider.y = position.y - SightCollider.h / 2 + size.y / 2;
 	}
 
+}
+
+void Entity::CheckBounds()
+{
+	for (p2List_item<ObjectsGroup*>* object = App->map->data.objLayers.start; object; object = object->next) //objects colliders
+	{
+		if (object->data->name == ("Boundaries"))
+		{
+			for (p2List_item<ObjectsData*>* objectdata = object->data->objects.start; objectdata; objectdata = objectdata->next)
+			{
+				if (type_int == 1 && objectdata->data->name == "Box1"
+					|| type_int == 2 && objectdata->data->name == "Box2"
+					|| type_int == 3 && objectdata->data->name == "Box3"
+					|| type_int == 4 && objectdata->data->name == "Box4")
+				{
+					Bounds.x = objectdata->data->x;
+					Bounds.y = objectdata->data->y;
+					Bounds.w = objectdata->data->width;
+					Bounds.h = objectdata->data->height;
+				}
+			}
+		}
+	}
 }

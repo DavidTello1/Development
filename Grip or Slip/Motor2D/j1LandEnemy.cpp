@@ -56,6 +56,7 @@ bool LandEnemy::Update(float dt)
 	{
 		PositionCollider();
 		App->entitycontroller->EnemyColliderCheck();
+		Collider_Overlay();
 
 		p2List_item<Entity*>* player = nullptr;
 		for (p2List_item<Entity*>* i = App->entitycontroller->Entities.start; i != nullptr; i = i->next)
@@ -64,37 +65,6 @@ bool LandEnemy::Update(float dt)
 			{
 				player = i;
 				break;
-			}
-		}
-
-		SDL_Rect ObjectRect;
-		SDL_Rect result;
-		for (p2List_item<ObjectsGroup*>* object = App->map->data.objLayers.start; object; object = object->next) //objects colliders
-		{
-			if (object->data->name == ("Collision"))
-			{
-				for (p2List_item<ObjectsData*>* objectdata = object->data->objects.start; objectdata; objectdata = objectdata->next)
-				{
-					ObjectRect.x = objectdata->data->x;
-					ObjectRect.y = objectdata->data->y;
-					ObjectRect.w = objectdata->data->width;
-					ObjectRect.h = objectdata->data->height;
-
-					if (SDL_IntersectRect(&Collider, &ObjectRect, &result))
-					{
-						if (objectdata->data->name == "Floor")
-						{
-							if (position.y + Collider.h - gravity <= ObjectRect.y)
-							{
-								if (result.h <= result.w || position.x + Collider.w >= ObjectRect.x)
-								{
-									position.y -= result.h - 1;
-									grounded = true;
-								}
-							}
-						}
-					}
-				}
 			}
 		}
 
@@ -109,13 +79,13 @@ bool LandEnemy::Update(float dt)
 
 		if (gravity_active == true)
 		{
-			if (position.y + gravity >= (App->map->data.height - 1) * App->map->data.tile_height)
+			if (position.y + gravity*dt >= (App->map->data.height - 1) * App->map->data.tile_height)
 			{
 				position.y = (App->map->data.height - 1) * App->map->data.tile_height;
 			}
 			else
 			{
-				position.y += gravity;
+				position.y += gravity*dt;
 			}
 		}
 

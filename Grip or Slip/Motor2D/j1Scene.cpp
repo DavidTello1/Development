@@ -126,23 +126,6 @@ bool j1Scene::Update(float dt)
 	{
 		App->LoadGame();
 	}
-	else if (App->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN) //change map
-	{
-		if (change == false)
-		{
-			pugi::xml_document save_data;  //savegame.xml data
-			pugi::xml_parse_result result = save_data.load_file("save_game.xml");
-			if (result == false)
-			{
-				App->SaveGame();
-			}
-
-			App->map->angle = 0.0;
-			App->map->rotate = true;
-			App->map->rotate_end = false;
-			change = true;
-		}
-	}
 	else if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) //View colliders
 	{
 		App->map->debug = !App->map->debug;
@@ -311,6 +294,11 @@ void j1Scene::SpawnEnemies()
 				{
 					App->entitycontroller->AddEntity(Entity::entityType::GRID, { objectdata->data->x, objectdata->data->y }, { objectdata->data->width, objectdata->data->height }, objectdata->data->type);
 				}
+				else if (objectdata->data->name == "Box1" || objectdata->data->name == "Box2" || objectdata->data->name == "Box3" || objectdata->data->name == "Box4")
+				{
+					App->entitycontroller->AddEntity(Entity::entityType::BOX, { objectdata->data->x, objectdata->data->y }, { objectdata->data->width, objectdata->data->height }, objectdata->data->name, objectdata->data->type);
+				}
+
 			}
 		}
 	}
@@ -337,7 +325,7 @@ void j1Scene::SaveAndChange()
 	{
 		currentMap = 1; //switch to and load map2
 		App->entitycontroller->DeleteEntities();
-		App->map->SwitchMaps(map_names[1]);
+		App->map->SwitchMaps2(map_names[1]);
 		SpawnEntities();
 
 		if (root.child("map_2").child("player") != NULL) // if map2 data exists loads it from savegame.xml
@@ -350,7 +338,7 @@ void j1Scene::SaveAndChange()
 	{
 		currentMap = 0; //switch to and load map1
 		App->entitycontroller->DeleteEntities();
-		App->map->SwitchMaps(map_names[0]);
+		App->map->SwitchMaps2(map_names[0]);
 		SpawnEntities();
 
 		if (root.child("map_1").child("player") != NULL) //if map1 data exists loads it from savegame.xml
