@@ -389,10 +389,10 @@ bool j1App::LoadGameNow()
 
 		while(item != NULL && ret == true)
 		{
-			if (item->data->name == "scene")
-			{
-				root.child("scene").child("currentMap").attribute("num").set_value(scene->currentMap);
-			}
+			//if (item->data->name == "scene")
+			//{
+			//	root.child("scene").child("currentMap").attribute("num").set_value(scene->currentMap);
+			//}
 			ret = item->data->Load(root.child(item->data->name.GetString()));
 			item = item->next;
 		}

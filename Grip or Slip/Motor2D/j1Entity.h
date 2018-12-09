@@ -39,7 +39,8 @@ public:
 	virtual void Restart() {};
 	virtual void LoadAnimations() {};
 	virtual void ChangeAnimation() {};
-	
+	virtual void LoadSide() {};
+
 	void Collider_Overlay();
 	void PositionCollider();
 	void CheckBounds();
@@ -108,9 +109,11 @@ public:
 	bool is_static;
 	int type_int;
 
-	bool box_moving;
-	bool end_moving = false;
 	SDL_Rect Bounds;
+	bool box_moving = false;
+	bool end_moving = false;
+	bool box_flag = false;
+
 };
 
 #endif

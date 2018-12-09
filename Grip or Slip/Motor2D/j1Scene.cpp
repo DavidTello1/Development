@@ -106,15 +106,18 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) //Start from first level
 	{
+		ResetBoxPos();
 		Load_level(0);
 		currentMap = 0;
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) //Start from beginning of current map
 	{
+		ResetBoxPos();
 		App->entitycontroller->Restart();
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) //Start from second level
 	{
+		ResetBoxPos();
 		Load_level(1);
 		currentMap = 1;
 	}
@@ -124,6 +127,8 @@ bool j1Scene::Update(float dt)
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) //Load game state
 	{
+		App->LoadGame();
+		SetBoxFlag();
 		App->LoadGame();
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) //View colliders
@@ -353,4 +358,25 @@ void j1Scene::SaveAndChange()
 	data.save_file("save_game.xml");
 	copy_data.reset();
 	data.reset();
+}
+
+void j1Scene::ResetBoxPos()
+{
+	box_1_side = false;
+	box_2_side = false;
+	box_3_side = true;
+	box_4_side = false;
+}
+
+void j1Scene::SetBoxFlag()
+{
+	p2List_item<Entity*>* tmp = App->entitycontroller->Entities.end;
+	while (tmp != nullptr)
+	{
+		if (tmp->data->type == Entity::entityType::BOX)
+		{
+			tmp->data->LoadSide();
+		}
+		tmp = tmp->prev;
+	}
 }

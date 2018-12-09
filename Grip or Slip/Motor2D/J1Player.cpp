@@ -81,7 +81,7 @@ bool j1Player::Update(float dt)
 		{
 			if (App->scene->change == false && gripped == false && attack == false && jumping == false)
 			{
-				pugi::xml_document save_data;  //savegame.xml data
+				pugi::xml_document save_data;
 				pugi::xml_parse_result result = save_data.load_file("save_game.xml");
 				if (result == false)
 				{
@@ -524,6 +524,7 @@ bool j1Player::PostUpdate()
 
 	if (dead && !App->scenechange->IsChanging())
 	{
+		App->scene->ResetBoxPos();
 		App->scenechange->ChangeMap(App->scene->currentMap, App->scene->fade_time);
 	}
 

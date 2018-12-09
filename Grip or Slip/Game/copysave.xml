@@ -1,17 +1,5 @@
 <?xml version="1.0"?>
 <game_state>
-	<player>
-		<size width="32" height="32" />
-		<position x="414" y="1217" />
-		<gravity value="250" />
-		<speed x="150" y="500" />
-		<grounded value="false" />
-		<sliding value="false" />
-		<jumping value="false" />
-		<grid value="false" />
-		<gripped value="false" />
-		<gravity_active value="true" />
-	</player>
 	<flying_enemy>
 		<position x="128" y="1088" />
 		<size width="32" height="32" />
@@ -37,44 +25,44 @@
 		<lives value="3" />
 	</land_enemy>
 	<grid>
-		<position x="1288" y="736" />
-		<size width="56" height="96" />
+		<position x="1227" y="736" />
+		<size width="117" height="96" />
 		<speed x="30" y="30" />
 		<type value="4" />
 	</grid>
 	<grid>
-		<position x="1248" y="992" />
-		<size width="96" height="96" />
+		<position x="1281" y="992" />
+		<size width="63" height="96" />
 		<speed x="30" y="30" />
 		<type value="4" />
 	</grid>
 	<grid>
 		<position x="1152" y="480" />
-		<size width="96" height="152" />
+		<size width="96" height="111" />
 		<speed x="30" y="30" />
 		<type value="1" />
 	</grid>
 	<grid>
-		<position x="1012" y="384" />
-		<size width="108" height="96" />
+		<position x="995" y="384" />
+		<size width="125" height="96" />
 		<speed x="30" y="30" />
 		<type value="4" />
 	</grid>
 	<grid>
 		<position x="32" y="608" />
-		<size width="96" height="96" />
+		<size width="63" height="96" />
 		<speed x="30" y="30" />
 		<type value="3" />
 	</grid>
 	<grid>
 		<position x="32" y="768" />
-		<size width="108" height="96" />
+		<size width="125" height="96" />
 		<speed x="30" y="30" />
 		<type value="3" />
 	</grid>
 	<grid>
 		<position x="96" y="384" />
-		<size width="96" height="152" />
+		<size width="96" height="111" />
 		<speed x="30" y="30" />
 		<type value="1" />
 	</grid>
@@ -94,16 +82,16 @@
 		<Bounds x="768" y="672" width="192" height="96" />
 		<side value="false" />
 		<box_moving value="false" />
-		<end_moving value="false" />
+		<end_moving value="true" />
 	</box>
 	<box>
-		<position x="733" y="605" />
+		<position x="640" y="544" />
 		<size width="35" height="35" />
 		<speed x="50" y="50" />
 		<Bounds x="640" y="544" width="128" height="96" />
-		<side value="false" />
+		<side value="true" />
 		<box_moving value="false" />
-		<end_moving value="false" />
+		<end_moving value="true" />
 	</box>
 	<box>
 		<position x="541" y="765" />
@@ -112,6 +100,18 @@
 		<Bounds x="320" y="608" width="256" height="192" />
 		<side value="false" />
 		<box_moving value="false" />
-		<end_moving value="false" />
+		<end_moving value="true" />
 	</box>
+	<player>
+		<size width="32" height="32" />
+		<position x="442" y="1217" />
+		<gravity value="250" />
+		<speed x="150" y="500" />
+		<grounded value="false" />
+		<sliding value="false" />
+		<jumping value="false" />
+		<grid value="false" />
+		<gripped value="false" />
+		<gravity_active value="true" />
+	</player>
 </game_state>

@@ -3,6 +3,7 @@
 #include "j1Scene.h"
 #include "j1Render.h"
 #include "j1Map.h"
+#include "j1Input.h"
 #include "Brofiler\Brofiler.h"
 
 
@@ -74,6 +75,12 @@ bool j1Box::Update(float dt)
 {
 	BROFILER_CATEGORY("Box Update", Profiler::Color::Lavender);
 
+	if (box_flag == false)
+	{
+		CheckSide();
+		box_flag = true;
+	}
+
 	if (left == true && box_moving == false)
 	{
 		direction = 1;
@@ -85,7 +92,6 @@ bool j1Box::Update(float dt)
 
 	final_speed = { 0,0 };
 	PositionCollider();
-	CheckSide();
 
 	if (end_moving == true)
 	{
@@ -204,7 +210,11 @@ bool j1Box::Update(float dt)
 			position.y -= ceilf(abs(final_speed.y*dt));
 		}
 	}
-	UpdateSide();
+
+	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN)
+	{
+		UpdateSide();
+	}
 
 	return true;
 }
@@ -336,4 +346,30 @@ void j1Box::CheckSide()
 			left = !App->scene->box_4_side;
 		}
 	}
+}
+
+void j1Box::LoadSide()
+{
+	pugi::xml_document data;
+	pugi::xml_node root;
+	pugi::xml_parse_result result = data.load_file("save_game.xml");
+
+	if (App->scene->currentMap == 0)
+	{
+		root = data.child("game_state").child("entitycontroller").child("map_1");
+	}
+	else if (App->scene->currentMap == 1)
+	{
+		root = data.child("game_state").child("entitycontroller").child("map_2");
+	}
+	root = root.child("box");
+
+	for (int i = type_int; i > 1; i--)
+	{
+		root = root.next_sibling("box");
+	}
+
+	left = root.child("side").attribute("value").as_bool();
+	UpdateSide();
+	box_flag = true;
 }
