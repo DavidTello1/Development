@@ -76,15 +76,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="InteractiveButton.cpp" />
     <ClCompile Include="j1Box.cpp" />
     <ClCompile Include="j1FlyingEnemy.cpp" />
     <ClCompile Include="j1Entity.cpp" />
     <ClCompile Include="j1EntityController.cpp" />
+    <ClCompile Include="j1Fonts.cpp" />
+    <ClCompile Include="j1Gui.cpp" />
     <ClCompile Include="j1LandEnemy.cpp" />
     <ClCompile Include="j1Main.cpp" />
     <ClCompile Include="j1App.cpp" />
     <ClCompile Include="j1Audio.cpp" />
     <ClCompile Include="j1Input.cpp" />
+    <ClCompile Include="j1MainMenu.cpp" />
     <ClCompile Include="j1Map.cpp" />
     <ClCompile Include="j1Grid.cpp" />
     <ClCompile Include="j1Pathfinding.cpp" />
@@ -93,6 +97,7 @@
     <ClCompile Include="j1Scene.cpp" />
     <ClCompile Include="j1SceneChange.cpp" />
     <ClCompile Include="j1Timer.cpp" />
+    <ClCompile Include="JustSimpleUI.cpp" />
     <ClCompile Include="p2Log.cpp" />
     <ClCompile Include="j1Render.cpp" />
     <ClCompile Include="j1Textures.cpp" />
@@ -100,11 +105,15 @@
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="InteractiveButton.h" />
     <ClInclude Include="j1Box.h" />
     <ClInclude Include="j1FlyingEnemy.h" />
     <ClInclude Include="j1Entity.h" />
     <ClInclude Include="j1EntityController.h" />
+    <ClInclude Include="j1Fonts.h" />
+    <ClInclude Include="j1Gui.h" />
     <ClInclude Include="j1LandEnemy.h" />
+    <ClInclude Include="j1MainMenu.h" />
     <ClInclude Include="j1Map.h" />
     <ClInclude Include="j1Grid.h" />
     <ClInclude Include="j1Pathfinding.h" />
@@ -113,6 +122,7 @@
     <ClInclude Include="j1Scene.h" />
     <ClInclude Include="j1SceneChange.h" />
     <ClInclude Include="j1Timer.h" />
+    <ClInclude Include="JustSimpleUI.h" />
     <ClInclude Include="p2Animation.h" />
     <ClInclude Include="p2DynArray.h" />
     <ClInclude Include="j1Audio.h" />
@@ -129,6 +139,7 @@
     <ClInclude Include="p2SString.h" />
     <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
+    <ClInclude Include="UI_Element.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

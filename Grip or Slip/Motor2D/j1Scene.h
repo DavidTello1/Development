@@ -2,6 +2,7 @@
 #define __j1SCENE_H__
 
 #include "j1Module.h"
+#include "UI_Element.h"
 
 struct SDL_Texture;
 
@@ -44,22 +45,34 @@ public:
 public:
 
 	p2List<p2SString*> map_names;
-	uint currentMap;
-	float fade_time;
-	bool to_end;
-	bool change;
+	uint currentMap = 0;
+	float fade_time = 0.0;
+	bool to_end = false;
+	bool change = false;
+	bool pause = false;
 
 	bool godmode = false;
 
-	bool box_1_side;
-	bool box_2_side;
-	bool box_3_side;
-	bool box_4_side;
+	bool box_1_side = false;
+	bool box_2_side = false;
+	bool box_3_side = false;
+	bool box_4_side = false;
 
 private:
 
-	SDL_Texture * debug_tex;
-	bool copy;
+	SDL_Texture* debug_tex;
+	bool copy = false;
+
+public:
+	//all gui elements
+	UI_Element* button;
+	UI_Element* button_text;
+
+	UI_Element* button2;
+	UI_Element* button_text2;
+
+	UI_Element* window_ui;
+
 
 };
 

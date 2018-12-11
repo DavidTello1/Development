@@ -18,6 +18,8 @@ class j1Scene;
 class j1Map;
 class j1SceneChange;
 class j1EntityController;
+class j1Fonts;
+class j1Gui;
 
 class j1App
 {
@@ -81,20 +83,22 @@ private:
 public:
 
 	// Modules
-	j1Window*			win;
-	j1Input*			input;
-	j1Render*			render;
-	j1Textures*			tex;
-	j1Audio*			audio;
-	j1PathFinding*		pathfinding;
-	j1Scene*			scene;
-	j1Map*				map;
-	j1SceneChange*		scenechange;
-	j1EntityController* entitycontroller;
+	j1Window*			win = NULL;
+	j1Input*			input = NULL;
+	j1Render*			render = NULL;
+	j1Textures*			tex = NULL;
+	j1Audio*			audio = NULL;
+	j1PathFinding*		pathfinding = NULL;
+	j1Scene*			scene = NULL;
+	j1Map*				map = NULL;
+	j1SceneChange*		scenechange = NULL;
+	j1EntityController* entitycontroller = NULL;
+	j1Fonts*			font = NULL;
+	j1Gui*				gui = NULL;
 
 	bool				fpsCapON = true;
-	bool				vsyncON;
-	float				dt;
+	bool				vsyncON = false;
+	float				dt = 0.0f;
 
 private:
 
@@ -105,24 +109,24 @@ private:
 	p2SString			title;
 	p2SString			organization;
 
-	mutable bool		want_to_save;
-	bool				want_to_load;
+	mutable bool		want_to_save = false;
+	bool				want_to_load = false;
 	p2SString			load_game;
 	mutable p2SString	save_game;
 
-	int					ms_capped;
-	float				avg_fps;
-	float				seconds_since_startup;
-	float				framerate;
+	int					ms_capped = -1;
+	float				avg_fps = 0.0f;
+	float				seconds_since_startup = 0.0f;
+	float				framerate = 0;
 	j1PerfTimer			ptimer;
 	j1Timer				startup_time;
 	j1Timer				frame_time;
 	j1Timer				last_sec_frame_time;
 	uint32				last_sec_frame_count = 0;
 	uint32				prev_last_sec_frame_count = 0;
-	uint32				last_frame_ms;
-	uint32				frames_on_last_update;
-	uint64				framerate_cap;
+	uint32				last_frame_ms = 0;
+	uint32				frames_on_last_update = 0;
+	uint64				framerate_cap = 0;
 	uint64				frame_count = 0;
 };
 

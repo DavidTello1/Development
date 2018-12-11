@@ -10,6 +10,12 @@
 #include "j1Scene.h"
 #include "j1SceneChange.h"
 #include "j1EntityController.h"
+#include "j1Gui.h"
+#include "j1Fonts.h"
+#include "UI_Element.h"
+#include "InteractiveButton.h"
+#include "JustSimpleUI.h"
+
 #include "Brofiler\Brofiler.h"
 
 j1Scene::j1Scene() : j1Module()
@@ -50,22 +56,27 @@ bool j1Scene::Start()
 	App->map->Load(map_names.start->data->GetString());
 	currentMap = 0;
 
-	int w, h;
-	uchar* data = NULL;
-	if (App->map->CreateWalkabilityMap(w, h, &data))
-	{
-		App->pathfinding->SetMap(w, h, data);
+	//int w, h;
+	//uchar* data = NULL;
+	//if (App->map->CreateWalkabilityMap(w, h, &data))
+	//{
+	//	App->pathfinding->SetMap(w, h, data);
 
-		LOG("Create walkability");
-	}
-
-
-	RELEASE_ARRAY(data);
-
-	debug_tex = App->tex->Load("maps/pathfinding.png");
+	//	LOG("Create walkability");
+	//}
+	//RELEASE_ARRAY(data);
+	//debug_tex = App->tex->Load("maps/pathfinding.png");
 
 	ResetBoxPos();
 	SpawnEntities();
+
+	//create gui
+	SDL_RenderGetViewport(App->render->renderer, &App->render->viewport);
+	window_ui = App->gui->AddUIElement(UI_Element::UI_type::WINDOW, UI_Element::Action::NONE, { App->render->viewport.w / 2, App->render->viewport.h / 12 }, { 424,458 }, nullptr, true, { true, true });
+	button = App->gui->AddUIElement(UI_Element::UI_type::PUSHBUTTON, UI_Element::Action::MOVE_LEFT, { 112,229 }, { 230,64 }, window_ui, true);
+	button_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0,0 }, { 0,0 }, button, true, { false, false }, "Hello World");
+	button2 = App->gui->AddUIElement(UI_Element::UI_type::PUSHBUTTON, UI_Element::Action::DRAGABLE, { App->render->viewport.w / 6, App->render->viewport.h / 12 + 75 }, { 230,64 }, nullptr, true);
+	button_text2 = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0,0 }, { 0,0 }, button2, true, { false, false }, "Dragable");
 
 	return true;
 }
@@ -130,6 +141,10 @@ bool j1Scene::Update(float dt)
 	{
 		App->LoadGame();
 	}
+	else if (App->input->GetKey(SDL_SCANCODE_F8) == KEY_REPEAT)
+	{
+		App->gui->UI_Debug = !App->gui->UI_Debug;
+	}
 	else if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) //View colliders
 	{
 		App->map->debug = !App->map->debug;
@@ -151,25 +166,60 @@ bool j1Scene::Update(float dt)
 		App->entitycontroller->Draw(dt);
 	}
 
-	//----
-	int x, y;
-	App->input->GetMousePosition(x, y);
-
 	// Debug pathfinding ------------------------------
 	//int x, y;
-	/*App->input->GetMousePosition(x, y);
-	iPoint p = App->render->ScreenToWorld(x, y);
-	p = App->map->WorldToMap(p.x, p.y);
-	p = App->map->MapToWorld(p.x, p.y);
-	App->render->Blit(debug_tex, p.x, p.y);
-	if (App->entitycontroller->draw_path) {
-		const p2DynArray<iPoint>* path = App->pathfinding->GetLastPath();
-		for (uint i = 0; i < path->Count(); ++i)
+	//App->input->GetMousePosition(x, y);
+	//iPoint p = App->render->ScreenToWorld(x, y);
+	//p = App->map->WorldToMap(p.x, p.y);
+	//p = App->map->MapToWorld(p.x, p.y);
+	//App->render->Blit(debug_tex, p.x, p.y);
+	//if (App->entitycontroller->draw_path) {
+	//	const p2DynArray<iPoint>* path = App->pathfinding->GetLastPath();
+	//	for (uint i = 0; i < path->Count(); ++i)
+	//	{
+	//		iPoint pos = App->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+	//		App->render->Blit(debug_tex, pos.x, pos.y);
+	//	}
+	//}
+
+	// gui update
+	p2List_item<UI_Element*>* item = App->gui->UI_elements.end;
+	while (item != nullptr)
+	{
+		if (App->gui->CheckMousePos(item->data) == true && App->gui->dragging == false) //hovering
 		{
-			iPoint pos = App->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-			App->render->Blit(debug_tex, pos.x, pos.y);
+			item->data->state = UI_Element::State::HOVER;
+			if (App->gui->CheckClick(item->data) == true) //on-click
+			{
+				if (item->data->dragable.x == false && item->data->dragable.y == false)
+				{
+					item->data->state = UI_Element::State::LOGIC;
+					item->data->DoLogic(item->data->action);
+
+					if (item->data->children.start != nullptr)
+					{
+						item->data->children.start->data->Center(true, true);
+					}
+				}
+				else
+				{
+					item->data->state = UI_Element::State::DRAG;
+				}
+			}
 		}
-	}*/
+		if (item->data->state == UI_Element::State::DRAG && App->gui->CheckClick(item->data) == true)
+		{
+			App->gui->dragging = true;
+			item->data->Drag();
+			App->gui->UpdateChildren();
+		}
+		else if (App->gui->CheckMousePos(item->data) == false && item->data->state != UI_Element::State::DRAG)
+		{
+			item->data->state = UI_Element::State::IDLE; //change to idle
+		}
+		item = item->prev;
+	}
+	App->gui->Draw();
 
 	return true;
 }
@@ -212,6 +262,7 @@ bool j1Scene::PostUpdate()
 
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 	{
+		pause = true;
 		ret = false;
 	}
 
