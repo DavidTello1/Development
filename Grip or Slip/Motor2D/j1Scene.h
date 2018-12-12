@@ -42,11 +42,14 @@ public:
 	void SaveAndChange();
 	void ResetBoxPos();
 
+	void UpdateState(UI_Element* data);
+	void UpdateSimpleUI();
+
 public:
 
 	p2List<p2SString*> map_names;
 	uint currentMap = 0;
-	float fade_time = 0.0;
+	float fade_time = 0.0f;
 	bool to_end = false;
 	bool change = false;
 	bool pause = false;
@@ -58,6 +61,12 @@ public:
 	bool box_3_side = false;
 	bool box_4_side = false;
 
+	uint coins = 0;
+	uint score = 0;
+	uint countdown = 0;
+
+	int player_lives = 0;
+
 private:
 
 	SDL_Texture* debug_tex;
@@ -65,13 +74,21 @@ private:
 
 public:
 	//all gui elements
-	UI_Element* button;
-	UI_Element* button_text;
+	UI_Element* ui_life1;
+	UI_Element* ui_life2;
+	UI_Element* ui_life3;
+	UI_Element* ui_coins;
+	UI_Element* ui_coins_text;
+	UI_Element* ui_score;
+	UI_Element* ui_timer;
 
-	UI_Element* button2;
-	UI_Element* button_text2;
+	UI_Element* ui_window_pause;
+	UI_Element* ui_volume_adjust;
+	UI_Element* ui_adjust_music;
+	UI_Element* ui_adjust_fx;
+	UI_Element* ui_resume;
+	UI_Element* ui_main_menu;
 
-	UI_Element* window_ui;
 
 
 };

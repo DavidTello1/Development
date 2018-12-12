@@ -499,7 +499,7 @@ bool j1Player::Update(float dt)
 	else
 	{
 		ChangeAnimation();
-		left = right = false;
+		left = right = attack = jumping = false;
 	}
 
 	return true;
@@ -513,6 +513,7 @@ bool j1Player::PostUpdate()
 
 	if (dead && !App->scenechange->IsChanging())
 	{
+		App->scene->player_lives--;
 		App->scene->ResetBoxPos();
 		App->scenechange->ChangeMap(App->scene->currentMap, App->scene->fade_time);
 	}

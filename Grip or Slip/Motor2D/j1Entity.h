@@ -97,6 +97,7 @@ public:
 	bool attack_able;
 	bool box_collision;
 	bool gripped;
+	bool spikes;
 
 	p2SString grid_type;
 	iPoint initial_size;

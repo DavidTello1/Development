@@ -454,7 +454,7 @@ void j1EntityController::EnemyColliderCheck()
 					{
 						if (!App->scene->godmode)
 						{
-							player->data->dead = true;
+							player->data->dead = true;;
 						}
 					}
 				}

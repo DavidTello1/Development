@@ -9,6 +9,7 @@
 #include "UI_Element.h"
 #include "InteractiveButton.h"
 #include "JustSimpleUI.h"
+#include "j1Scene.h"
 
 j1Gui::j1Gui() : j1Module()
 {
@@ -130,11 +131,7 @@ bool j1Gui::Draw()
 
 				App->render->Blit(UI_elem->data->texture, UI_elem->data->globalpos.x, UI_elem->data->globalpos.y, 0, SDL_FLIP_NONE, 0);
 			}
-			else if (UI_elem->data->type == UI_elem->data->IMAGE) //image
-			{
-				App->render->Blit(UI_elem->data->texture, UI_elem->data->globalpos.x, UI_elem->data->globalpos.y, &UI_elem->data->rect, SDL_FLIP_NONE, 0);
-			}
-			else //interactive button & window
+			else //rest of ui
 			{
 				App->render->Blit(App->gui->GetAtlas(), UI_elem->data->globalpos.x, UI_elem->data->globalpos.y, &UI_elem->data->rect, SDL_FLIP_NONE, 0);
 			}
@@ -191,112 +188,6 @@ bool j1Gui::CheckClick(UI_Element* data)
 	return ret;
 }
 
-void j1Gui::UpdateState(UI_Element* data)
-{
-	switch (data->type)
-	{
-	case UI_Element::UI_type::PUSHBUTTON: //push button
-		switch (data->state)
-		{
-		case UI_Element::State::LOCKED:
-			data->rect = { 0,0,0,0 };
-			break;
-
-		case UI_Element::State::IDLE:
-			data->rect = { 642,170,230,64 };
-			break;
-
-		case UI_Element::State::HOVER:
-			data->rect = { 0,114,230,64 };
-			break;
-
-		case UI_Element::State::LOGIC:
-			data->rect = { 411,170,230,64 };
-			break;
-
-		case UI_Element::State::DRAG:
-			data->rect = { 411,170,230,64 };
-			break;
-		}
-		break;
-
-	//case UI_Element::UI_type::CHECKBUTTON: //check button
-	//	switch (data->state)
-	//	{
-	//	case UI_Element::State::LOCKED:
-	//		data->rect = { 0,0,0,0 };
-	//		break;
-
-	//	case UI_Element::State::IDLE:
-	//		data->rect = {};
-	//		break;
-
-	//	case UI_Element::State::HOVER:
-	//		data->rect = {};
-	//		break;
-
-	//	case UI_Element::State::LOGIC:
-	//		data->rect = {};
-	//		break;
-
-	//	case UI_Element::State::DRAG:
-	//		data->rect = {};
-	//		break;
-	//	}
-	//	break;
-
-	case UI_Element::UI_type::WINDOW: //window
-		switch (data->state)
-		{
-		case UI_Element::State::LOCKED:
-			data->rect = { 0,0,0,0 };
-			break;
-
-		case UI_Element::State::IDLE:
-			data->rect = { 26,536,424,458 };
-			break;
-
-		case UI_Element::State::HOVER:
-			data->rect = { 26,536,424,458 };
-			break;
-
-		case UI_Element::State::LOGIC:
-			data->rect = { 26,536,424,458 };
-			break;
-
-		case UI_Element::State::DRAG:
-			data->rect = { 26,536,424,458 };
-			break;
-		}
-		break;
-
-	case UI_Element::UI_type::TEXT: //window
-		switch (data->state)
-		{
-		case UI_Element::State::LOCKED:
-			data->label = "Locked";
-			break;
-
-		case UI_Element::State::IDLE:
-			data->label = "Idle";
-			break;
-
-		case UI_Element::State::HOVER:
-			data->label = "Hover";
-			break;
-
-		case UI_Element::State::LOGIC:
-			data->label = "Logic";
-			break;
-
-		case UI_Element::State::DRAG:
-			data->label = "Drag";
-			break;
-		}
-		break;
-	}
-}
-
 void j1Gui::UpdateChildren()
 {
 	p2List_item<UI_Element*>*item = UI_elements.start;
@@ -313,7 +204,7 @@ void j1Gui::UpdateChildren()
 
 		item->data->collider = { item->data->globalpos.x, item->data->globalpos.y, item->data->size.x, item->data->size.y }; //update collider
 
-		UpdateState(item->data); //update rect (section)
+		App->scene->UpdateState(item->data); //update rect (section)
 
 		item = item->next;
 	}

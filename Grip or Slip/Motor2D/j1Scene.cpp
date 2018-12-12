@@ -44,6 +44,8 @@ bool j1Scene::Awake(pugi::xml_node& config)
 		map_names.add(data);
 	}
 
+	player_lives = config.child("player_lives").attribute("value").as_int();
+
 	return ret;
 }
 
@@ -72,11 +74,14 @@ bool j1Scene::Start()
 
 	//create gui
 	SDL_RenderGetViewport(App->render->renderer, &App->render->viewport);
-	window_ui = App->gui->AddUIElement(UI_Element::UI_type::WINDOW, UI_Element::Action::NONE, { App->render->viewport.w / 2, App->render->viewport.h / 12 }, { 424,458 }, nullptr, true, { true, true });
-	button = App->gui->AddUIElement(UI_Element::UI_type::PUSHBUTTON, UI_Element::Action::MOVE_LEFT, { 112,229 }, { 230,64 }, window_ui, true);
-	button_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0,0 }, { 0,0 }, button, true, { false, false }, "Hello World");
-	button2 = App->gui->AddUIElement(UI_Element::UI_type::PUSHBUTTON, UI_Element::Action::DRAGABLE, { App->render->viewport.w / 6, App->render->viewport.h / 12 + 75 }, { 230,64 }, nullptr, true);
-	button_text2 = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0,0 }, { 0,0 }, button2, true, { false, false }, "Dragable");
+
+	ui_life1 = App->gui->AddUIElement(UI_Element::UI_type::IMAGE, UI_Element::Action::NONE, { 0,0 }, { 54,45 }, nullptr, true);
+	ui_life2 = App->gui->AddUIElement(UI_Element::UI_type::IMAGE, UI_Element::Action::NONE, { 55,0 }, { 54,45 }, nullptr, true);
+	ui_life3 = App->gui->AddUIElement(UI_Element::UI_type::IMAGE, UI_Element::Action::NONE, { 110,0 }, { 54,45 }, nullptr, true);
+	ui_coins = App->gui->AddUIElement(UI_Element::UI_type::IMAGE, UI_Element::Action::NONE, { 200,0 }, { 47,47 }, nullptr, true);
+	ui_coins_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 250,0 }, { 0,0 }, nullptr, true, { false, false }, "x0");
+	ui_score = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 500,0 }, { 0,0 }, nullptr, true, { false, false }, "Score: 0");
+	ui_timer = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 950,0 }, { 0,0 }, nullptr, true, { false, false }, "Timer: 0s");
 
 	return true;
 }
@@ -86,6 +91,10 @@ bool j1Scene::PreUpdate()
 {
 	BROFILER_CATEGORY("Scene PreUpdate", Profiler::Color::DarkOrange);
 
+	if (player_lives <= 0)
+	{
+		return false;
+	}
 	//LOG("IsChanging: %i", App->scenechange->IsChanging());
 
 	//// debug pathfing ------------------
@@ -141,7 +150,7 @@ bool j1Scene::Update(float dt)
 	{
 		App->LoadGame();
 	}
-	else if (App->input->GetKey(SDL_SCANCODE_F8) == KEY_REPEAT)
+	else if (App->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN) //Debug UI
 	{
 		App->gui->UI_Debug = !App->gui->UI_Debug;
 	}
@@ -186,6 +195,7 @@ bool j1Scene::Update(float dt)
 	p2List_item<UI_Element*>* item = App->gui->UI_elements.end;
 	while (item != nullptr)
 	{
+		//if(item->data->type != UI_Element::UI_type::IMAGE && item->data->type != UI_Element::UI_type::TEXT)
 		if (App->gui->CheckMousePos(item->data) == true && App->gui->dragging == false) //hovering
 		{
 			item->data->state = UI_Element::State::HOVER;
@@ -219,6 +229,8 @@ bool j1Scene::Update(float dt)
 		}
 		item = item->prev;
 	}
+	coins++;
+	UpdateSimpleUI();
 	App->gui->Draw();
 
 	return true;
@@ -283,10 +295,13 @@ bool j1Scene::Load(pugi::xml_node& data)
 
 	if (currentMap != data.child("currentMap").attribute("num").as_int())
 	{
+		data.child("player_lives").attribute("value").set_value(player_lives);
+
 		LOG("Calling switch maps");
 		currentMap = data.child("currentMap").attribute("num").as_int();
 		App->map->SwitchMaps(map_names[data.child("currentMap").attribute("num").as_int()]);
 
+		player_lives = data.child("player_lives").attribute("value").as_int();
 	}
 	return true;
 }
@@ -294,6 +309,7 @@ bool j1Scene::Load(pugi::xml_node& data)
 bool j1Scene::Save(pugi::xml_node& data) const
 {
 	data.append_child("currentMap").append_attribute("num") = currentMap;
+	data.append_child("player_lives").append_attribute("value") = player_lives;
 	return true;
 }
 
@@ -416,4 +432,151 @@ void j1Scene::ResetBoxPos()
 	box_2_side = false;
 	box_3_side = true;
 	box_4_side = false;
+}
+
+void j1Scene::UpdateState(UI_Element* data)
+{
+	switch(data->type)
+	{
+	case UI_Element::UI_type::PUSHBUTTON: //push button
+		switch (data->state)
+		{
+		case UI_Element::State::LOCKED:
+			data->rect = { 0,0,0,0 };
+			break;
+
+		case UI_Element::State::IDLE:
+			data->rect = { 642,170,230,64 };
+			break;
+
+		case UI_Element::State::HOVER:
+			data->rect = { 0,114,230,64 };
+			break;
+
+		case UI_Element::State::LOGIC:
+			data->rect = { 411,170,230,64 };
+			break;
+
+		case UI_Element::State::DRAG:
+			data->rect = { 411,170,230,64 };
+			break;
+		}
+		break;
+
+	case UI_Element::UI_type::WINDOW: //window
+		switch (data->state)
+		{
+		case UI_Element::State::LOCKED:
+			data->rect = { 0,0,0,0 };
+			break;
+
+		case UI_Element::State::IDLE:
+			data->rect = { 26,536,424,458 };
+			break;
+
+		case UI_Element::State::HOVER:
+			data->rect = { 26,536,424,458 };
+			break;
+
+		case UI_Element::State::LOGIC:
+			data->rect = { 26,536,424,458 };
+			break;
+
+		case UI_Element::State::DRAG:
+			data->rect = { 26,536,424,458 };
+			break;
+		}
+		break;
+	}
+}
+
+void j1Scene::UpdateSimpleUI()
+{
+	p2List_item<UI_Element*>* item = App->gui->UI_elements.start;
+	while (item != nullptr)
+	{
+		switch (item->data->type)
+		{
+		case UI_Element::UI_type::IMAGE: //image
+
+			if (item->data == ui_life1) //Life 1
+			{
+				if (player_lives >= 2)
+				{
+					item->data->rect = { 190,0,53,45 }; //full
+					break;
+				}
+				else if (player_lives == 1)
+				{
+					item->data->rect = { 242,0,54,45 }; //half
+					break;
+				}
+				else
+				{
+					item->data->rect = { 295,0,54,45 }; //empty
+					break;
+				}
+			}
+			else if (item->data == ui_life2) //Life 2
+			{
+				if (player_lives >= 4)
+				{
+					item->data->rect = { 190,0,53,45 }; //full
+					break;
+				}
+				else if (player_lives == 3)
+				{
+					item->data->rect = { 242,0,54,45 }; //half
+					break;
+				}
+				else
+				{
+					item->data->rect = { 295,0,54,45 }; //empty
+					break;
+				}
+			}
+			else if (item->data == ui_life3) //Life 3
+			{
+				if (player_lives == 6)
+				{
+					item->data->rect = { 190,0,53,45 }; //full
+					break;
+				}
+				else if (player_lives == 5)
+				{
+					item->data->rect = { 242,0,54,45 }; //half
+					break;
+				}
+				else
+				{
+					item->data->rect = { 295,0,54,45 }; //empty
+					break;
+				}
+			}
+			else if (item->data == ui_coins) //Coins
+			{
+				item->data->rect = { 190,45,47,47 };
+				break;
+			}
+
+		case UI_Element::UI_type::TEXT: //text
+
+			if (item->data == ui_coins_text) //coins number
+			{
+				item->data->label = "x0";
+				break;
+			}
+			else if (item->data == ui_score) //score
+			{
+				item->data->label = "SCORE: 0000";
+				break;
+			}
+			else if (item->data == ui_timer) //timer
+			{
+				item->data->label = "TIME: 300s";
+				break;
+			}
+		}
+		item = item->next;
+	}
 }

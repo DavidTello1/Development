@@ -71,6 +71,7 @@
     <map_name name="level1.tmx"></map_name>
     <map_name name="level2.tmx"></map_name>
     <fade_time value="1"/>
+    <player_lives value="6"/>
   </scene>
 
   </config>

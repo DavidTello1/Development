@@ -36,7 +36,6 @@ public:
 	bool Draw();
 	bool CheckMousePos(UI_Element* data);
 	bool CheckClick(UI_Element* data);
-	void UpdateState(UI_Element* data);
 	void UpdateChildren();
 
 	// Gui creation functions
