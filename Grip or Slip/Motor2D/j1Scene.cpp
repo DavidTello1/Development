@@ -73,16 +73,22 @@ bool j1Scene::Start()
 	SpawnEntities();
 
 	//create gui
-	SDL_RenderGetViewport(App->render->renderer, &App->render->viewport);
+	ui_life1 = App->gui->AddUIElement(UI_Element::UI_type::IMAGE, UI_Element::Action::NONE, { 5,3 }, { 29,25 }, nullptr, true);
+	ui_life2 = App->gui->AddUIElement(UI_Element::UI_type::IMAGE, UI_Element::Action::NONE, { 37,3 }, { 29,25 }, nullptr, true);
+	ui_life3 = App->gui->AddUIElement(UI_Element::UI_type::IMAGE, UI_Element::Action::NONE, { 69,3 }, { 29,25 }, nullptr, true);
+	ui_coins = App->gui->AddUIElement(UI_Element::UI_type::IMAGE, UI_Element::Action::NONE, { 200,5 }, { 24,24 }, nullptr, true);
+	ui_game_over = App->gui->AddUIElement(UI_Element::UI_type::IMAGE, UI_Element::Action::NONE, { App->win->width / 2 - 313, App->win->height / 2 - 134 }, { 0,0 }, nullptr, false, { false, false });
+	ui_coins_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 228,10 }, { 0,0 }, nullptr, true, { false, false }, "x0");
+	ui_score = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { App->win->width / 2 - 50, 10 }, { 0,0 }, nullptr, true, { false, false }, "Score: 0");
+	ui_timer = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 950,10 }, { 0,0 }, nullptr, true, { false, false }, "Timer: 0s");
 
-	ui_life1 = App->gui->AddUIElement(UI_Element::UI_type::IMAGE, UI_Element::Action::NONE, { 0,0 }, { 54,45 }, nullptr, true);
-	ui_life2 = App->gui->AddUIElement(UI_Element::UI_type::IMAGE, UI_Element::Action::NONE, { 55,0 }, { 54,45 }, nullptr, true);
-	ui_life3 = App->gui->AddUIElement(UI_Element::UI_type::IMAGE, UI_Element::Action::NONE, { 110,0 }, { 54,45 }, nullptr, true);
-	ui_coins = App->gui->AddUIElement(UI_Element::UI_type::IMAGE, UI_Element::Action::NONE, { 200,0 }, { 47,47 }, nullptr, true);
-	ui_coins_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 250,0 }, { 0,0 }, nullptr, true, { false, false }, "x0");
-	ui_score = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 500,0 }, { 0,0 }, nullptr, true, { false, false }, "Score: 0");
-	ui_timer = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 950,0 }, { 0,0 }, nullptr, true, { false, false }, "Timer: 0s");
+	ui_coins_text->color = { 255,255,255,255 }; //white
+	ui_score->color = { 255,255,255,255 };
+	ui_timer->color = { 255,255,255,255 };
 
+	coins_bg = { 193,3,70,30 };
+	score_bg = { App->win->width/2 - 57, 5,85,25 };
+	timer_bg = { 945,6,70,25 };
 	return true;
 }
 
@@ -91,10 +97,6 @@ bool j1Scene::PreUpdate()
 {
 	BROFILER_CATEGORY("Scene PreUpdate", Profiler::Color::DarkOrange);
 
-	if (player_lives <= 0)
-	{
-		return false;
-	}
 	//LOG("IsChanging: %i", App->scenechange->IsChanging());
 
 	//// debug pathfing ------------------
@@ -195,40 +197,47 @@ bool j1Scene::Update(float dt)
 	p2List_item<UI_Element*>* item = App->gui->UI_elements.end;
 	while (item != nullptr)
 	{
-		//if(item->data->type != UI_Element::UI_type::IMAGE && item->data->type != UI_Element::UI_type::TEXT)
-		if (App->gui->CheckMousePos(item->data) == true && App->gui->dragging == false) //hovering
+		if (item->data->type != UI_Element::UI_type::IMAGE && item->data->type != UI_Element::UI_type::TEXT)
 		{
-			item->data->state = UI_Element::State::HOVER;
-			if (App->gui->CheckClick(item->data) == true) //on-click
+			if (App->gui->CheckMousePos(item->data) == true && App->gui->dragging == false) //hovering
 			{
-				if (item->data->dragable.x == false && item->data->dragable.y == false)
+				item->data->state = UI_Element::State::HOVER;
+				if (App->gui->CheckClick(item->data) == true) //on-click
 				{
-					item->data->state = UI_Element::State::LOGIC;
-					item->data->DoLogic(item->data->action);
-
-					if (item->data->children.start != nullptr)
+					if (item->data->dragable.x == false && item->data->dragable.y == false)
 					{
-						item->data->children.start->data->Center(true, true);
+						item->data->state = UI_Element::State::LOGIC;
+						item->data->DoLogic(item->data->action);
+
+						if (item->data->children.start != nullptr)
+						{
+							item->data->children.start->data->Center(true, true);
+						}
+					}
+					else
+					{
+						item->data->state = UI_Element::State::DRAG;
 					}
 				}
-				else
-				{
-					item->data->state = UI_Element::State::DRAG;
-				}
 			}
-		}
-		if (item->data->state == UI_Element::State::DRAG && App->gui->CheckClick(item->data) == true)
-		{
-			App->gui->dragging = true;
-			item->data->Drag();
-			App->gui->UpdateChildren();
-		}
-		else if (App->gui->CheckMousePos(item->data) == false && item->data->state != UI_Element::State::DRAG)
-		{
-			item->data->state = UI_Element::State::IDLE; //change to idle
+			if (item->data->state == UI_Element::State::DRAG && App->gui->CheckClick(item->data) == true)
+			{
+				App->gui->dragging = true;
+				item->data->Drag();
+				App->gui->UpdateChildren();
+			}
+			else if (App->gui->CheckMousePos(item->data) == false && item->data->state != UI_Element::State::DRAG)
+			{
+				item->data->state = UI_Element::State::IDLE; //change to idle
+			}
 		}
 		item = item->prev;
 	}
+	
+	App->render->DrawQuad(coins_bg, 0, 0, 0, 160, true, false);
+	App->render->DrawQuad(score_bg, 0, 0, 0, 160, true, false);
+	App->render->DrawQuad(timer_bg, 0, 0, 0, 160, true, false);
+
 	coins++;
 	UpdateSimpleUI();
 	App->gui->Draw();
@@ -242,6 +251,11 @@ bool j1Scene::PostUpdate()
 	BROFILER_CATEGORY("Scene PostUpdate", Profiler::Color::DarkOrange);
 
 	bool ret = true;
+
+	if (player_lives <= 0)
+	{
+		ui_game_over->SetVisible();
+	}
 
 	if (change == true) //rotate map and change
 	{
@@ -503,17 +517,17 @@ void j1Scene::UpdateSimpleUI()
 			{
 				if (player_lives >= 2)
 				{
-					item->data->rect = { 190,0,53,45 }; //full
+					item->data->rect = { 190,0,30,25 }; //full
 					break;
 				}
 				else if (player_lives == 1)
 				{
-					item->data->rect = { 242,0,54,45 }; //half
+					item->data->rect = { 219,0,30,25 }; //half
 					break;
 				}
 				else
 				{
-					item->data->rect = { 295,0,54,45 }; //empty
+					item->data->rect = { 249,0,30,25 }; //empty
 					break;
 				}
 			}
@@ -521,17 +535,17 @@ void j1Scene::UpdateSimpleUI()
 			{
 				if (player_lives >= 4)
 				{
-					item->data->rect = { 190,0,53,45 }; //full
+					item->data->rect = { 190,0,30,25 }; //full
 					break;
 				}
 				else if (player_lives == 3)
 				{
-					item->data->rect = { 242,0,54,45 }; //half
+					item->data->rect = { 219,0,30,25 }; //half
 					break;
 				}
 				else
 				{
-					item->data->rect = { 295,0,54,45 }; //empty
+					item->data->rect = { 249,0,30,25 }; //empty
 					break;
 				}
 			}
@@ -539,23 +553,28 @@ void j1Scene::UpdateSimpleUI()
 			{
 				if (player_lives == 6)
 				{
-					item->data->rect = { 190,0,53,45 }; //full
+					item->data->rect = { 190,0,30,25 }; //full
 					break;
 				}
 				else if (player_lives == 5)
 				{
-					item->data->rect = { 242,0,54,45 }; //half
+					item->data->rect = { 219,0,30,25 }; //half
 					break;
 				}
 				else
 				{
-					item->data->rect = { 295,0,54,45 }; //empty
+					item->data->rect = { 249,0,30,25 }; //empty
 					break;
 				}
 			}
 			else if (item->data == ui_coins) //Coins
 			{
-				item->data->rect = { 190,45,47,47 };
+				item->data->rect = { 190,25,24,24 };
+				break;
+			}
+			else if (item->data == ui_game_over)
+			{
+				item->data->rect = { 0,187,626,267 };
 				break;
 			}
 

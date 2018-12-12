@@ -27,7 +27,7 @@ JustSimpleUI::JustSimpleUI(UI_type Type, iPoint pos, iPoint Size, UI_Element* Pa
 	visible = Visible;
 	dragable = Dragable;
 
-	texture = App->font->Print(label, { 255,0,0,255 });
+	texture = App->font->Print(label, color);
 	App->font->CalcSize(label, size.x, size.y);
 
 	collider = { position.x, position.y, size.x, size.y };

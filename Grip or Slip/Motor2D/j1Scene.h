@@ -89,7 +89,11 @@ public:
 	UI_Element* ui_resume;
 	UI_Element* ui_main_menu;
 
+	UI_Element* ui_game_over;
 
+	SDL_Rect coins_bg;
+	SDL_Rect score_bg;
+	SDL_Rect timer_bg;
 
 };
 

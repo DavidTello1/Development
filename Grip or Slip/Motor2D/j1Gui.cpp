@@ -126,7 +126,7 @@ bool j1Gui::Draw()
 			if (UI_elem->data->type == UI_elem->data->TEXT) //text
 			{
 				App->tex->UnLoad(UI_elem->data->texture);
-				UI_elem->data->texture = App->font->Print(UI_elem->data->label, { 255,0,0,255 });
+				UI_elem->data->texture = App->font->Print(UI_elem->data->label, UI_elem->data->color);
 				App->font->CalcSize(UI_elem->data->label, UI_elem->data->size.x, UI_elem->data->size.y);
 
 				App->render->Blit(UI_elem->data->texture, UI_elem->data->globalpos.x, UI_elem->data->globalpos.y, 0, SDL_FLIP_NONE, 0);
