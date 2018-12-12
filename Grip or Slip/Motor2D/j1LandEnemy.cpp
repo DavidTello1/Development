@@ -99,6 +99,7 @@ bool LandEnemy::Update(float dt)
 		if (lives <= 0)
 		{
 			dead = true;
+			App->scene->score += 1000;
 		}
 
 		if (!chasing_player) {

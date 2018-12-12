@@ -28,7 +28,7 @@ Entity::~Entity()
 void Entity::Draw(float dt)
 {
 
-	if (type == GRID)
+	if (type == GRID || type == COIN)
 	{
 		if (flip_ver)
 		{
@@ -200,7 +200,6 @@ void Entity::Collider_Overlay()
 					{
 						App->scene->to_end = true;
 					}
-
 				}
 			}
 		}

@@ -10,6 +10,7 @@
 #include "j1FlyingEnemy.h"
 #include "j1LandEnemy.h"
 #include "j1Box.h"
+#include "j1Coins.h"
 #include "j1Textures.h"
 #include "Brofiler\Brofiler.h"
 
@@ -239,6 +240,7 @@ bool j1EntityController::Load(pugi::xml_node& file)
 	pugi::xml_node grid = file.child("grid");
 	pugi::xml_node flying_enemy = file.child("flying_enemy");
 	pugi::xml_node land_enemy = file.child("land_enemy");
+	pugi::xml_node coin = file.child("coin");
 
 	while (tmp != nullptr)
 	{
@@ -261,6 +263,11 @@ bool j1EntityController::Load(pugi::xml_node& file)
 		{
 			tmp->data->Load(land_enemy);
 			land_enemy = land_enemy.next_sibling("land_enemy");
+		}
+		else if (tmp->data->type == Entity::entityType::COIN)
+		{
+			tmp->data->Load(coin);
+			coin = coin.next_sibling("coin");
 		}
 		else if (tmp->data->type == Entity::entityType::PLAYER)
 		{
@@ -397,6 +404,10 @@ Entity* j1EntityController::AddEntity(Entity::entityType type, iPoint position, 
 	case Entity::entityType::PLAYER:
 		tmp = new j1Player();
 		break;
+
+	case Entity::entityType::COIN:
+		tmp = new j1Coins(position, Size);
+		break;
 	}
 
 	if (tmp)
@@ -444,7 +455,12 @@ void j1EntityController::EnemyColliderCheck()
 				{
 					if (player->data->attack)
 					{
-						if (tmp->data->hurt == false)
+						if (tmp->data->type == Entity::entityType::FLYING_ENEMY && tmp->data->dead == false)
+						{
+							tmp->data->dead = true;
+							App->scene->score += 500;
+						}
+						else if (tmp->data->hurt == false)
 						{
 							tmp->data->lives--;
 							tmp->data->hurt = true;
@@ -458,6 +474,15 @@ void j1EntityController::EnemyColliderCheck()
 						}
 					}
 				}
+			}
+		}
+		else if (tmp->data->type == Entity::entityType::COIN)
+		{
+			if (SDL_HasIntersection(&tmp->data->Collider, &player->data->Collider))
+			{
+				App->entitycontroller->DeleteEntity(tmp->data);
+				App->scene->coins++;
+				App->scene->score += 100;
 			}
 		}
 		tmp = tmp->next;

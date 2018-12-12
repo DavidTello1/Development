@@ -41,6 +41,7 @@ public:
 	void SpawnEntities();
 	void SaveAndChange();
 	void ResetBoxPos();
+	void ResetIngameUI();
 
 	void UpdateState(UI_Element* data);
 	void UpdateSimpleUI();
@@ -66,6 +67,8 @@ public:
 	uint countdown = 0;
 
 	int player_lives = 0;
+	char current_score[20] = "SCORE: 0000";
+	char current_coins[10] = "x0";
 
 private:
 

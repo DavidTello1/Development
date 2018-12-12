@@ -63,7 +63,6 @@ bool FlyingEnemy::Update(float dt)
 		if (lives <= 0)
 		{
 			dead = true;
-			return true;
 		}
 
 		if (!chasing_player) {

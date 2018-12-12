@@ -20,7 +20,7 @@ public:
 		PLAYER,
 		FLYING_ENEMY,
 		LAND_ENEMY,
-		BOSS
+		COIN
 	};
 
 public:
@@ -66,7 +66,7 @@ public:
 
 	bool flip = false;
 	bool chasing_player = false;
-	bool hurt;
+	bool hurt = false;
 
 	bool moving_left = false;
 	bool moving_right = true;
@@ -76,28 +76,28 @@ public:
 	iPoint box_position;
 	int grid_direction;
 	int jumpSpeed;
-	bool left;
-	bool right;
-	bool grid_moving;
-	bool dead;
-	bool grounded;
-	bool jumping;
-	bool grid;
-	bool sliding;
-	bool landing;
-	bool falling;
-	bool gripping;
-	bool wall_left, wall_right;
-	bool gravity_active;
-	bool grid_collision;
-	bool top_grid;
-	bool ceiling;
-	bool landed;
-	bool attack;
-	bool attack_able;
-	bool box_collision;
-	bool gripped;
-	bool spikes;
+	bool left = false;
+	bool right = false;
+	bool grid_moving = false;
+	bool dead = false;
+	bool grounded = false;
+	bool jumping = false;
+	bool grid = false;
+	bool sliding = false;
+	bool landing = false;
+	bool falling = false;
+	bool gripping = false;
+	bool wall_left = false;
+	bool wall_right = false;
+	bool gravity_active = false;
+	bool grid_collision = false;
+	bool top_grid = false;
+	bool ceiling = false;
+	bool landed = false;
+	bool attack = false;
+	bool attack_able = false;
+	bool box_collision = false;
+	bool gripped = false;
 
 	p2SString grid_type;
 	iPoint initial_size;
@@ -107,8 +107,8 @@ public:
 	int type_int;
 	bool flip_ver = false;
 	bool flip_hor = false;
-	bool vertical;
-	bool is_static;
+	bool vertical = false;
+	bool is_static = false;
 
 	SDL_Rect Bounds;
 	bool box_moving = false;

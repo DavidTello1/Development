@@ -17,6 +17,7 @@
 #include "JustSimpleUI.h"
 
 #include "Brofiler\Brofiler.h"
+#include <stdio.h>
 
 j1Scene::j1Scene() : j1Module()
 {
@@ -70,6 +71,7 @@ bool j1Scene::Start()
 	//debug_tex = App->tex->Load("maps/pathfinding.png");
 
 	ResetBoxPos();
+	ResetIngameUI();
 	SpawnEntities();
 
 	//create gui
@@ -78,7 +80,7 @@ bool j1Scene::Start()
 	ui_life3 = App->gui->AddUIElement(UI_Element::UI_type::IMAGE, UI_Element::Action::NONE, { 69,3 }, { 29,25 }, nullptr, true);
 	ui_coins = App->gui->AddUIElement(UI_Element::UI_type::IMAGE, UI_Element::Action::NONE, { 200,5 }, { 24,24 }, nullptr, true);
 	ui_game_over = App->gui->AddUIElement(UI_Element::UI_type::IMAGE, UI_Element::Action::NONE, { App->win->width / 2 - 313, App->win->height / 2 - 134 }, { 0,0 }, nullptr, false, { false, false });
-	ui_coins_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 228,10 }, { 0,0 }, nullptr, true, { false, false }, "x0");
+	ui_coins_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 230,10 }, { 0,0 }, nullptr, true, { false, false }, "x0");
 	ui_score = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { App->win->width / 2 - 50, 10 }, { 0,0 }, nullptr, true, { false, false }, "Score: 0");
 	ui_timer = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 950,10 }, { 0,0 }, nullptr, true, { false, false }, "Timer: 0s");
 
@@ -130,17 +132,20 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) //Start from first level
 	{
 		ResetBoxPos();
+		ResetIngameUI();
 		Load_level(0);
 		currentMap = 0;
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) //Start from beginning of current map
 	{
 		ResetBoxPos();
+		ResetIngameUI();
 		App->entitycontroller->Restart();
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) //Start from second level
 	{
 		ResetBoxPos();
+		ResetIngameUI();
 		Load_level(1);
 		currentMap = 1;
 	}
@@ -238,7 +243,6 @@ bool j1Scene::Update(float dt)
 	App->render->DrawQuad(score_bg, 0, 0, 0, 160, true, false);
 	App->render->DrawQuad(timer_bg, 0, 0, 0, 160, true, false);
 
-	coins++;
 	UpdateSimpleUI();
 	App->gui->Draw();
 
@@ -309,14 +313,21 @@ bool j1Scene::Load(pugi::xml_node& data)
 
 	if (currentMap != data.child("currentMap").attribute("num").as_int())
 	{
+		data.child("game_state").child("scene").child("coins").attribute("value").set_value(coins);
+		data.child("game_state").child("scene").child("score").attribute("value").set_value(score);
+		data.child("game_state").child("scene").child("countdown").attribute("value").set_value(countdown);
 		data.child("player_lives").attribute("value").set_value(player_lives);
 
 		LOG("Calling switch maps");
 		currentMap = data.child("currentMap").attribute("num").as_int();
 		App->map->SwitchMaps(map_names[data.child("currentMap").attribute("num").as_int()]);
 
-		player_lives = data.child("player_lives").attribute("value").as_int();
 	}
+	player_lives = data.child("player_lives").attribute("value").as_int();
+	coins = data.child("coins").attribute("value").as_uint();
+	score = data.child("score").attribute("value").as_uint();
+	countdown = data.child("countdown").attribute("value").as_uint();
+	
 	return true;
 }
 
@@ -324,6 +335,9 @@ bool j1Scene::Save(pugi::xml_node& data) const
 {
 	data.append_child("currentMap").append_attribute("num") = currentMap;
 	data.append_child("player_lives").append_attribute("value") = player_lives;
+	data.append_child("coins").append_attribute("value") = coins;
+	data.append_child("score").append_attribute("value") = score;
+	data.append_child("countdown").append_attribute("value") = countdown;
 	return true;
 }
 
@@ -383,7 +397,10 @@ void j1Scene::SpawnEnemies()
 				{
 					App->entitycontroller->AddEntity(Entity::entityType::BOX, { objectdata->data->x, objectdata->data->y }, { objectdata->data->width, objectdata->data->height }, objectdata->data->name, objectdata->data->type);
 				}
-
+				else if (objectdata->data->name == "Coin")
+				{
+					App->entitycontroller->AddEntity(Entity::entityType::COIN, { objectdata->data->x, objectdata->data->y }, { objectdata->data->width, objectdata->data->height });
+				}
 			}
 		}
 	}
@@ -395,6 +412,9 @@ void j1Scene::SaveAndChange()
 	pugi::xml_node root;
 	pugi::xml_parse_result result = data.load_file("save_game.xml");
 	data.child("game_state").child("scene").child("currentMap").attribute("num").set_value(currentMap);
+	data.child("game_state").child("scene").child("coins").attribute("value").set_value(coins);
+	data.child("game_state").child("scene").child("score").attribute("value").set_value(score);
+	data.child("game_state").child("scene").child("countdown").attribute("value").set_value(countdown);
 	data.save_file("save_game.xml");
 
 	root = data.child("game_state").child("entitycontroller");
@@ -447,6 +467,14 @@ void j1Scene::ResetBoxPos()
 	box_3_side = true;
 	box_4_side = false;
 }
+
+void j1Scene::ResetIngameUI()
+{
+	score = 0;
+	coins = 0;
+	countdown = 0;
+}
+
 
 void j1Scene::UpdateState(UI_Element* data)
 {
@@ -582,12 +610,14 @@ void j1Scene::UpdateSimpleUI()
 
 			if (item->data == ui_coins_text) //coins number
 			{
-				item->data->label = "x0";
+				sprintf_s(current_coins, "x%u", coins);
+				item->data->label = current_coins;
 				break;
 			}
 			else if (item->data == ui_score) //score
 			{
-				item->data->label = "SCORE: 0000";
+				sprintf_s(current_score, "SCORE: %u", score);
+				item->data->label = current_score;
 				break;
 			}
 			else if (item->data == ui_timer) //timer
