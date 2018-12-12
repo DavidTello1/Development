@@ -82,6 +82,7 @@ public:
 	bool dead = false;
 	bool grounded = false;
 	bool jumping = false;
+	bool jump_able = false;
 	bool grid = false;
 	bool sliding = false;
 	bool landing = false;

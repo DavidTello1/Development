@@ -1,5 +1,5 @@
 # GRIP OR SLIP
-This is a little game made by two second year students of the Videogame Design and Development degree. It's a platformer with two levels where the player must jump, grip to the metal nets and kill the enemies to complete the game. It has been made using C++, SDL and pugi libraries. The maps have been made using Tiled.
+This is a little game made by two second year students of the Videogame Design and Development degree. It's a 2D platformer with two levels where the player must change between maps to complete the game. It has been made using C++, SDL and pugi libraries. The maps have been made using Tiled.
 
 ### Controls
 -Movement with WASD keys: A (left), D (right), W (up & grip), S (down)
@@ -8,15 +8,34 @@ This is a little game made by two second year students of the Videogame Design a
 
 -Attack with M.
 
--Close Game with ESC.
+-Change Map with N.
+
+-Pause Game with ESC.
+
+### Tips
+You can jump after attacking or falling from a grid, box or the ground.
+To jump from walls you must stop sliding.
+Boxes have opposite positions in each map so, if you think you can't continue, try changing the map.
+
+
 
 ### Debug Controls
-F1: Load the first level. F2: Restart the current level. F3: Load the second level. F5: Load the saved game. F6: Save the current game. F7: Rotate Maps. F9: View collider logic. F10: Activate/Deactivate God Mode.
+F1: Load the first level. F2: Restart the current level. F3: Load the second level. F5: Load the saved game. F6: Save the current game. F8: Debug UI. F9: View collider logic. F10: Activate/Deactivate God Mode. F11:Activate/Deactivate FrameCap.
 
 ### Innovation Features
 -Moving Grids that the player can grip to and move.
 
 -Land Enemy sprite stays in map after death.
+
+-Boxes opposite position to its pair in the other map.
+
+-Save both map entities at the same time.
+
+-Rotation of maps.
+
+-Wall Jumping.
+
+-Dash Attack.
 
 
 ### Authors
@@ -39,6 +58,10 @@ We do not own any of the sprites or tilesets presented in this game.
 -Land Enemy: The Legendary Starfy https://www.spriters-resource.com/ds_dsi/legendarystarfy/sheet/37442/
 
 -Flying Enemy: The Legendary Starfy 2 https://www.spriters-resource.com/game_boy_advance/thelegendarystarfy2/sheet/26327/
+
+-GUI: Kenney https://opengameart.org/content/platformer-art-deluxe , https://opengameart.org/content/ui-pack-rpg-extension
+
+-Game Over: http://www.allfinweb.com/single/113513976-game-over-1920x1080.html
 
 ## License
 ### MIT License

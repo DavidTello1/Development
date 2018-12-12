@@ -146,7 +146,7 @@ void Entity::Collider_Overlay()
 					{
 						if (position.y + Collider.h - ceil(gravity*App->dt) <= ObjectRect.y)
 						{
-							if (result.h <= result.w || position.x + Collider.w >= ObjectRect.x)
+							if (result.h < result.w)
 							{
 								position.y -= result.h - 1;
 								if (box_moving == false)
@@ -169,7 +169,6 @@ void Entity::Collider_Overlay()
 							{
   								wall_right = true;
 							}
-							jumpSpeed = 0;
 						}
 					}
 					else if (objectdata->data->name == "Spikes")

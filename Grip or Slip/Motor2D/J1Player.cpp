@@ -112,15 +112,17 @@ bool j1Player::Update(float dt)
 
 		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) //jump
 		{
-			if (attack == false && App->scene->godmode == false && box_moving == false)
+			if (attack == false && App->scene->godmode == false && box_moving == false && jump_able == true)
 			{
 				if (jumping == false)
 				{
 					jumping = true;
 					grounded = false;
+					sliding = false;
 					grid = false;
 					landed = false;
 					attack_able = true;
+					jump_able = false;
 					jumpSpeed = speed.y;
 				}
 			}
@@ -141,7 +143,7 @@ bool j1Player::Update(float dt)
 				{
 					left = true;
 					final_speed.x -= speed.x;
-					if (wall_left == true && grounded == false && jumpSpeed < gravity)
+					if (wall_left == true && grounded == false)
 					{
 						sliding = true;
 					}
@@ -163,7 +165,7 @@ bool j1Player::Update(float dt)
 				{
 					right = true;
 					final_speed.x += speed.x;
-					if (wall_right == true && grounded == false && jumpSpeed < gravity)
+					if (wall_right == true && grounded == false)
 					{
 						sliding = true;
 					}
@@ -226,12 +228,20 @@ bool j1Player::Update(float dt)
 
 		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP) //left release
 		{
+			if (sliding == true)
+			{
+				jump_able = true;
+			}
 			left = false;
 			sliding = false;
 			grid_moving = false;
 		}
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP) //right release
 		{
+			if (sliding == true)
+			{
+				jump_able = true;
+			}
 			right = false;
 			sliding = false;
 			grid_moving = false;
@@ -264,6 +274,7 @@ bool j1Player::Update(float dt)
 		if (grounded == true) //grounded
 		{
 			jumping = false;
+			jump_able = true;
 			sliding = false;
 			attack_able = true;
 		}
@@ -304,6 +315,7 @@ bool j1Player::Update(float dt)
 		if (grid == true) //grid
 		{
 			gravity_active = false;
+			jump_able = true;
 			grounded = false;
 			sliding = false;
 			landed = false;
@@ -373,13 +385,6 @@ bool j1Player::Update(float dt)
 			}
 		}
 
-		if (sliding == true) //sliding
-		{
-			jumpSpeed = 0;
-			grounded = false;
-			grid = false;
-		}
-
 		if (jumping == true && App->scene->godmode == false) //jumping
 		{
 			gravity_active = false;
@@ -389,6 +394,13 @@ bool j1Player::Update(float dt)
 				jumpSpeed = -gravity;
 			}
 			final_speed.y -= jumpSpeed;
+		}
+
+		if (sliding == true) //sliding
+		{
+			grounded = false;
+			grid = false;
+			jumping = false;
 		}
 
 		if (wall_left == true && App->scene->godmode == false) //wall left
@@ -491,7 +503,6 @@ bool j1Player::Update(float dt)
 		ChangeAnimation();
 
 		grounded = false;
-		sliding = false;
 		grid_collision = false;
 		box_collision = false;
 		top_grid = false;
