@@ -15,6 +15,7 @@ class j1Textures;
 class j1Audio;
 class j1PathFinding;
 class j1Scene;
+class j1MainMenu;
 class j1Map;
 class j1SceneChange;
 class j1EntityController;
@@ -44,7 +45,7 @@ public:
 	bool CleanUp();
 
 	// Add a new module to handle
-	void AddModule(j1Module* module);
+	void AddModule(j1Module* module, bool check_active = true);
 
 	// Exposing some properties for reading
 	int GetArgc() const;
@@ -90,6 +91,7 @@ public:
 	j1Audio*			audio = NULL;
 	j1PathFinding*		pathfinding = NULL;
 	j1Scene*			scene = NULL;
+	j1MainMenu*			main_menu = NULL;
 	j1Map*				map = NULL;
 	j1SceneChange*		scenechange = NULL;
 	j1EntityController* entitycontroller = NULL;

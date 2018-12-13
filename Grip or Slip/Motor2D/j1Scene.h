@@ -69,6 +69,7 @@ public:
 	int player_lives = 0;
 	char current_score[20] = "SCORE: 0000";
 	char current_coins[10] = "x0";
+	char current_time[20] = "TIME: 000";
 
 private:
 
@@ -97,6 +98,9 @@ public:
 	SDL_Rect coins_bg;
 	SDL_Rect score_bg;
 	SDL_Rect timer_bg;
+
+	j1Timer timer;
+	j1Timer delay;
 
 };
 

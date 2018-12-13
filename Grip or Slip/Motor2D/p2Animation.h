@@ -2,6 +2,7 @@
 #define __P2ANIMATION_H__
 #include <assert.h>
 #include "SDL/include/SDL_rect.h"
+#include "j1Scene.h"
 
 #define MAX_FRAMES 50
 
@@ -31,7 +32,11 @@ public:
 	SDL_Rect& GetCurrentFrame(float dt)
 	{
 		float tmp = speed;
-		current_frame += tmp*dt;
+
+		if (App->scene->pause == false)
+		{
+			current_frame += tmp*dt;
+		}
 
 		if (current_frame < 0)
 		{

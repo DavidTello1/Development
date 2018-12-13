@@ -12,6 +12,7 @@
 #include "j1Audio.h"
 #include "j1Pathfinding.h"
 #include "j1Scene.h"
+#include "j1MainMenu.h"
 #include "j1SceneChange.h"
 #include "j1Map.h"
 #include "j1EntityController.h"
@@ -33,6 +34,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	tex = new j1Textures();
 	audio = new j1Audio();
 	pathfinding = new j1PathFinding();
+	main_menu = new j1MainMenu();
 	scene = new j1Scene();
 	scenechange = new j1SceneChange();
 	map = new j1Map();
@@ -48,7 +50,8 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(audio);
 	AddModule(map);
 	AddModule(pathfinding);
-	AddModule(scene);
+	AddModule(main_menu);
+	AddModule(scene,false);
 	AddModule(scenechange);
 	AddModule(entitycontroller);
 	AddModule(font);
@@ -75,9 +78,9 @@ j1App::~j1App()
 	modules.clear();
 }
 
-void j1App::AddModule(j1Module* module)
+void j1App::AddModule(j1Module* module, bool check_active)
 {
-	module->Init();
+	module->Init(check_active);
 	modules.add(module);
 }
 
@@ -144,7 +147,10 @@ bool j1App::Start()
 
 	while(item != NULL && ret == true)
 	{
-		ret = item->data->Start();
+		if (item->data->active)
+		{
+			ret = item->data->Start();
+		}
 		item = item->next;
 	}
 
@@ -394,7 +400,7 @@ bool j1App::LoadGameNow()
 
 		while(item != NULL && ret == true)
 		{
-			//if (item->data->name == "scene")
+			//if (item->data->name == "scene") //load current map's last saved state
 			//{
 			//	root.child("scene").child("currentMap").attribute("num").set_value(scene->currentMap);
 			//}
@@ -421,7 +427,7 @@ bool j1App::SavegameNow() const
 
 	LOG("Saving Game State to %s...", save_game.GetString());
 
-	// xml object were we will store all data
+	// xml object were we will store all data first
 	pugi::xml_document data;
 	pugi::xml_node root;
 	root = data.append_child("game_state");
@@ -454,6 +460,7 @@ bool j1App::SavegameNow() const
 
 		if (result == true) //if there was a previous save_game.xml
 		{
+			save_data.load_file(save_game.GetString()); //load new save_game.xml to save_data
 			pugi::xml_node save_root = save_data.child("game_state").child("entitycontroller");
 			
 			copy_root = copy_data.child("game_state");
@@ -477,7 +484,6 @@ bool j1App::SavegameNow() const
 			{
 				scene->currentMap = 0;
 			}
-			save_data.child("game_state").child("scene").child("currentMap").attribute("num").set_value(scene->currentMap);
 
 			save_data.save_file(save_game.GetString()); //save save_game with copysave data in it
 		}

@@ -8,6 +8,7 @@
 #include "j1Map.h"
 #include "j1Pathfinding.h"
 #include "j1Scene.h"
+#include "j1MainMenu.h"
 #include "j1SceneChange.h"
 #include "j1EntityController.h"
 #include "j1Gui.h"
@@ -44,8 +45,6 @@ bool j1Scene::Awake(pugi::xml_node& config)
 		data->create(map.attribute("name").as_string());
 		map_names.add(data);
 	}
-
-	player_lives = config.child("player_lives").attribute("value").as_int();
 
 	return ret;
 }
@@ -90,7 +89,14 @@ bool j1Scene::Start()
 
 	coins_bg = { 193,3,70,30 };
 	score_bg = { App->win->width/2 - 57, 5,85,25 };
-	timer_bg = { 945,6,70,25 };
+	timer_bg = { 943,6,70,25 };
+
+	coins = 0;
+	score = 0;
+	countdown = 300;
+	player_lives = 6;
+
+	timer.Start();
 	return true;
 }
 
@@ -121,6 +127,7 @@ bool j1Scene::PreUpdate()
 	//		origin_selected = true;
 	//	}
 	//}
+
 	return true;
 }
 
@@ -149,6 +156,10 @@ bool j1Scene::Update(float dt)
 		Load_level(1);
 		currentMap = 1;
 	}
+	else if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN) //Go to main menu
+	{
+		App->scenechange->SwitchScene(App->main_menu, App->scene);
+	}
 	else if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) //Save game state
 	{
 		App->SaveGame();
@@ -175,6 +186,10 @@ bool j1Scene::Update(float dt)
 		App->fpsCapON = !App->fpsCapON;
 	}
 
+	else if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !App->scenechange->IsSwitching() && player_lives <= 0) //Go to main menu after game over
+	{
+			App->scenechange->SwitchScene(App->main_menu, App->scene);
+	}
 	//----
 	App->map->Draw();
 	if (change == false)
@@ -230,6 +245,7 @@ bool j1Scene::Update(float dt)
 				App->gui->dragging = true;
 				item->data->Drag();
 				App->gui->UpdateChildren();
+				UpdateState(item->data);
 			}
 			else if (App->gui->CheckMousePos(item->data) == false && item->data->state != UI_Element::State::DRAG)
 			{
@@ -259,6 +275,10 @@ bool j1Scene::PostUpdate()
 	if (player_lives <= 0)
 	{
 		ui_game_over->SetVisible();
+
+		pugi::xml_document data;
+		data.load_file("save_game");
+		data.reset();
 	}
 
 	if (change == true) //rotate map and change
@@ -276,7 +296,7 @@ bool j1Scene::PostUpdate()
 		}
 	}
 
-	if (to_end && App->scenechange->IsChanging() == false)
+	if (to_end == true && !App->scenechange->IsChanging() == false)
 	{
 		if (currentMap < map_names.count() - 1)
 		{
@@ -292,8 +312,8 @@ bool j1Scene::PostUpdate()
 
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 	{
-		pause = true;
-		ret = false;
+		pause = !pause;
+		timer.Start();
 	}
 
 	return ret;
@@ -311,22 +331,17 @@ bool j1Scene::Load(pugi::xml_node& data)
 {
 	LOG("IsChanging: %i", App->scenechange->IsChanging());
 
-	if (currentMap != data.child("currentMap").attribute("num").as_int())
-	{
-		data.child("game_state").child("scene").child("coins").attribute("value").set_value(coins);
-		data.child("game_state").child("scene").child("score").attribute("value").set_value(score);
-		data.child("game_state").child("scene").child("countdown").attribute("value").set_value(countdown);
-		data.child("player_lives").attribute("value").set_value(player_lives);
-
-		LOG("Calling switch maps");
-		currentMap = data.child("currentMap").attribute("num").as_int();
-		App->map->SwitchMaps(map_names[data.child("currentMap").attribute("num").as_int()]);
-
-	}
 	player_lives = data.child("player_lives").attribute("value").as_int();
 	coins = data.child("coins").attribute("value").as_uint();
 	score = data.child("score").attribute("value").as_uint();
 	countdown = data.child("countdown").attribute("value").as_uint();
+
+	if (currentMap != data.child("currentMap").attribute("num").as_int())
+	{
+		LOG("Calling switch maps");
+		currentMap = data.child("currentMap").attribute("num").as_int();
+		App->map->SwitchMaps(map_names[data.child("currentMap").attribute("num").as_int()]);
+	}
 	
 	return true;
 }
@@ -338,6 +353,7 @@ bool j1Scene::Save(pugi::xml_node& data) const
 	data.append_child("coins").append_attribute("value") = coins;
 	data.append_child("score").append_attribute("value") = score;
 	data.append_child("countdown").append_attribute("value") = countdown;
+
 	return true;
 }
 
@@ -472,9 +488,9 @@ void j1Scene::ResetIngameUI()
 {
 	score = 0;
 	coins = 0;
-	countdown = 0;
+	countdown = 300;
+	player_lives = 6;
 }
-
 
 void j1Scene::UpdateState(UI_Element* data)
 {
@@ -483,10 +499,6 @@ void j1Scene::UpdateState(UI_Element* data)
 	case UI_Element::UI_type::PUSHBUTTON: //push button
 		switch (data->state)
 		{
-		case UI_Element::State::LOCKED:
-			data->rect = { 0,0,0,0 };
-			break;
-
 		case UI_Element::State::IDLE:
 			data->rect = { 642,170,230,64 };
 			break;
@@ -508,10 +520,6 @@ void j1Scene::UpdateState(UI_Element* data)
 	case UI_Element::UI_type::WINDOW: //window
 		switch (data->state)
 		{
-		case UI_Element::State::LOCKED:
-			data->rect = { 0,0,0,0 };
-			break;
-
 		case UI_Element::State::IDLE:
 			data->rect = { 26,536,424,458 };
 			break;
@@ -620,9 +628,24 @@ void j1Scene::UpdateSimpleUI()
 				item->data->label = current_score;
 				break;
 			}
-			else if (item->data == ui_timer) //timer
+			else if (item->data == ui_timer && pause == false) //timer
 			{
-				item->data->label = "TIME: 300s";
+				if (countdown <= 60)
+				{
+					item->data->color = { 255,0,0,255 };
+				}
+				else
+				{
+					item->data->color = { 255,255,255,255 };
+				}
+
+				if (timer.ReadSec() >= 1)
+				{
+					timer.Start();
+					countdown--;
+				}
+				sprintf_s(current_time, "TIME: %u", countdown);
+				item->data->label = current_time;
 				break;
 			}
 		}

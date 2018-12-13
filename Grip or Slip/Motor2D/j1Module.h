@@ -18,9 +18,9 @@ public:
 	j1Module() : active(false)
 	{}
 
-	void Init()
+	void Init(bool check_active)
 	{
-		active = true;
+		active = check_active;
 	}
 
 	// Called before render is available
@@ -67,6 +67,23 @@ public:
 	virtual bool Save(pugi::xml_node&) const
 	{
 		return true;
+	}
+
+	void Enable()
+	{
+		if (!active)
+		{
+			active = true;
+			Start();
+		}
+	}
+	void Disable()
+	{
+		if (active)
+		{
+			active = false;
+			CleanUp();
+		}
 	}
 
 public:

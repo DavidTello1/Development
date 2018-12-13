@@ -33,6 +33,7 @@ public:
 
 	bool CopySave(pugi::xml_node&);
 	bool AppendSave(pugi::xml_node& source, pugi::xml_node& destiny);
+	void PlayerRestart();
 
 public:
 	p2SString		folder;

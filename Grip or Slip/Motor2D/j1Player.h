@@ -40,6 +40,7 @@ public:
 
 	void ChangeAnimation();
 	void LoadAnimations();
+	void CameraOnPlayer();
 
 public: 
 

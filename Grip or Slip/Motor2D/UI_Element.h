@@ -46,7 +46,7 @@ public:
 
 	enum State
 	{
-		LOCKED = 0,
+		NOTHING = 0,
 		IDLE,
 		HOVER,
 		LOGIC,
@@ -123,7 +123,8 @@ public:
 	iPoint size;
 	SDL_Rect collider;
 	const char* label = nullptr;
-	bool visible;
+	bool visible = true;
+	bool locked = false;
 
 	UI_Element* parent;
 	p2List<UI_Element*> children;

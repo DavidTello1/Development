@@ -54,7 +54,7 @@ bool j1EntityController::Update(float dt)
 		DebugDraw();
 	}
 
-	if (App->scene->change == false)
+	if (App->scene->change == false && App->scene->pause == false)
 	{
 		EnemyColliderCheck();
 
@@ -74,22 +74,25 @@ bool j1EntityController::PostUpdate()
 	BROFILER_CATEGORY("EntityController PostUpdate", Profiler::Color::Blue);
 
 	bool ret = true;
-	p2List_item<Entity*>* tmp = Entities.start;
-	while (tmp != nullptr)
+
+	if (App->scene->pause == false)
 	{
-		tmp->data->PostUpdate();
+		p2List_item<Entity*>* tmp = Entities.start;
+		while (tmp != nullptr)
+		{
+			tmp->data->PostUpdate();
 
-		if (App->entitycontroller->draw_path) {
-			const p2DynArray<iPoint>* path = &tmp->data->entityPath;
-			for (uint i = 0; i < path->Count(); ++i)
-			{
-				iPoint pos = App->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-				App->render->Blit(debug_tex, pos.x, pos.y);
+			if (App->entitycontroller->draw_path) {
+				const p2DynArray<iPoint>* path = &tmp->data->entityPath;
+				for (uint i = 0; i < path->Count(); ++i)
+				{
+					iPoint pos = App->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+					App->render->Blit(debug_tex, pos.x, pos.y);
+				}
 			}
+			tmp = tmp->next;
 		}
-		tmp = tmp->next;
 	}
-
 	
 	return ret;
 }
@@ -486,5 +489,19 @@ void j1EntityController::EnemyColliderCheck()
 			}
 		}
 		tmp = tmp->next;
+	}
+}
+
+void j1EntityController::PlayerRestart()
+{
+	p2List_item<Entity*>* tmp = Entities.end;
+	while (tmp != nullptr)
+	{
+		if (tmp->data->type == Entity::entityType::PLAYER)
+		{
+			tmp->data->Restart();
+			break;
+		}
+		tmp = tmp->prev;
 	}
 }

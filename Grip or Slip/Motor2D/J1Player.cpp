@@ -510,8 +510,9 @@ bool j1Player::Update(float dt)
 	else
 	{
 		ChangeAnimation();
-		left = right = attack = jumping = false;
+		left = right = attack = jumping = grid = box_moving = sliding = false;
 	}
+	CameraOnPlayer();
 
 	return true;
 }
@@ -525,8 +526,15 @@ bool j1Player::PostUpdate()
 	if (dead && !App->scenechange->IsChanging())
 	{
 		App->scene->player_lives--;
-		App->scene->ResetBoxPos();
-		App->scenechange->ChangeMap(App->scene->currentMap, App->scene->fade_time);
+		if (App->scene->player_lives > 0)
+		{
+			App->scene->ResetBoxPos();
+			App->scenechange->ChangeMap(App->scene->currentMap, App->scene->fade_time);
+		}
+		else
+		{
+			App->scene->delay.Start();
+		}
 	}
 
 	return true;
@@ -736,4 +744,27 @@ void j1Player::LoadAnimations()
 	attacking.PushBack({ 0, 160, size.x, size.y });
 	attacking.loop = false;
 	attacking.speed = 15.0f;
+}
+
+void j1Player::CameraOnPlayer()
+{
+	App->render->camera.x = -position.x + App->render->camera.w / 3;
+	App->render->camera.y = -position.y + App->render->camera.h / 2;
+
+	if (App->render->camera.x > 0) //left limit
+	{
+		App->render->camera.x = 0;
+	}
+	if (App->render->camera.x - App->render->camera.w < -App->map->data.width * App->map->data.tile_width) //right limit
+	{
+		App->render->camera.x = -App->map->data.width * App->map->data.tile_width + App->render->camera.w;
+	}
+	if (App->render->camera.y > 0) //top limit
+	{
+		App->render->camera.y = 0;
+	}
+	if (App->render->camera.y - App->render->camera.h < -App->map->data.height * App->map->data.tile_height) //down limit
+	{
+		App->render->camera.y = -App->map->data.height * App->map->data.tile_height + App->render->camera.h;
+	}
 }

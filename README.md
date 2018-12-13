@@ -37,6 +37,8 @@ F1: Load the first level. F2: Restart the current level. F3: Load the second lev
 
 -Dash Attack.
 
+-Time color changes to red when there are 60 or less seconds remaining.
+
 
 ### Authors
 -David Tello Panea

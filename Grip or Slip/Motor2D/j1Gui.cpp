@@ -204,8 +204,6 @@ void j1Gui::UpdateChildren()
 
 		item->data->collider = { item->data->globalpos.x, item->data->globalpos.y, item->data->size.x, item->data->size.y }; //update collider
 
-		App->scene->UpdateState(item->data); //update rect (section)
-
 		item = item->next;
 	}
 }

@@ -2,6 +2,7 @@
 #define __j1SceneChange_H__
 
 #include "j1Module.h"
+#include "j1Timer.h"
 #include "SDL\include\SDL_rect.h"
 
 enum ListOfMapNames;
@@ -24,14 +25,21 @@ public:
 	//Called each loop iteration
 	bool Update(float dt);
 
-	//Set up the map change and fade time
+	//Change Map
 	bool ChangeMap(int newMap, float time);
 
-	//returns true if the change process is active
+	//returns true if changing
 	bool IsChanging() const;
+
+	//Change Scene
+	bool SwitchScene(j1Module* SceneIn, j1Module* SceneOut);
+
+	//returns true if switching
+	bool IsSwitching() const;
 
 public:
 	bool fading = false;
+	bool ContinueGame = false;
 
 private:
 	enum fade_step
@@ -47,6 +55,14 @@ private:
 	uint total_time = 0;
 	SDL_Rect screen;
 
+	float fadetime = 1.0f;
+	j1Module* to_enable = nullptr;
+	j1Module* to_disable = nullptr;
+	j1Timer switchtimer;
+
+	bool map = false;
+	bool scene = false;
 
 };
+
 #endif // __j1SceneChange_H__

@@ -1,5 +1,5 @@
-#ifndef __j1SCENE_H__
-#define __j1SCENE_H__
+#ifndef __j1MAIN_MENU_H__
+#define __j1MAIN_MENU_H__
 
 #include "j1Module.h"
 #include "UI_Element.h"
@@ -33,15 +33,27 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	void UpdateState(UI_Element* data);
+
 public:	//all gui elements
-	UI_Element* button;
-	UI_Element* button_text;
 
-	UI_Element* button2;
-	UI_Element* button_text2;
+	UI_Element* continue_button;
+	UI_Element* continue_text;
 
-	UI_Element* window_ui;
+	UI_Element* new_game_button;
+	UI_Element* new_game_text;
+	
+	UI_Element* exit_button;
+	UI_Element* exit_text;
 
+	UI_Element* credits_button;
+	UI_Element* credits_text;
+
+	UI_Element* settings_button;
+	UI_Element* settings_text;
+
+
+	bool quit_game = false;
 };
 
-#endif // __j1SCENE_H__
+#endif // __j1MAIN_MENU_H__

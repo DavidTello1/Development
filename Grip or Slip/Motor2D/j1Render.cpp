@@ -75,9 +75,6 @@ bool j1Render::PreUpdate()
 
 bool j1Render::Update(float dt)
 {
-	BROFILER_CATEGORY("Render Update", Profiler::Color::Green);
-
-	CameraOnPlayer();
 	return true;
 }
 
@@ -138,41 +135,6 @@ void j1Render::ResetViewPort()
 	SDL_RenderSetViewport(renderer, &viewport);
 }
 
-bool j1Render::CameraOnPlayer()
-{
-	p2List_item<Entity*>* player = nullptr;
-	
-	for (p2List_item<Entity*>* i = App->entitycontroller->Entities.start; i != nullptr; i = i->next)
-	{
-		if (i->data->type == Entity::entityType::PLAYER)
-		{
-			player = i;
-			break;
-		}
-	}
-
-	camera.x = -player->data->position.x + camera.w / 3;
-	camera.y = -player->data->position.y + camera.h / 2;
-
-	if (camera.x > 0 ) //left limit
-	{
-		camera.x = 0;
-	}
-	if (camera.x - camera.w < -App->map->data.width * App->map->data.tile_width) //right limit
-	{
-		camera.x = - App->map->data.width * App->map->data.tile_width + camera.w;
-	}
-	if (camera.y > 0) //top limit
-	{
-		camera.y = 0;
-	}
-	if (camera.y - camera.h < -App->map->data.height * App->map->data.tile_height) //down limit
-	{
-		camera.y = -App->map->data.height * App->map->data.tile_height + camera.h;
-	}
-
-	return true;
-}
 
 iPoint j1Render::ScreenToWorld(int x, int y) const
 {
