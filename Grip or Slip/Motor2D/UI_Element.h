@@ -22,9 +22,8 @@ public:
 		TEXT,
 		IMAGE,
 		PUSHBUTTON,
-		CHECKBUTTON,
-		INPUTTEXT,
-		WINDOW
+		WINDOW,
+		BACKGROUND
 	};
 
 	enum Action
@@ -39,9 +38,7 @@ public:
 		ADJUST_VOL,
 		RESUME,
 		MAIN_MENU,
-
-		MOVE_LEFT,
-		DRAGABLE
+		BACK
 	};
 
 	enum State
@@ -75,11 +72,6 @@ public:
 		}
 	}
 
-	void SetVisible()
-	{
-		visible = true;
-	}
-
 	void SetDragable(bool x, bool y)
 	{
 		if (x)
@@ -108,8 +100,8 @@ public:
 	}
 
 public:
-	SDL_Rect rect;
 	SDL_Texture* texture;
+	SDL_Rect rect;
 	SDL_Color color;
 
 	UI_type type;

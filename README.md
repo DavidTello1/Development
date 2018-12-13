@@ -75,6 +75,8 @@ We do not own any of the sprites or tilesets presented in this game.
 
 -Game Over: http://www.allfinweb.com/single/113513976-game-over-1920x1080.html
 
+-Main Menu Background: http://in2gpu.com/category/game-development/
+
 ###Accomplishments
 
 - David Tello: EntitySystem, Player(Attack, animations, godmode), Grid, Enemies (without pathfinding), Brofiler, UML, Map Rotation

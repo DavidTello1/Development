@@ -276,7 +276,7 @@ bool j1Scene::PostUpdate()
 	if (player_lives <= 0)
 	{
 		pause = true;
-		ui_game_over->SetVisible();
+		ui_game_over->visible = true;
 
 		pugi::xml_document data;
 		data.load_file("save_game");

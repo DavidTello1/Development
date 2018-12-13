@@ -16,7 +16,7 @@ public:
 	virtual ~j1MainMenu();
 
 	// Called before render is available
-	bool Awake();
+	bool Awake(pugi::xml_node& conf);
 
 	// Called before the first frame
 	bool Start();
@@ -34,8 +34,13 @@ public:
 	bool CleanUp();
 
 	void UpdateState(UI_Element* data);
+	void MoveUI_Left();
+	void ResetUI_pos();
 
 public:	//all gui elements
+
+	p2SString menu_bg_file_name;
+	UI_Element* menu_background;
 
 	UI_Element* continue_button;
 	UI_Element* continue_text;
@@ -52,6 +57,8 @@ public:	//all gui elements
 	UI_Element* settings_button;
 	UI_Element* settings_text;
 
+	UI_Element* back_button;
+	UI_Element* back_text;
 
 	bool quit_game = false;
 };

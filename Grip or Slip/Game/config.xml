@@ -73,4 +73,8 @@
     <fade_time value="1"/>
   </scene>
 
+  <main_menu>
+    <menu_bg file="gui/menu_bg.png"/>
+  </main_menu>
+
   </config>

@@ -36,19 +36,25 @@ public:
 
 			case UI_Element::Action::SETTINGS:
 			{
-
+				App->main_menu->MoveUI_Left();
 			}
 			break;
 
 			case UI_Element::Action::CREDITS:
 			{
-
+				App->main_menu->MoveUI_Left();
 			}
 			break;
 
 			case UI_Element::Action::EXIT:
 			{
 				App->main_menu->quit_game = true;
+			}
+			break;
+
+			case UI_Element::Action::BACK:
+			{
+				App->main_menu->ResetUI_pos();
 			}
 			break;
 		}

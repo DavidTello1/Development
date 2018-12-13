@@ -25,10 +25,12 @@ j1MainMenu::~j1MainMenu()
 {}
 
 // Called before render is available
-bool j1MainMenu::Awake()
+bool j1MainMenu::Awake(pugi::xml_node& conf)
 {
 	LOG("Loading Main Menu");
 	bool ret = true;
+
+	menu_bg_file_name = conf.child("menu_bg").attribute("file").as_string("");
 
 	return ret;
 }
@@ -39,6 +41,7 @@ bool j1MainMenu::Start()
 	//create gui
 	SDL_RenderGetViewport(App->render->renderer, &App->render->viewport);
 
+	menu_background = App->gui->AddUIElement(UI_Element::UI_type::BACKGROUND, UI_Element::Action::NONE, { 0,0 }, { App->win->width, App->win->height }, nullptr, true);
 	continue_button = App->gui->AddUIElement(UI_Element::UI_type::PUSHBUTTON, UI_Element::Action::CONTINUE, { App->render->viewport.w / 2 - 95, App->render->viewport.h / 3 +20 }, { 190,48 }, nullptr, true);
 	continue_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0,0 }, { 0,0 }, continue_button, true, { false, false }, "CONTINUE");
 	new_game_button = App->gui->AddUIElement(UI_Element::UI_type::PUSHBUTTON, UI_Element::Action::NEW_GAME, { App->render->viewport.w / 2 - 95, App->render->viewport.h / 3 + 80 }, { 190,48 }, nullptr, true);
@@ -49,8 +52,14 @@ bool j1MainMenu::Start()
 	credits_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0,0 }, { 0,0 }, credits_button, true, { false, false }, "CREDITS");
 	settings_button = App->gui->AddUIElement(UI_Element::UI_type::PUSHBUTTON, UI_Element::Action::SETTINGS, { App->render->viewport.w / 2 - 95, App->render->viewport.h / 3 + 140 }, { 190,48 }, nullptr, true);
 	settings_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0,0 }, { 0,0 }, settings_button, true, { false, false }, "SETTINGS");
+	back_button = App->gui->AddUIElement(UI_Element::UI_type::PUSHBUTTON, UI_Element::Action::BACK, { App->render->viewport.w / 2 + 50, App->render->viewport.h / 3 + 300 }, { 190,48 }, nullptr, false);
+	back_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0,0 }, { 0,0 }, back_button, false, { false, false }, "BACK");
 
-	continue_text->color = new_game_text->color = exit_text->color = credits_text->color = settings_text->color = { 255,255,255,255 };
+	continue_text->color = new_game_text->color = exit_text->color = credits_text->color = settings_text->color = back_text->color = { 255,255,255,255 };
+	
+	menu_background->texture =  App->tex->Load(menu_bg_file_name.GetString());
+	menu_background->rect = { 0,0, App->win->width, App->win->height };
+
 	return true;
 }
 
@@ -122,6 +131,7 @@ bool j1MainMenu::Update(float dt)
 		UpdateState(item->data);
 		item = item->prev;
 	}
+	App->render->Blit(menu_background->texture, 0,0, &menu_background->rect, SDL_FLIP_NONE, 0); //draw background before gui
 	App->gui->Draw();
 
 	return true;
@@ -188,4 +198,34 @@ void j1MainMenu::UpdateState(UI_Element* data)
 		}
 		break;
 	}
+}
+
+void j1MainMenu::MoveUI_Left()
+{
+	p2List_item<UI_Element*>* item = App->gui->UI_elements.start;
+	while (item != nullptr)
+	{
+		if (item->data->type != item->data->BACKGROUND && item->data->type != item->data->TEXT && item->data != back_button)
+		{
+			item->data->globalpos.x = 200;
+		}
+		item = item->next;
+	}
+	back_button->visible = true;
+	back_text->visible = true;
+}
+
+void j1MainMenu::ResetUI_pos()
+{
+	p2List_item<UI_Element*>* item = App->gui->UI_elements.start;
+	while (item != nullptr)
+	{
+		if (item->data->type != item->data->BACKGROUND && item->data->type != item->data->TEXT)
+		{
+			item->data->globalpos.x = item->data->position.x;
+		}
+		item = item->next;
+	}
+	back_button->visible = false;
+	back_text->visible = false;
 }

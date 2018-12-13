@@ -93,19 +93,14 @@ UI_Element* j1Gui::AddUIElement(UI_Element::UI_type type, UI_Element::Action act
 	case UI_Element::UI_type::PUSHBUTTON:
 		UI_elem = new InteractiveButton(type, action, pos, size, parent, visible, dragable);
 		break;
-
-	case UI_Element::UI_type::CHECKBUTTON:
-		UI_elem = new InteractiveButton(type, action, pos, size, parent, visible, dragable);
-		break;									  
 												  
-	//case UI_Element::UI_type::INPUTTEXT:		  
-	//	UI_elem = new InteractiveButton(type, pos, size, parent, visible, dragable);
-	//	break;
-
 	case UI_Element::UI_type::WINDOW:
 		UI_elem = new InteractiveButton(type, action, pos, size, parent, visible, dragable);
 		break;
 
+	case UI_Element::UI_type::BACKGROUND:
+		UI_elem = new JustSimpleUI(type, pos, size, parent, visible, dragable);
+		break;
 	}
 
 	if (UI_elem)
@@ -131,7 +126,7 @@ bool j1Gui::Draw()
 
 				App->render->Blit(UI_elem->data->texture, UI_elem->data->globalpos.x, UI_elem->data->globalpos.y, 0, SDL_FLIP_NONE, 0);
 			}
-			else //rest of ui
+			else if (UI_elem->data->type != UI_elem->data->BACKGROUND) //rest of ui
 			{
 				App->render->Blit(App->gui->GetAtlas(), UI_elem->data->globalpos.x, UI_elem->data->globalpos.y, &UI_elem->data->rect, SDL_FLIP_NONE, 0);
 			}
