@@ -280,6 +280,7 @@ bool j1Player::Update(float dt)
 		if (gripped == true) //box gripped
 		{
 			gravity_active = false;
+			jump_able = true;
 			grounded = false;
 			sliding = false;
 			landed = false;

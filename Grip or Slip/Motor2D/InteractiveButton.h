@@ -37,6 +37,7 @@ public:
 			case UI_Element::Action::SETTINGS:
 			{
 				App->main_menu->settings = true;
+				App->main_menu->credits = false;
 				App->main_menu->MoveUI_Left();
 			}
 			break;
@@ -44,6 +45,7 @@ public:
 			case UI_Element::Action::CREDITS:
 			{
 				App->main_menu->credits = true;
+				App->main_menu->settings = false;
 				App->main_menu->MoveUI_Left();
 			}
 			break;
