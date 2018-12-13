@@ -181,40 +181,6 @@ void j1MainMenu::UpdateState(UI_Element* data)
 			else
 			{
 				data->rect = { 190,90,190,48 };
-
-				switch (data->action)
-				{
-				case UI_Element::Action::CONTINUE:
-				{
-					App->scenechange->SwitchScene(App->scene, App->main_menu);
-					App->scenechange->ContinueGame = true;
-				}
-				break;
-
-				case UI_Element::Action::NEW_GAME:
-				{
-					App->scenechange->SwitchScene(App->scene, App->main_menu);
-				}
-				break;
-
-				case UI_Element::Action::SETTINGS:
-				{
-
-				}
-				break;
-
-				case UI_Element::Action::CREDITS:
-				{
-
-				}
-				break;
-
-				case UI_Element::Action::EXIT:
-				{
-					quit_game = true;
-				}
-				break;
-				}
 			}
 			break;
 		}

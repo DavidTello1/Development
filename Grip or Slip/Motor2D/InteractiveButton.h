@@ -2,6 +2,9 @@
 #define __INTERACTIVEBUTTON_H__
 
 #include "UI_Element.h"
+#include "j1SceneChange.h"
+#include "j1MainMenu.h"
+#include "j1Scene.h"
 
 class InteractiveButton : public UI_Element
 {
@@ -14,20 +17,36 @@ public:
 	{
 		switch (action)
 		{
-		case UI_Element::Action::MOVE_LEFT:
-			if (parent != nullptr)
+			case UI_Element::Action::CONTINUE:
 			{
-				position.x -= 50;
-			}
-			else
-			{
-				globalpos.x -= 50;
+				App->scenechange->SwitchScene(App->scene, App->main_menu);
+				App->scenechange->ContinueGame = true;
 			}
 			break;
 
-		case UI_Element::Action::DRAGABLE:
-			dragable.x = true;
-			dragable.y = true;
+			case UI_Element::Action::NEW_GAME:
+			{
+				App->scenechange->SwitchScene(App->scene, App->main_menu);
+			}
+			break;
+
+			case UI_Element::Action::SETTINGS:
+			{
+
+			}
+			break;
+
+			case UI_Element::Action::CREDITS:
+			{
+
+			}
+			break;
+
+			case UI_Element::Action::EXIT:
+			{
+				App->main_menu->quit_game = true;
+			}
+			break;
 		}
 	};
 
