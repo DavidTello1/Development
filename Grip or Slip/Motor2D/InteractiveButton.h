@@ -27,6 +27,11 @@ public:
 			case UI_Element::Action::NEW_GAME:
 			{
 				App->scenechange->SwitchScene(App->scene, App->main_menu);
+				App->scene->ResetBoxPos();
+				App->scene->ResetIngameUI();
+				App->scene->Load_level(0);
+				App->scene->currentMap = 0;
+
 			}
 			break;
 

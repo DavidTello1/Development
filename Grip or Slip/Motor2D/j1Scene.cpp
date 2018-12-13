@@ -54,6 +54,7 @@ bool j1Scene::Start()
 {
 	bool ret = false;
 
+	pause = false;
 	to_end = false;
 	App->map->Load(map_names.start->data->GetString());
 	currentMap = 0;
@@ -274,6 +275,7 @@ bool j1Scene::PostUpdate()
 
 	if (player_lives <= 0)
 	{
+		pause = true;
 		ui_game_over->SetVisible();
 
 		pugi::xml_document data;
@@ -312,8 +314,15 @@ bool j1Scene::PostUpdate()
 
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 	{
-		pause = !pause;
-		timer.Start();
+		if (player_lives > 0)
+		{
+			pause = !pause;
+			timer.Start();
+		}
+		else
+		{
+			ret = false;
+		}
 	}
 
 	return ret;

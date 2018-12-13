@@ -98,8 +98,10 @@ bool j1MainMenu::Update(float dt)
 				if (item->data->dragable.x == false && item->data->dragable.y == false)
 				{
 					item->data->state = UI_Element::State::LOGIC;
-					item->data->DoLogic(item->data->action);
-
+					if (item->data->locked == false)
+					{
+						item->data->DoLogic(item->data->action);
+					}
 				}
 				else
 				{
