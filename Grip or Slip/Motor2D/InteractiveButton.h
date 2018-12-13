@@ -31,7 +31,6 @@ public:
 				App->scene->ResetIngameUI();
 				App->scene->Load_level(0);
 				App->scene->currentMap = 0;
-
 			}
 			break;
 

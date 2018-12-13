@@ -97,7 +97,7 @@ bool j1Player::Update(float dt)
 
 		if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN) //attack
 		{
-			if (attack == false && attack_able == true && box_moving == false)
+			if (attack == false && attack_able == true && gripped == false)
 			{
 				attack = true;
 				attack_able = false;
@@ -130,7 +130,7 @@ bool j1Player::Update(float dt)
 
 		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) //left
 		{
-			if (attack == false && box_moving == false)
+			if (attack == false && gripped == false || App->scene->godmode == true)
 			{
 				flip = false;
 
@@ -153,7 +153,7 @@ bool j1Player::Update(float dt)
 
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) //right
 		{
-			if (attack == false && box_moving == false)
+			if (attack == false && gripped == false || App->scene->godmode == true)
 			{
 				flip = true;
 
@@ -180,11 +180,7 @@ bool j1Player::Update(float dt)
 				grid_moving = true;
 				final_speed.y -= speed.x / 2;
 			}
-			else if (App->scene->godmode == true)
-			{
-				final_speed.y -= speed.x;
-			}
-			else if (gripped == true && box_moving == false)
+			else if (gripped == false || App->scene->godmode == true)
 			{
 				final_speed.y -= speed.y;
 			}
@@ -197,11 +193,7 @@ bool j1Player::Update(float dt)
 				grid_moving = true;
 				final_speed.y += speed.x / 2;
 			}
-			else if (App->scene->godmode == true)
-			{
-				final_speed.y += speed.x;
-			}
-			else if (gripped == true && box_moving == false)
+			else if (gripped == false || App->scene->godmode == true)
 			{
 				final_speed.y += speed.y;
 			}

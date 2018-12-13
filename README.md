@@ -12,15 +12,23 @@ This is a little game made by two second year students of the Videogame Design a
 
 -Pause Game with ESC.
 
+-Go to Main Menu after Game Over with Space.
+
+-Quit Game after Game Over with ESC.
+
 ### Tips
 You can jump after attacking or falling from a grid, box or the ground.
+
 To jump from walls you must stop sliding.
+
 Boxes have opposite positions in each map so, if you think you can't continue, try changing the map.
 
+While gripped to a box you can only jump and only after it has stopped moving.
 
 
 ### Debug Controls
 F1: Load the first level. F2: Restart the current level. F3: Load the second level. F5: Load the saved game. F6: Save the current game. F8: Debug UI. F9: View collider logic. F10: Activate/Deactivate God Mode. F11:Activate/Deactivate FrameCap.
+
 
 ### Innovation Features
 -Moving Grids that the player can grip to and move.
@@ -45,8 +53,10 @@ F1: Load the first level. F2: Restart the current level. F3: Load the second lev
 
 -Marc Garcia Reig
 
+
 ### Webpage
 https://github.com/DavidTello1/Development
+
 
 ### Disclosure
 We do not own any of the sprites or tilesets presented in this game.
@@ -64,6 +74,13 @@ We do not own any of the sprites or tilesets presented in this game.
 -GUI: Kenney https://opengameart.org/content/platformer-art-deluxe , https://opengameart.org/content/ui-pack-rpg-extension
 
 -Game Over: http://www.allfinweb.com/single/113513976-game-over-1920x1080.html
+
+###Accomplishments
+
+- David Tello: EntitySystem, Player(Attack, animations, godmode), Grid, Enemies (without pathfinding), Brofiler, UML, Map Rotation
+
+- Marc Garcia: FrameCap, Pathfinding, Enemies pathfinding, Normalized movement.
+
 
 ## License
 ### MIT License
@@ -87,10 +104,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-
-###Accomplishments
-
-- David Tello: EntitySystem, Player(Attack, animations, godmode), Grid, Enemies (without pathfinding), Brofiler, UML, Map Rotation
-
-- Marc Garcia: FrameCap, Pathfinding, Enemies pathfinding, Normalized movement.

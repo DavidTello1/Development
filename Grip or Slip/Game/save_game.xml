@@ -9,9 +9,9 @@
 	<scene>
 		<currentMap num="0" />
 		<player_lives value="1" />
-		<coins value="0" />
-		<score value="0" />
-		<countdown value="257" />
+		<coins value="1" />
+		<score value="100" />
+		<countdown value="274" />
 	</scene>
 	<scenechange />
 	<entitycontroller>
@@ -25,7 +25,7 @@
 				<lives value="1" />
 			</flying_enemy>
 			<land_enemy>
-				<position x="1120" y="1253" />
+				<position x="1120" y="1216" />
 				<size width="32" height="32" />
 				<speed x="5" y="5" />
 				<sightCollider width="160" height="96" />
@@ -33,7 +33,7 @@
 				<lives value="3" />
 			</land_enemy>
 			<land_enemy>
-				<position x="1088" y="773" />
+				<position x="1088" y="736" />
 				<size width="32" height="32" />
 				<speed x="5" y="5" />
 				<sightCollider width="160" height="96" />
@@ -41,53 +41,53 @@
 				<lives value="3" />
 			</land_enemy>
 			<grid>
-				<position x="1235" y="736" />
-				<size width="109" height="96" />
+				<position x="1287" y="736" />
+				<size width="57" height="96" />
 				<speed x="30" y="30" />
 				<type value="4" />
 			</grid>
 			<grid>
-				<position x="1249" y="992" />
-				<size width="95" height="96" />
+				<position x="1253" y="992" />
+				<size width="91" height="96" />
 				<speed x="30" y="30" />
 				<type value="4" />
 			</grid>
 			<grid>
 				<position x="1152" y="480" />
-				<size width="96" height="63" />
+				<size width="96" height="43" />
 				<speed x="30" y="30" />
 				<type value="1" />
 			</grid>
 			<grid>
-				<position x="939" y="384" />
-				<size width="181" height="96" />
+				<position x="1005" y="384" />
+				<size width="115" height="96" />
 				<speed x="30" y="30" />
 				<type value="4" />
 			</grid>
 			<grid>
 				<position x="32" y="608" />
-				<size width="95" height="96" />
+				<size width="91" height="96" />
 				<speed x="30" y="30" />
 				<type value="3" />
 			</grid>
 			<grid>
 				<position x="32" y="768" />
-				<size width="181" height="96" />
+				<size width="115" height="96" />
 				<speed x="30" y="30" />
 				<type value="3" />
 			</grid>
 			<grid>
 				<position x="96" y="384" />
-				<size width="96" height="63" />
+				<size width="96" height="43" />
 				<speed x="30" y="30" />
 				<type value="1" />
 			</grid>
 			<box>
-				<position x="352" y="1248" />
+				<position x="192" y="1152" />
 				<size width="32" height="32" />
 				<speed x="50" y="50" />
 				<Bounds x="192" y="1152" width="192" height="128" />
-				<side value="false" />
+				<side value="true" />
 				<box_moving value="false" />
 			</box>
 			<box>
@@ -115,10 +115,6 @@
 				<box_moving value="false" />
 			</box>
 			<coin>
-				<position x="278" y="1258" />
-				<size width="16" height="16" />
-			</coin>
-			<coin>
 				<position x="1482" y="1127" />
 				<size width="16" height="16" />
 			</coin>
@@ -144,7 +140,7 @@
 			</coin>
 			<player>
 				<size width="32" height="32" />
-				<position x="64" y="1249" />
+				<position x="90" y="1249" />
 				<gravity value="250" />
 				<speed x="150" y="500" />
 				<grounded value="false" />
