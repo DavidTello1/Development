@@ -180,7 +180,7 @@ bool j1Player::Update(float dt)
 				grid_moving = true;
 				final_speed.y -= speed.x / 2;
 			}
-			else if (gripped == false || App->scene->godmode == true)
+			else if (App->scene->godmode == true)
 			{
 				final_speed.y -= speed.y;
 			}
@@ -193,7 +193,7 @@ bool j1Player::Update(float dt)
 				grid_moving = true;
 				final_speed.y += speed.x / 2;
 			}
-			else if (gripped == false || App->scene->godmode == true)
+			else if (App->scene->godmode == true)
 			{
 				final_speed.y += speed.y;
 			}

@@ -40,6 +40,7 @@ public:
 public:	//all gui elements
 
 	p2SString menu_bg_file_name;
+	p2SString credits_file_name;
 	UI_Element* menu_background;
 
 	UI_Element* continue_button;
@@ -53,14 +54,18 @@ public:	//all gui elements
 
 	UI_Element* credits_button;
 	UI_Element* credits_text;
+	UI_Element* credits_window;
 
 	UI_Element* settings_button;
 	UI_Element* settings_text;
+	UI_Element* settings_window;
 
 	UI_Element* back_button;
 	UI_Element* back_text;
 
 	bool quit_game = false;
+	bool credits = false;
+	bool settings = false;
 };
 
 #endif // __j1MAIN_MENU_H__

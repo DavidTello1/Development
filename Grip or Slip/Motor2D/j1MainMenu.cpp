@@ -31,6 +31,7 @@ bool j1MainMenu::Awake(pugi::xml_node& conf)
 	bool ret = true;
 
 	menu_bg_file_name = conf.child("menu_bg").attribute("file").as_string("");
+	credits_file_name = conf.child("credits").attribute("file").as_string("");
 
 	return ret;
 }
@@ -52,13 +53,18 @@ bool j1MainMenu::Start()
 	credits_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0,0 }, { 0,0 }, credits_button, true, { false, false }, "CREDITS");
 	settings_button = App->gui->AddUIElement(UI_Element::UI_type::PUSHBUTTON, UI_Element::Action::SETTINGS, { App->render->viewport.w / 2 - 95, App->render->viewport.h / 3 + 140 }, { 190,48 }, nullptr, true);
 	settings_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0,0 }, { 0,0 }, settings_button, true, { false, false }, "SETTINGS");
-	back_button = App->gui->AddUIElement(UI_Element::UI_type::PUSHBUTTON, UI_Element::Action::BACK, { App->render->viewport.w / 2 + 50, App->render->viewport.h / 3 + 300 }, { 190,48 }, nullptr, false);
+	back_button = App->gui->AddUIElement(UI_Element::UI_type::PUSHBUTTON, UI_Element::Action::BACK, { App->render->viewport.w / 2 + 55, App->render->viewport.h / 3 + 352 }, { 190,48 }, nullptr, false);
 	back_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0,0 }, { 0,0 }, back_button, false, { false, false }, "BACK");
 
-	continue_text->color = new_game_text->color = exit_text->color = credits_text->color = settings_text->color = back_text->color = { 255,255,255,255 };
-	
+	credits_window = App->gui->AddUIElement(UI_Element::UI_type::BACKGROUND, UI_Element::Action::NONE, { App->render->viewport.w / 2 - 40, App->render->viewport.h / 3 - 50 }, { 375,425 }, nullptr, false, { false, false });
+	credits_window->texture = App->tex->Load(credits_file_name.GetString());
+	credits_window->rect = { 0, 0, 375, 425 };
+
 	menu_background->texture =  App->tex->Load(menu_bg_file_name.GetString());
 	menu_background->rect = { 0,0, App->win->width, App->win->height };
+
+	continue_text->color = new_game_text->color = exit_text->color = credits_text->color = settings_text->color = back_text->color = { 255,255,255,255 };
+
 
 	return true;
 }
@@ -131,8 +137,15 @@ bool j1MainMenu::Update(float dt)
 		UpdateState(item->data);
 		item = item->prev;
 	}
-	App->render->Blit(menu_background->texture, 0,0, &menu_background->rect, SDL_FLIP_NONE, 0); //draw background before gui
-	App->gui->Draw();
+
+	App->render->Blit(menu_background->texture, 0,0, &menu_background->rect, SDL_FLIP_NONE, 0); //draw background first
+
+	if (credits == true)
+	{
+		App->render->Blit(credits_window->texture, credits_window->globalpos.x, credits_window->globalpos.y, &credits_window->rect, SDL_FLIP_NONE, 0);
+	}
+
+	App->gui->Draw(); //draw gui
 
 	return true;
 }
@@ -205,7 +218,7 @@ void j1MainMenu::MoveUI_Left()
 	p2List_item<UI_Element*>* item = App->gui->UI_elements.start;
 	while (item != nullptr)
 	{
-		if (item->data->type != item->data->BACKGROUND && item->data->type != item->data->TEXT && item->data != back_button)
+		if (item->data->type != UI_Element::UI_type::BACKGROUND && item->data->type != UI_Element::UI_type::TEXT && item->data != back_button)
 		{
 			item->data->globalpos.x = 200;
 		}
@@ -213,6 +226,15 @@ void j1MainMenu::MoveUI_Left()
 	}
 	back_button->visible = true;
 	back_text->visible = true;
+
+	if (credits == true)
+	{
+		credits_window->visible = true;
+	}
+	else if (settings == true)
+	{
+
+	}
 }
 
 void j1MainMenu::ResetUI_pos()
@@ -228,4 +250,9 @@ void j1MainMenu::ResetUI_pos()
 	}
 	back_button->visible = false;
 	back_text->visible = false;
+
+	credits_window->visible = false;
+
+	credits = false;
+	settings = false;
 }

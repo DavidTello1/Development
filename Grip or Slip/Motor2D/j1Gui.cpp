@@ -118,7 +118,7 @@ bool j1Gui::Draw()
 	{
 		if (UI_elem->data->visible == true)
 		{
-			if (UI_elem->data->type == UI_elem->data->TEXT) //text
+			if (UI_elem->data->type == UI_Element::UI_type::TEXT) //text
 			{
 				App->tex->UnLoad(UI_elem->data->texture);
 				UI_elem->data->texture = App->font->Print(UI_elem->data->label, UI_elem->data->color);
@@ -126,7 +126,7 @@ bool j1Gui::Draw()
 
 				App->render->Blit(UI_elem->data->texture, UI_elem->data->globalpos.x, UI_elem->data->globalpos.y, 0, SDL_FLIP_NONE, 0);
 			}
-			else if (UI_elem->data->type != UI_elem->data->BACKGROUND) //rest of ui
+			else if (UI_elem->data->type != UI_Element::UI_type::BACKGROUND) //rest of ui
 			{
 				App->render->Blit(App->gui->GetAtlas(), UI_elem->data->globalpos.x, UI_elem->data->globalpos.y, &UI_elem->data->rect, SDL_FLIP_NONE, 0);
 			}
