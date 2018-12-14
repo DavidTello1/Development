@@ -127,7 +127,6 @@ public:
 	p2List<UI_Element*> children;
 
 	iPoint click_pos;
-	
 };
 
 #endif // __UI_ELEMENT__

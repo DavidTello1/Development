@@ -77,6 +77,8 @@ public:	//all gui elements
 	bool quit_game = false;
 	bool credits = false;
 	bool settings = false;
+
+	iPoint x_limit;
 };
 
 #endif // __j1MAIN_MENU_H__

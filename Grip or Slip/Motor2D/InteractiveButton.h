@@ -5,6 +5,7 @@
 #include "j1SceneChange.h"
 #include "j1MainMenu.h"
 #include "j1Scene.h"
+#include "j1Audio.h"
 
 class InteractiveButton : public UI_Element
 {
@@ -65,13 +66,13 @@ public:
 
 			case UI_Element::Action::ADJUST_VOL:
 			{
-
+				//App->audio->AdjustMusicVol(music_vol);
 			}
 			break;
 
 			case UI_Element::Action::ADJUST_FX:
 			{
-
+				//App->audio->AdjustSoundVol(sfx_vol);
 			}
 			break;
 

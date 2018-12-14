@@ -118,6 +118,8 @@ bool j1MainMenu::PreUpdate()
 		continue_button->locked = false;
 	}
 
+	x_limit.x = vol_slider_bar->globalpos.x;
+	x_limit.y = vol_slider_bar->globalpos.x + vol_slider_bar->size.x - vol_slider_circle->size.x;
 	return true;
 }
 
@@ -191,6 +193,16 @@ bool j1MainMenu::Update(float dt)
 		{
 			item->data->dragging = true;
 			item->data->Drag();
+
+			if (item->data->globalpos.x <= x_limit.x) //left limit
+			{
+				item->data->globalpos.x = x_limit.x;
+			}
+			if (item->data->globalpos.x >= x_limit.y) //right limit
+			{
+				item->data->globalpos.x = x_limit.y;
+			}
+
 			App->gui->UpdateChildren();
 		}
 		else if (App->gui->CheckMousePos(item->data) == false && item->data->state != UI_Element::State::DRAG)
@@ -210,10 +222,15 @@ bool j1MainMenu::Update(float dt)
 
 	App->gui->Draw(); //draw gui
 	
-	if (settings == true) //draw settings slider bars
+	if (settings == true) //draw settings slider bars and circles
 	{
+		//bars
 		App->render->Blit(App->gui->GetAtlas(), vol_slider_bar->globalpos.x, vol_slider_bar->globalpos.y, &vol_slider_bar->rect, SDL_FLIP_NONE, 0);
 		App->render->Blit(App->gui->GetAtlas(), sfx_slider_bar->globalpos.x, sfx_slider_bar->globalpos.y, &sfx_slider_bar->rect, SDL_FLIP_NONE, 0);
+
+		//circles
+		App->render->Blit(App->gui->GetAtlas(), vol_slider_circle->globalpos.x, vol_slider_circle->globalpos.y, &vol_slider_circle->rect, SDL_FLIP_NONE, 0);
+		App->render->Blit(App->gui->GetAtlas(), sfx_slider_circle->globalpos.x, sfx_slider_circle->globalpos.y, &sfx_slider_circle->rect, SDL_FLIP_NONE, 0);
 	}
 
 	return true;
