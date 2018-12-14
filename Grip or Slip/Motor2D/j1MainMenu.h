@@ -63,6 +63,8 @@ public:	//all gui elements
 	UI_Element* back_button;
 	UI_Element* back_text;
 
+	UI_Element* web_page;
+
 	bool quit_game = false;
 	bool credits = false;
 	bool settings = false;

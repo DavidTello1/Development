@@ -55,6 +55,7 @@ bool j1MainMenu::Start()
 	settings_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0,0 }, { 0,0 }, settings_button, true, { false, false }, "SETTINGS");
 	back_button = App->gui->AddUIElement(UI_Element::UI_type::PUSHBUTTON, UI_Element::Action::BACK, { App->render->viewport.w / 2 + 55, App->render->viewport.h / 3 + 352 }, { 190,48 }, nullptr, false);
 	back_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0,0 }, { 0,0 }, back_button, false, { false, false }, "BACK");
+	web_page = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::WEB, { 20, App->render->viewport.h - 50}, { 0,0 }, nullptr, true, { false, false }, "WEB PAGE - www.webpage.com");
 
 	credits_window = App->gui->AddUIElement(UI_Element::UI_type::BACKGROUND, UI_Element::Action::NONE, { App->render->viewport.w / 2 - 40, App->render->viewport.h / 3 - 50 }, { 375,425 }, nullptr, false, { false, false });
 	credits_window->texture = App->tex->Load(credits_file_name.GetString());
@@ -63,7 +64,7 @@ bool j1MainMenu::Start()
 	menu_background->texture =  App->tex->Load(menu_bg_file_name.GetString());
 	menu_background->rect = { 0,0, App->win->width, App->win->height };
 
-	continue_text->color = new_game_text->color = exit_text->color = credits_text->color = settings_text->color = back_text->color = { 255,255,255,255 };
+	continue_text->color = new_game_text->color = exit_text->color = credits_text->color = settings_text->color = back_text->color =  web_page->color= { 255,255,255,255 };
 
 
 	return true;
@@ -208,6 +209,29 @@ void j1MainMenu::UpdateState(UI_Element* data)
 				data->rect = { 190,90,190,48 };
 			}
 			break;
+		}
+		break;
+
+	case UI_Element::UI_type::TEXT: //web text
+		switch (data->action)
+		{
+		case UI_Element::Action::WEB:
+		{
+			switch (data->state)
+			{
+			case UI_Element::State::IDLE:
+			{
+				data->color = { 0,0,0,255 };
+			}
+			break;
+
+			case UI_Element::State::HOVER:
+			{
+				data->color = { 0,0,255,255 };
+			}
+			break;
+			}
+		}break;
 		}
 		break;
 	}

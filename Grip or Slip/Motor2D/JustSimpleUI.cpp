@@ -14,7 +14,7 @@ JustSimpleUI::~JustSimpleUI()
 {
 }
 
-JustSimpleUI::JustSimpleUI(UI_type Type, iPoint pos, iPoint Size, UI_Element* Parent, bool Visible, Dragable Dragable, const char* Label)
+JustSimpleUI::JustSimpleUI(UI_type Type, iPoint pos, iPoint Size, UI_Element* Parent, bool Visible, Dragable Dragable, const char* Label, Action Action)
 {
 	type = Type;
 	position.x = pos.x;
@@ -22,6 +22,7 @@ JustSimpleUI::JustSimpleUI(UI_type Type, iPoint pos, iPoint Size, UI_Element* Pa
 	globalpos = position;
 	size = Size;
 	label = Label;
+	action = Action;
 
 	parent = Parent;
 	visible = Visible;

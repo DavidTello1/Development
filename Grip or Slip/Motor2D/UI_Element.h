@@ -38,7 +38,8 @@ public:
 		ADJUST_VOL,
 		RESUME,
 		MAIN_MENU,
-		BACK
+		BACK,
+		WEB
 	};
 
 	enum State

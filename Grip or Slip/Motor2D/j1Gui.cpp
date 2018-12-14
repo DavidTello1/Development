@@ -83,7 +83,7 @@ UI_Element* j1Gui::AddUIElement(UI_Element::UI_type type, UI_Element::Action act
 	switch (type)
 	{
 	case UI_Element::UI_type::TEXT:
-		UI_elem = new JustSimpleUI(type, pos, size, parent, visible, dragable, label);
+		UI_elem = new JustSimpleUI(type, pos, size, parent, visible, dragable, label, action);
 		break;
 	
 	case UI_Element::UI_type::IMAGE:
