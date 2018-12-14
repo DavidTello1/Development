@@ -40,8 +40,8 @@ struct Properties
 struct MapLayer
 {
 	p2SString	name;
-	uint			width;
-	uint			height;
+	uint		width;
+	uint		height;
 	uint*		data;
 	Properties	properties;
 	float		parallaxSpeed;
@@ -75,8 +75,18 @@ struct ObjectsGroup
 {
 	p2SString				name;
 	p2List<ObjectsData*>	objects;
+
 	~ObjectsGroup()
 	{
+		p2List_item<ObjectsData*>* item;
+		item = objects.start;
+
+		while (item != NULL)
+		{
+			RELEASE(item->data);
+			item = item->next;
+		}
+
 		objects.clear();
 	}
 };

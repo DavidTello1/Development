@@ -39,6 +39,7 @@ bool j1MainMenu::Awake(pugi::xml_node& conf)
 // Called before the first frame
 bool j1MainMenu::Start()
 {
+	
 	SDL_RenderGetViewport(App->render->renderer, &App->render->viewport);
 	
 	//WEB
@@ -248,6 +249,9 @@ bool j1MainMenu::PostUpdate()
 bool j1MainMenu::CleanUp()
 {
 	LOG("Freeing Main Menu");
+
+	App->tex->UnLoad(menu_background->texture);
+	App->tex->UnLoad(credits_window->texture);
 
 	return true;
 }

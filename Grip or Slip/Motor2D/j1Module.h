@@ -77,6 +77,7 @@ public:
 			Start();
 		}
 	}
+
 	void Disable()
 	{
 		if (active)

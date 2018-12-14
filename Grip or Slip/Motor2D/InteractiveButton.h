@@ -19,13 +19,14 @@ public:
 		{
 			case UI_Element::Action::CONTINUE:
 			{
-				App->scenechange->SwitchScene(App->scene, App->main_menu);
 				App->scenechange->ContinueGame = true;
+				App->scenechange->SwitchScene(App->scene, App->main_menu);
 			}
 			break;
 
 			case UI_Element::Action::NEW_GAME:
 			{
+				App->scenechange->ContinueGame = false;
 				App->scenechange->SwitchScene(App->scene, App->main_menu);
 				App->scene->ResetBoxPos();
 				App->scene->ResetIngameUI();

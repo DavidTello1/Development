@@ -42,6 +42,7 @@ public:	//all gui elements
 
 	p2SString menu_bg_file_name;
 	p2SString credits_file_name;
+
 	UI_Element* menu_background;
 
 	UI_Element* continue_button;

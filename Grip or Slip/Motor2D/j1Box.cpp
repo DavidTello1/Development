@@ -254,8 +254,6 @@ bool j1Box::Update(float dt)
 		}
 	}
 
-	//if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN)
-	//{
 	UpdateSide();
 
 	return true;

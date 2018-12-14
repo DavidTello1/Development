@@ -32,7 +32,7 @@ bool j1SceneChange::Awake(pugi::xml_node&)
 
 bool j1SceneChange::Start()
 {
-	LOG("Preparing Fade Screen");
+	LOG("SceneChange Start");
 	SDL_SetRenderDrawBlendMode(App->render->renderer, SDL_BLENDMODE_BLEND);
 	return true;
 }
@@ -79,8 +79,18 @@ bool j1SceneChange::Update(float dt)
 				App->gui->CleanUp();
 				App->map->CleanUp();
 				App->entitycontroller->DeleteEntities();
+				if (to_disable == App->scene)
+				{
+					App->entitycontroller->Disable();
+				}
+
 				App->gui->Start();
 				to_enable->Enable();
+				if (to_enable == App->scene)
+				{
+					App->entitycontroller->Enable();
+				}
+
 				switchtimer.Start();
 
 				if (App->scenechange->ContinueGame)
@@ -157,6 +167,7 @@ bool j1SceneChange::SwitchScene(j1Module* SceneIn, j1Module* SceneOut)
 		switchtimer.Start();
 		to_enable = SceneIn;
 		to_disable = SceneOut;
+
 		ret = true;
 	}
 	return true;

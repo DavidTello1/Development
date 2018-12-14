@@ -44,19 +44,19 @@ public:
 
 public: 
 
-	Animation		idle;
-	Animation		move_anim;
-	Animation		jump_anim;
-	Animation		falling_anim;
-	Animation		grip_idle;
-	Animation		grip_move;
-	Animation		slide_anim;
-	Animation		landing_anim;
-	Animation		grip_anim;
-	Animation		dying;
-	Animation		start_attacking;
-	Animation		attacking;
-	Animation		end_attacking;
+	Animation	idle;
+	Animation	move_anim;
+	Animation	jump_anim;
+	Animation	falling_anim;
+	Animation	grip_idle;
+	Animation	grip_move;
+	Animation	slide_anim;
+	Animation	landing_anim;
+	Animation	grip_anim;
+	Animation	dying;
+	Animation	start_attacking;
+	Animation	attacking;
+	Animation	end_attacking;
 };
 
 #endif // !__J1PLAYER_H__

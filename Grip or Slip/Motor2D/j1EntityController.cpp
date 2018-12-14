@@ -100,6 +100,8 @@ bool j1EntityController::PostUpdate()
 bool j1EntityController::CleanUp()
 {
 	DeleteEntities();
+	App->tex->UnLoad(texture);
+	App->tex->UnLoad(debug_tex);
 
 	return true;
 }

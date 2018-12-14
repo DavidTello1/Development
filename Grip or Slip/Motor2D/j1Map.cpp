@@ -214,7 +214,6 @@ bool j1Map::CleanUp()
 	// Remove all tilesets
 	p2List_item<TileSet*>* item;
 	item = data.tilesets.start;
-
 	while(item != NULL)
 	{
 		SDL_DestroyTexture(item->data->texture);
@@ -226,7 +225,6 @@ bool j1Map::CleanUp()
 	//Remove all object layers
 	p2List_item<ObjectsGroup*>* item3;
 	item3 = data.objLayers.start;
-
 	while (item3 != NULL)
 	{
 		RELEASE(item3->data);
@@ -237,7 +235,6 @@ bool j1Map::CleanUp()
 	// Remove all layers
 	p2List_item<MapLayer*>* item2;
 	item2 = data.layers.start;
-
 	while(item2 != NULL)
 	{
 		RELEASE(item2->data);
