@@ -1,1 +1,1 @@
-
+This is a little game made by two second year students of the Videogame Design and Development degree, for the Videogame Development subject. It's a 2D platformer with two levels where the player must change between maps to complete the game. It has been made using C++, SDL and pugi libraries. The maps have been made using Tiled.
