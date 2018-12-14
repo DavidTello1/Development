@@ -220,25 +220,25 @@ bool j1Scene::Update(float dt)
 	{
 		if (item->data->type != UI_Element::UI_type::IMAGE && item->data->type != UI_Element::UI_type::TEXT)
 		{
-			if (App->gui->CheckMousePos(item->data) == true && item->data->dragging == false) //hovering
+			if (App->gui->CheckMousePos(item->data) == true && item->data->dragging == false && App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) != KEY_REPEAT) //hovering
 			{
 				item->data->state = UI_Element::State::HOVER;
-				if (App->gui->CheckClick(item->data) == true) //on-click
+			}
+			if (App->gui->CheckClick(item->data) == true && item->data->state == UI_Element::State::HOVER) //on-click
+			{
+				if (item->data->dragable.x == false && item->data->dragable.y == false)
 				{
-					if (item->data->dragable.x == false && item->data->dragable.y == false)
-					{
-						item->data->state = UI_Element::State::LOGIC;
-						item->data->DoLogic(item->data->action);
+					item->data->state = UI_Element::State::LOGIC;
+					item->data->DoLogic(item->data->action);
 
-						if (item->data->children.start != nullptr)
-						{
-							item->data->children.start->data->Center(true, true);
-						}
-					}
-					else
+					if (item->data->children.start != nullptr)
 					{
-						item->data->state = UI_Element::State::DRAG;
+						item->data->children.start->data->Center(true, true);
 					}
+				}
+				else
+				{
+					item->data->state = UI_Element::State::DRAG;
 				}
 			}
 			if (item->data->state == UI_Element::State::DRAG && App->gui->CheckClick(item->data) == true)
