@@ -55,7 +55,7 @@ F1: Load the first level. F2: Restart the current level. F3: Load the second lev
 
 
 ### Webpage
-https://github.com/DavidTello1/Development
+https://davidtello1.github.io/Development/
 
 
 ### Disclosure
