@@ -1,6 +1,10 @@
 # GRIP OR SLIP
 This is a little game made by two second year students of the Videogame Design and Development degree. It's a 2D platformer with two levels where the player must change between maps to complete the game. It has been made using C++, SDL and pugi libraries. The maps have been made using Tiled.
 
+-Github link:
+https://github.com/DavidTello1/Development
+
+
 ### Controls
 -Movement with WASD keys: A (left), D (right), W (up & grip), S (down)
 
@@ -56,7 +60,6 @@ F1: Load the first level. F2: Restart the current level. F3: Load the second lev
 
 ### Webpage
 https://davidtello1.github.io/Development/
-
 
 ### Disclosure
 We do not own any of the sprites or tilesets presented in this game.
