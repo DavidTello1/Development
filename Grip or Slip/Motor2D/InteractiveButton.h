@@ -61,6 +61,30 @@ public:
 				App->main_menu->ResetUI_pos();
 			}
 			break;
+
+			case UI_Element::Action::ADJUST_VOL:
+			{
+
+			}
+			break;
+
+			case UI_Element::Action::ADJUST_FX:
+			{
+
+			}
+			break;
+
+			case UI_Element::Action::SAVE:
+			{
+				App->SaveGame();
+			}
+			break;
+
+			case UI_Element::Action::RESUME:
+			{
+				App->scene->pause = false;
+			}
+			break;
 		}
 	};
 

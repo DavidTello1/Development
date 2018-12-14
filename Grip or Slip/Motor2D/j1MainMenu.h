@@ -34,6 +34,7 @@ public:
 	bool CleanUp();
 
 	void UpdateState(UI_Element* data);
+	void SetChildrenVisible(UI_Element* elem);
 	void MoveUI_Left();
 	void ResetUI_pos();
 
@@ -59,11 +60,18 @@ public:	//all gui elements
 	UI_Element* settings_button;
 	UI_Element* settings_text;
 	UI_Element* settings_window;
+	UI_Element* settings_window_text;
 
 	UI_Element* back_button;
 	UI_Element* back_text;
 
 	UI_Element* web_page;
+	UI_Element* vol_slider_bar;
+	UI_Element* vol_slider_circle;
+	UI_Element* sfx_slider_bar;	
+	UI_Element* sfx_slider_circle;
+	UI_Element* volume_text;
+	UI_Element* sfx_text;
 
 	bool quit_game = false;
 	bool credits = false;

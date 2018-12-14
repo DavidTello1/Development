@@ -23,7 +23,8 @@ public:
 		IMAGE,
 		PUSHBUTTON,
 		WINDOW,
-		BACKGROUND
+		BACKGROUND,
+		SLIDER
 	};
 
 	enum Action
@@ -36,10 +37,12 @@ public:
 		EXIT,
 		PAUSE,
 		ADJUST_VOL,
+		ADJUST_FX,
 		RESUME,
 		MAIN_MENU,
 		BACK,
-		WEB
+		WEB,
+		SAVE
 	};
 
 	enum State
@@ -118,6 +121,7 @@ public:
 	const char* label = nullptr;
 	bool visible = true;
 	bool locked = false;
+	bool dragging = false;
 
 	UI_Element* parent;
 	p2List<UI_Element*> children;

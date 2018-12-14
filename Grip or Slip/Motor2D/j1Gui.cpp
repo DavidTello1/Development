@@ -90,6 +90,10 @@ UI_Element* j1Gui::AddUIElement(UI_Element::UI_type type, UI_Element::Action act
 		UI_elem = new JustSimpleUI(type, pos, size, parent, visible, dragable);
 		break;
 
+	case UI_Element::UI_type::BACKGROUND:
+		UI_elem = new JustSimpleUI(type, pos, size, parent, visible, dragable);
+		break;
+
 	case UI_Element::UI_type::PUSHBUTTON:
 		UI_elem = new InteractiveButton(type, action, pos, size, parent, visible, dragable);
 		break;
@@ -98,8 +102,8 @@ UI_Element* j1Gui::AddUIElement(UI_Element::UI_type type, UI_Element::Action act
 		UI_elem = new InteractiveButton(type, action, pos, size, parent, visible, dragable);
 		break;
 
-	case UI_Element::UI_type::BACKGROUND:
-		UI_elem = new JustSimpleUI(type, pos, size, parent, visible, dragable);
+	case UI_Element::UI_type::SLIDER:
+		UI_elem = new InteractiveButton(type, action, pos, size, parent, visible, dragable);
 		break;
 	}
 
@@ -128,7 +132,7 @@ bool j1Gui::Draw()
 			}
 			else if (UI_elem->data->type != UI_Element::UI_type::BACKGROUND) //rest of ui
 			{
-				App->render->Blit(App->gui->GetAtlas(), UI_elem->data->globalpos.x, UI_elem->data->globalpos.y, &UI_elem->data->rect, SDL_FLIP_NONE, 0);
+				App->render->Blit(GetAtlas(), UI_elem->data->globalpos.x, UI_elem->data->globalpos.y, &UI_elem->data->rect, SDL_FLIP_NONE, 0);
 			}
 		}
 		if (UI_Debug == true)
@@ -176,7 +180,7 @@ bool j1Gui::CheckClick(UI_Element* data)
 
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
 	{
-		dragging = false;
+		data->dragging = false;
 		return false;
 	}
 

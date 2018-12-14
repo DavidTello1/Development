@@ -54,7 +54,6 @@ public:
 	SDL_Rect* section;
 
 	bool UI_Debug = false;
-	bool dragging = false;
 
 };
 

@@ -220,7 +220,7 @@ bool j1Scene::Update(float dt)
 	{
 		if (item->data->type != UI_Element::UI_type::IMAGE && item->data->type != UI_Element::UI_type::TEXT)
 		{
-			if (App->gui->CheckMousePos(item->data) == true && App->gui->dragging == false) //hovering
+			if (App->gui->CheckMousePos(item->data) == true && item->data->dragging == false) //hovering
 			{
 				item->data->state = UI_Element::State::HOVER;
 				if (App->gui->CheckClick(item->data) == true) //on-click
@@ -243,7 +243,7 @@ bool j1Scene::Update(float dt)
 			}
 			if (item->data->state == UI_Element::State::DRAG && App->gui->CheckClick(item->data) == true)
 			{
-				App->gui->dragging = true;
+				item->data->dragging = true;
 				item->data->Drag();
 				App->gui->UpdateChildren();
 				UpdateState(item->data);
@@ -562,17 +562,17 @@ void j1Scene::UpdateSimpleUI()
 			{
 				if (player_lives >= 2)
 				{
-					item->data->rect = { 190,0,30,25 }; //full
+					item->data->rect = { 192,0,30,25 }; //full
 					break;
 				}
 				else if (player_lives == 1)
 				{
-					item->data->rect = { 219,0,30,25 }; //half
+					item->data->rect = { 221,0,30,25 }; //half
 					break;
 				}
 				else
 				{
-					item->data->rect = { 249,0,30,25 }; //empty
+					item->data->rect = { 251,0,30,25 }; //empty
 					break;
 				}
 			}
@@ -580,17 +580,17 @@ void j1Scene::UpdateSimpleUI()
 			{
 				if (player_lives >= 4)
 				{
-					item->data->rect = { 190,0,30,25 }; //full
+					item->data->rect = { 192,0,30,25 }; //full
 					break;
 				}
 				else if (player_lives == 3)
 				{
-					item->data->rect = { 219,0,30,25 }; //half
+					item->data->rect = { 221,0,30,25 }; //half
 					break;
 				}
 				else
 				{
-					item->data->rect = { 249,0,30,25 }; //empty
+					item->data->rect = { 251,0,30,25 }; //empty
 					break;
 				}
 			}
@@ -598,23 +598,23 @@ void j1Scene::UpdateSimpleUI()
 			{
 				if (player_lives == 6)
 				{
-					item->data->rect = { 190,0,30,25 }; //full
+					item->data->rect = { 192,0,30,25 }; //full
 					break;
 				}
 				else if (player_lives == 5)
 				{
-					item->data->rect = { 219,0,30,25 }; //half
+					item->data->rect = { 221,0,30,25 }; //half
 					break;
 				}
 				else
 				{
-					item->data->rect = { 249,0,30,25 }; //empty
+					item->data->rect = { 251,0,30,25 }; //empty
 					break;
 				}
 			}
 			else if (item->data == ui_coins) //Coins
 			{
-				item->data->rect = { 190,25,24,24 };
+				item->data->rect = { 192,25,24,24 };
 				break;
 			}
 			else if (item->data == ui_game_over)
