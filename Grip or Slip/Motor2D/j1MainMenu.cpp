@@ -166,24 +166,24 @@ bool j1MainMenu::Update(float dt)
 			}
 		}
 
-		if (App->gui->CheckMousePos(item->data) == true && item->data->dragging == false) //hovering
+		if (App->gui->CheckMousePos(item->data) == true && item->data->dragging == false && App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) != KEY_REPEAT) //hovering
 		{
 			item->data->state = UI_Element::State::HOVER;
-			if (App->gui->CheckClick(item->data) == true) //on-click
+		}
+		if (App->gui->CheckClick(item->data) == true && item->data->state == UI_Element::State::HOVER) //on-click
+		{
+			if (item->data->dragable.x == false && item->data->dragable.y == false)
 			{
-				if (item->data->dragable.x == false && item->data->dragable.y == false)
+				item->data->state = UI_Element::State::LOGIC;
+				if (item->data->locked == false)
 				{
-					item->data->state = UI_Element::State::LOGIC;
-					if (item->data->locked == false)
-					{
-						item->data->DoLogic(item->data->action);
-					}
-				}
-				else
-				{
-					item->data->state = UI_Element::State::DRAG;
 					item->data->DoLogic(item->data->action);
 				}
+			}
+			else
+			{
+				item->data->state = UI_Element::State::DRAG;
+				item->data->DoLogic(item->data->action);
 			}
 		}
 		if (item->data->state == UI_Element::State::DRAG && App->gui->CheckClick(item->data) == true)
@@ -400,6 +400,7 @@ void j1MainMenu::ResetUI_pos()
 	credits_window->visible = false;
 	settings_window->visible = false;
 	SetChildrenVisible(settings_window);
+	settings_window_text->visible = false;
 	vol_slider_bar->visible = false;
 	sfx_slider_bar->visible = false;
 	vol_slider_circle->visible = false;
