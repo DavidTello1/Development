@@ -273,6 +273,11 @@ bool j1Scene::PostUpdate()
 
 	bool ret = true;
 
+	if (countdown <= 0)
+	{
+		player_lives = 0;
+	}
+
 	if (player_lives <= 0)
 	{
 		pause = true;

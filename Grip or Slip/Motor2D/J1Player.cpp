@@ -182,7 +182,7 @@ bool j1Player::Update(float dt)
 			}
 			else if (App->scene->godmode == true)
 			{
-				final_speed.y -= speed.y;
+				final_speed.y -= speed.x;
 			}
 		}
 
@@ -195,7 +195,7 @@ bool j1Player::Update(float dt)
 			}
 			else if (App->scene->godmode == true)
 			{
-				final_speed.y += speed.y;
+				final_speed.y += speed.x;
 			}
 		}
 

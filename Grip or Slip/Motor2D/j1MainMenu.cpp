@@ -43,7 +43,7 @@ bool j1MainMenu::Start()
 	SDL_RenderGetViewport(App->render->renderer, &App->render->viewport);
 	
 	//WEB
-	web_page = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::WEB, { 20, App->render->viewport.h - 50}, { 0,0 }, nullptr, true, { false, false }, "WEB PAGE - www.webpage.com");
+	web_page = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::WEB, { 20, App->render->viewport.h - 40}, { 0,0 }, nullptr, true, { false, false }, "WEB PAGE - www.webpage.com");
 
 	//BG
 	menu_background = App->gui->AddUIElement(UI_Element::UI_type::BACKGROUND, UI_Element::Action::NONE, { 0,0 }, { App->win->width, App->win->height }, nullptr, true);
@@ -85,8 +85,8 @@ bool j1MainMenu::Start()
 	sfx_slider_bar->rect = { 0,44,190,18 };
 	volume_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0, 100 }, { 0,0 }, settings_window, false, { false, false }, "MUSIC: 0");
 	sfx_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0, 200 }, { 0,0 }, settings_window, false, { false, false }, "SOUND EFFECTS: 0");
-	vol_slider_circle = App->gui->AddUIElement(UI_Element::UI_type::SLIDER, UI_Element::Action::ADJUST_VOL, { App->render->viewport.w / 2 + 52, App->render->viewport.h / 3 + 74 }, { 26,26 }, nullptr, false, { true, false });
-	sfx_slider_circle = App->gui->AddUIElement(UI_Element::UI_type::SLIDER, UI_Element::Action::ADJUST_FX, { App->render->viewport.w / 2 + 52, App->render->viewport.h / 3 + 174 }, { 26,26 }, nullptr, false, { true, false });
+	vol_slider_circle = App->gui->AddUIElement(UI_Element::UI_type::SLIDER, UI_Element::Action::ADJUST_VOL, { App->render->viewport.w / 2 + 52, 312 }, { 26,26 }, nullptr, false, { true, false });
+	sfx_slider_circle = App->gui->AddUIElement(UI_Element::UI_type::SLIDER, UI_Element::Action::ADJUST_FX, { App->render->viewport.w / 2 + 52, 412 }, { 26,26 }, nullptr, false, { true, false });
 
 	//BACK
 	back_button = App->gui->AddUIElement(UI_Element::UI_type::PUSHBUTTON, UI_Element::Action::BACK, { App->render->viewport.w / 2 + 55, App->render->viewport.h / 3 + 352 }, { 190,48 }, nullptr, false);

@@ -242,8 +242,8 @@ void j1App::FinishUpdate()
 	framerate = 1000.0f / ptimer.ReadMs();
 	dt = 1.0f / framerate;
 
-	p2SString title("FPS: %i | Av.FPS: %.2f | MsLastFrame: %02u ms | Last dt: %.5f | FPS_Cap: %i | Vsync: %i || box1: %i | box2: %i | box3: %i | box4: %i",
-		prev_last_sec_frame_count, avg_fps, last_frame_ms, dt,  fpsCapON, vsyncON, scene->box_1_side, scene->box_2_side, scene->box_3_side, scene->box_4_side);
+	p2SString title("FPS: %i | Av.FPS: %.2f | MsLastFrame: %02u ms | Last dt: %.5f | FPS_Cap: %i | Vsync: %i",
+		prev_last_sec_frame_count, avg_fps, last_frame_ms, dt,  fpsCapON, vsyncON);
 	App->win->SetTitle(title.GetString());
 }
 
