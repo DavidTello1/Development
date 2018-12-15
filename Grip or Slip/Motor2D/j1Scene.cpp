@@ -81,6 +81,7 @@ bool j1Scene::Start()
 	ui_life3 = App->gui->AddUIElement(UI_Element::UI_type::IMAGE, UI_Element::Action::NONE, { 69,3 }, { 29,25 }, nullptr, true);
 	ui_coins = App->gui->AddUIElement(UI_Element::UI_type::IMAGE, UI_Element::Action::NONE, { 200,5 }, { 24,24 }, nullptr, true);
 	ui_game_over = App->gui->AddUIElement(UI_Element::UI_type::IMAGE, UI_Element::Action::NONE, { App->win->width / 2 - 313, App->win->height / 2 - 134 }, { 0,0 }, nullptr, false, { false, false });
+	ui_game_win = App->gui->AddUIElement(UI_Element::UI_type::IMAGE, UI_Element::Action::NONE, { App->win->width / 2 - 502, App->win->height / 2 - 250 }, { 0,0 }, nullptr, false, { false, false });
 	ui_coins_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 230,10 }, { 0,0 }, nullptr, true, { false, false }, "x0");
 	ui_score = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { App->win->width / 2 - 50, 10 }, { 0,0 }, nullptr, true, { false, false }, "Score: 0");
 	ui_timer = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 950,10 }, { 0,0 }, nullptr, true, { false, false }, "Timer: 0s");
@@ -97,6 +98,9 @@ bool j1Scene::Start()
 	score = 0;
 	countdown = 300;
 	player_lives = 6;
+	finish_1 = false;
+	finish_2 = false;
+	end_game = false;
 
 	timer.Start();
 	return true;
@@ -167,9 +171,12 @@ bool j1Scene::Update(float dt)
 		App->fpsCapON = !App->fpsCapON;
 	}
 
-	else if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !App->scenechange->IsSwitching() && player_lives <= 0) //Go to main menu after game over
+	else if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !App->scenechange->IsSwitching()) //Go to main menu after game over or win
 	{
+		if (player_lives <= 0 || end_game == true)
+		{
 			App->scenechange->SwitchScene(App->main_menu, App->scene);
+		}
 	}
 	//----
 	App->map->Draw();
@@ -241,6 +248,12 @@ bool j1Scene::PostUpdate()
 	{
 		player_lives = 0;
 	}
+	
+	if (end_game == true)
+	{
+		pause = true;
+		ui_game_win->visible = true;
+	}
 
 	if (player_lives <= 0)
 	{
@@ -267,7 +280,7 @@ bool j1Scene::PostUpdate()
 		}
 	}
 
-	if (to_end == true && !App->scenechange->IsChanging() == false)
+	if (to_end == true && App->scenechange->IsChanging() == false)
 	{
 		if (currentMap < map_names.count() - 1)
 		{
@@ -591,7 +604,12 @@ void j1Scene::UpdateSimpleUI()
 			}
 			else if (item->data == ui_game_over)
 			{
-				item->data->rect = { 0,187,626,267 };
+				item->data->rect = { 0,187,626,336 };
+				break;
+			}
+			else if (item->data == ui_game_win)
+			{
+				item->data->rect = { 0,524,1003,476 };
 				break;
 			}
 

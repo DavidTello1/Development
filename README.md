@@ -80,6 +80,8 @@ We do not own any of the sprites or tilesets presented in this game.
 
 -Main Menu Background: http://in2gpu.com/category/game-development/
 
+-Title made with Font-Generator.com
+
 ###Accomplishments
 
 - David Tello: EntitySystem, Player(Attack, animations, godmode), Grid, Enemies (without pathfinding), Brofiler, UML, Map Rotation

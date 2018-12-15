@@ -197,7 +197,42 @@ void Entity::Collider_Overlay()
 					}
 					else if (objectdata->data->name == "Finish")
 					{
-						App->scene->to_end = true;
+						if (App->scene->currentMap == 0)
+						{
+							if (App->scene->finish_2 == false)
+							{
+								App->scene->finish_1 = true;
+
+								//change map
+								App->map->angle = 0.0;
+								App->map->rotate = true;
+								App->map->rotate_end = false;
+								App->scene->change = true;
+							}
+							else
+							{
+								App->scene->end_game = true;
+								App->SaveGame();
+							}
+						}
+						else if (App->scene->currentMap == 1)
+						{
+							if (App->scene->finish_1 == false)
+							{
+								App->scene->finish_2 = true;
+
+								//change map
+								App->map->angle = 0.0;
+								App->map->rotate = true;
+								App->map->rotate_end = false;
+								App->scene->change = true;
+							}
+							else
+							{
+								App->scene->end_game = true;
+								App->SaveGame();
+							}
+						}
 					}
 				}
 			}

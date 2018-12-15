@@ -2238,7 +2238,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="33"/>
+   <tile gid="23"/>
    <tile gid="25"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -2286,7 +2286,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="23"/>
    <tile gid="25"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -2334,7 +2334,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="23"/>
    <tile gid="25"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -2382,7 +2382,55 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="23"/>
+   <tile gid="25"/>
    <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="1"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="23"/>
    <tile gid="25"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -2430,55 +2478,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="25"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="23"/>
    <tile gid="25"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -2526,7 +2526,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="23"/>
    <tile gid="26"/>
    <tile gid="14"/>
    <tile gid="14"/>
@@ -2574,7 +2574,7 @@
    <tile gid="14"/>
    <tile gid="14"/>
    <tile gid="14"/>
-   <tile gid="14"/>
+   <tile gid="27"/>
    <tile gid="16"/>
    <tile gid="34"/>
    <tile gid="34"/>
@@ -4119,7 +4119,7 @@
   <object id="58" name="Floor" x="128" y="288" width="160" height="32"/>
   <object id="59" name="Floor" x="288" y="320" width="64" height="32"/>
   <object id="60" name="Floor" x="576" y="320" width="960" height="32"/>
-  <object id="61" name="Wall" type="Wall_right" x="1504" y="0" width="32" height="128"/>
+  <object id="61" name="Wall" type="Wall_right" x="1504" y="0" width="32" height="320"/>
   <object id="65" name="Ceiling" x="32" y="960" width="400" height="32"/>
   <object id="67" name="Ceiling" x="1424" y="1056" width="96" height="32"/>
   <object id="70" name="Ceiling" x="32" y="368" width="320" height="16"/>
@@ -4147,7 +4147,7 @@
   <object id="101" name="Spikes" x="672" y="1216" width="32" height="24"/>
   <object id="102" name="Floor" x="320" y="544" width="192" height="32"/>
   <object id="103" name="Spikes" x="320" y="520" width="160" height="24"/>
-  <object id="105" name="Finish" x="1504" y="128" width="32" height="192"/>
+  <object id="105" name="Finish" x="1408" y="224" width="32" height="32"/>
   <object id="106" name="Wall" type="Wall_left" x="256" y="304" width="32" height="32"/>
   <object id="107" name="Wall" type="Wall_right" x="128" y="304" width="32" height="32"/>
   <object id="112" name="Floor" x="32" y="800" width="128" height="16"/>

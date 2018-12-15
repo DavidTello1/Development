@@ -71,6 +71,10 @@ public:
 	char current_coins[10] = "x0";
 	char current_time[20] = "TIME: 000";
 
+	bool finish_1 = false;
+	bool finish_2 = false;
+	bool end_game = false;
+
 private:
 
 	SDL_Texture* debug_tex;
@@ -94,6 +98,7 @@ public:
 	UI_Element* ui_main_menu;
 
 	UI_Element* ui_game_over;
+	UI_Element* ui_game_win;
 
 	SDL_Rect coins_bg;
 	SDL_Rect score_bg;

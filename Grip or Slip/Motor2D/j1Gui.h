@@ -51,8 +51,6 @@ private:
 public:
 
 	p2List<UI_Element*> UI_elements;
-	SDL_Rect* section;
-
 	bool UI_Debug = false;
 
 };

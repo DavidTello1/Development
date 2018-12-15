@@ -74,7 +74,7 @@
   </scene>
 
   <main_menu>
-    <menu_bg file="gui/menu_bg.png"/>
+    <menu_bg file="gui/title_bg.png"/>
     <credits file="gui/credits.png"/>
   </main_menu>
 

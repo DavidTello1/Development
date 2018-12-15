@@ -58,7 +58,6 @@ bool j1Gui::CleanUp()
 	LOG("Freeing GUI");
 	
 	App->tex->UnLoad(atlas);
-	RELEASE(section);
 
 	p2List_item<UI_Element*>*item = UI_elements.start;
 	while (item != nullptr)
