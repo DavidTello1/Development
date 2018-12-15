@@ -35,6 +35,12 @@ public:
 	void AdjustMusicVol(int value);
 	void AdjustSoundVol(int value);
 
+public:
+	p2SString			folder_music;
+	p2SString			folder_fx;
+	p2List<p2SString>	tracks_path;
+	p2List<p2SString>	fx_path;
+
 private:
 
 	_Mix_Music*			music = NULL;

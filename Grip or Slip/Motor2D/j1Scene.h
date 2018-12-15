@@ -45,6 +45,7 @@ public:
 
 	void UpdateState(UI_Element* data);
 	void UpdateSimpleUI();
+	void UpdatePauseMenu(UI_Element* data);
 
 public:
 
@@ -70,10 +71,17 @@ public:
 	char current_score[20] = "SCORE: 0000";
 	char current_coins[10] = "x0";
 	char current_time[20] = "TIME: 000";
+	char current_vol[20] = "MUSIC: 0";
+	char current_sfx[20] = "SOUND: 0";
+
 
 	bool finish_1 = false;
 	bool finish_2 = false;
 	bool end_game = false;
+
+	iPoint x_limit;
+	p2List_item<p2SString>* current_track;
+	p2List_item<p2SString>* current_fx;
 
 private:
 
@@ -106,6 +114,28 @@ public:
 
 	j1Timer timer;
 	j1Timer delay;
+
+
+	//pause
+	UI_Element* pause_window;
+	UI_Element* pause_window_text;
+
+	UI_Element* resume_button;
+	UI_Element* resume_text;
+
+	UI_Element* main_menu_button;
+	UI_Element* main_menu_text;
+
+	UI_Element* save_button;
+	UI_Element* save_text;
+
+	UI_Element* vol_slider_bar;
+	UI_Element* vol_slider_circle;
+	UI_Element* sfx_slider_bar;
+	UI_Element* sfx_slider_circle;
+	UI_Element* volume_text;
+	UI_Element* sfx_text;
+
 
 };
 

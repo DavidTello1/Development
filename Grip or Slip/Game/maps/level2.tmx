@@ -4067,8 +4067,8 @@
  </layer>
  <objectgroup name="Enemies">
   <object id="108" name="FlyingEnemy" x="128" y="1088" width="32" height="32"/>
-  <object id="109" name="LandEnemy" x="993" y="279" width="32" height="32"/>
-  <object id="110" name="LandEnemy" x="96" y="760" width="32" height="32"/>
+  <object id="109" name="LandEnemy" x="993" y="194" width="32" height="32"/>
+  <object id="110" name="LandEnemy" x="96" y="704" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="Collision">
   <object id="1" name="StartPosition" x="65" y="1224" width="32" height="32"/>

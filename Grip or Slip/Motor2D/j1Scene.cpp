@@ -36,6 +36,8 @@ bool j1Scene::Awake(pugi::xml_node& config)
 
 	LOG("Loading Scene");
 
+	current_track = App->audio->tracks_path.start;
+
 	fade_time = config.child("fade_time").attribute("value").as_float();
 
 	for (pugi::xml_node map = config.child("map_name"); map; map = map.next_sibling("map_name"))
@@ -53,6 +55,8 @@ bool j1Scene::Awake(pugi::xml_node& config)
 bool j1Scene::Start()
 {
 	bool ret = false;
+
+	App->audio->PlayMusic(PATH(App->audio->folder_music.GetString(), current_track->data.GetString()));
 
 	pause = false;
 	to_end = false;
@@ -76,6 +80,8 @@ bool j1Scene::Start()
 	SpawnEntities();
 
 	//create gui
+
+	//IN-GAME UI ---
 	ui_life1 = App->gui->AddUIElement(UI_Element::UI_type::IMAGE, UI_Element::Action::NONE, { 5,3 }, { 29,25 }, nullptr, true);
 	ui_life2 = App->gui->AddUIElement(UI_Element::UI_type::IMAGE, UI_Element::Action::NONE, { 37,3 }, { 29,25 }, nullptr, true);
 	ui_life3 = App->gui->AddUIElement(UI_Element::UI_type::IMAGE, UI_Element::Action::NONE, { 69,3 }, { 29,25 }, nullptr, true);
@@ -94,6 +100,35 @@ bool j1Scene::Start()
 	score_bg = { App->win->width/2 - 57, 5,85,25 };
 	timer_bg = { 943,6,70,25 };
 
+	//PAUSE MENU ---
+	pause_window = App->gui->AddUIElement(UI_Element::UI_type::WINDOW, UI_Element::Action::NONE, { App->render->viewport.w / 2 - 187, App->render->viewport.h / 2 - 212 }, { 375,425 }, nullptr, false);
+	pause_window_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0, 40 }, { 0,0 }, pause_window, false, { false, false }, "*PAUSE*");
+	pause_window->rect = { 628,0,375,425 };
+
+	//RESUME
+	resume_button = App->gui->AddUIElement(UI_Element::UI_type::PUSHBUTTON, UI_Element::Action::RESUME, { 0, 350 }, { 190,48 }, pause_window, false);
+	resume_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0,0 }, { 0,0 }, resume_button, false, { false, false }, "RESUME");
+
+	//SETTINGS
+	vol_slider_bar = App->gui->AddUIElement(UI_Element::UI_type::BACKGROUND, UI_Element::Action::NONE, { 0, 240 }, { 158,18 }, pause_window, false);
+	sfx_slider_bar = App->gui->AddUIElement(UI_Element::UI_type::BACKGROUND, UI_Element::Action::NONE, { 0, 310 }, { 158,18 }, pause_window, false);
+	vol_slider_bar->rect = { 0,26,158,18 };
+	sfx_slider_bar->rect = { 0,44,158,18 };
+	volume_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0, 210 }, { 0,0 }, pause_window, false, { false, false }, "MUSIC: 0");
+	sfx_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0, 280 }, { 0,0 }, pause_window, false, { false, false }, "SOUND EFFECTS: 0");
+	vol_slider_circle = App->gui->AddUIElement(UI_Element::UI_type::SLIDER, UI_Element::Action::ADJUST_VOL, { App->render->viewport.w / 2 - 79, 378 }, { 26,26 }, nullptr, false, { true, false });
+	sfx_slider_circle = App->gui->AddUIElement(UI_Element::UI_type::SLIDER, UI_Element::Action::ADJUST_FX, { App->render->viewport.w / 2 - 79, 448 }, { 26,26 }, nullptr, false, { true, false });
+
+	//SAVE
+	save_button = App->gui->AddUIElement(UI_Element::UI_type::PUSHBUTTON, UI_Element::Action::SAVE, { 0, 140 }, { 190,48 }, pause_window, false);
+	save_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0,0 }, { 0,0 }, save_button, false, { false, false }, "SAVE");
+
+	//MAIN MENU
+	main_menu_button = App->gui->AddUIElement(UI_Element::UI_type::PUSHBUTTON, UI_Element::Action::MAIN_MENU, {  0, 80 }, { 190,48 }, pause_window, false);
+	main_menu_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0,0 }, { 0,0 }, main_menu_button, false, { false, false }, "MAIN MENU");
+
+
+	//init
 	coins = 0;
 	score = 0;
 	countdown = 300;
@@ -101,8 +136,9 @@ bool j1Scene::Start()
 	finish_1 = false;
 	finish_2 = false;
 	end_game = false;
-
 	timer.Start();
+	pause_window_text->color = volume_text->color = sfx_text->color =  save_text->color = main_menu_text->color = resume_text->color = { 0,0,0,255 };
+
 	return true;
 }
 
@@ -112,6 +148,47 @@ bool j1Scene::PreUpdate()
 	BROFILER_CATEGORY("Scene PreUpdate", Profiler::Color::DarkOrange);
 
 	//LOG("IsChanging: %i", App->scenechange->IsChanging());
+
+	if (pause == true)
+	{
+		resume_button->visible = true;
+		resume_text->visible = true;
+		main_menu_button->visible = true;
+		main_menu_text->visible = true;
+		save_button->visible = true;
+		save_text->visible = true;
+		pause_window->visible = true;
+		pause_window_text->visible = true;
+		vol_slider_bar->visible = true;
+		vol_slider_circle->visible = true;
+		sfx_slider_bar->visible = true;
+		sfx_slider_circle->visible = true;
+		volume_text->visible = true;
+		sfx_text->visible = true;
+	}
+	else
+	{
+		resume_button->visible = false;
+		resume_text->visible = false;
+		main_menu_button->visible = false;
+		main_menu_text->visible = false;
+		save_button->visible = false;
+		save_text->visible = false;
+		pause_window->visible = false;
+		pause_window_text->visible = false;
+		vol_slider_bar->visible = false;
+		vol_slider_circle->visible = false;
+		sfx_slider_bar->visible = false;
+		sfx_slider_circle->visible = false;
+		volume_text->visible = false;
+		sfx_text->visible = false;
+	}
+
+	x_limit.x = vol_slider_bar->globalpos.x;
+	x_limit.y = vol_slider_bar->globalpos.x + vol_slider_bar->size.x - vol_slider_circle->size.x;
+
+	vol_slider_circle->globalpos.x = App->main_menu->vol_value + x_limit.x;
+	sfx_slider_circle->globalpos.x = App->main_menu->sfx_value + x_limit.x;
 
 	return true;
 }
@@ -189,41 +266,109 @@ bool j1Scene::Update(float dt)
 	p2List_item<UI_Element*>* item = App->gui->UI_elements.end;
 	while (item != nullptr)
 	{
-		if (item->data->type != UI_Element::UI_type::IMAGE && item->data->type != UI_Element::UI_type::TEXT)
+		if (item->data->children.start != nullptr) //center children
 		{
-			if (App->gui->CheckMousePos(item->data) == true && item->data->dragging == false && App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) != KEY_REPEAT) //hovering
+			if (item->data->type != UI_Element::UI_type::PUSHBUTTON)
 			{
-				item->data->state = UI_Element::State::HOVER;
-			}
-			if (App->gui->CheckClick(item->data) == true && item->data->state == UI_Element::State::HOVER) //on-click
-			{
-				if (item->data->dragable.x == false && item->data->dragable.y == false)
+				if (item->data->type == UI_Element::UI_type::WINDOW)
 				{
-					item->data->state = UI_Element::State::LOGIC;
-					item->data->DoLogic(item->data->action);
-
-					if (item->data->children.start != nullptr)
+					p2List_item<UI_Element*>* tmp = item->data->children.start;
+					while (tmp != nullptr)
 					{
-						item->data->children.start->data->Center(true, true);
+						tmp->data->Center(true,false); //center X
+						tmp = tmp->next;
 					}
 				}
-				else
+				else if (item->data->type == UI_Element::UI_type::BACKGROUND)
 				{
-					item->data->state = UI_Element::State::DRAG;
+					p2List_item<UI_Element*>* tmp = item->data->children.start;
+					while (tmp != nullptr)
+					{
+						if (tmp->data->type == UI_Element::UI_type::SLIDER)
+						tmp->data->Center(false, true); //center Y
+						tmp = tmp->next;
+					}
 				}
 			}
-			if (item->data->state == UI_Element::State::DRAG && App->gui->CheckClick(item->data) == true)
+			else
 			{
-				item->data->dragging = true;
-				item->data->Drag();
-				App->gui->UpdateChildren();
-				UpdateState(item->data);
-			}
-			else if (App->gui->CheckMousePos(item->data) == false && item->data->state != UI_Element::State::DRAG)
-			{
-				item->data->state = UI_Element::State::IDLE; //change to idle
+				p2List_item<UI_Element*>* tmp = item->data->children.start;
+				while (tmp != nullptr)
+				{
+					tmp->data->Center(true, true); //center X and Y
+					tmp = tmp->next;
+				}
 			}
 		}
+
+		if (App->gui->CheckMousePos(item->data) == true && item->data->dragging == false && App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) != KEY_REPEAT) //hovering
+		{
+			item->data->state = UI_Element::State::HOVER;
+		}
+		if (App->gui->CheckClick(item->data) == true && item->data->state == UI_Element::State::HOVER) //on-click
+		{
+			if (item->data->dragable.x == false && item->data->dragable.y == false)
+			{
+				item->data->state = UI_Element::State::LOGIC;
+				if (item->data->locked == false)
+				{
+					item->data->DoLogic(item->data->action);
+				}
+			}
+			else
+			{
+				item->data->state = UI_Element::State::DRAG;
+				item->data->DoLogic(item->data->action);
+			}
+		}
+		if (item->data->state == UI_Element::State::DRAG && App->gui->CheckClick(item->data) == true)
+		{
+			item->data->dragging = true;
+			item->data->Drag();
+
+			if (item->data->action == UI_Element::Action::ADJUST_VOL)
+			{
+				App->main_menu->vol_value = item->data->globalpos.x - x_limit.x;
+				if (App->main_menu->vol_value <= -1)
+				{
+					App->main_menu->vol_value = 0;
+				}
+				else if (App->main_menu->vol_value >= SDL_MIX_MAXVOLUME + 1)
+				{
+					App->main_menu->vol_value = SDL_MIX_MAXVOLUME;
+				}
+				item->data->DoLogic(item->data->action);
+			}
+			else if (item->data->action == UI_Element::Action::ADJUST_FX)
+			{
+				App->main_menu->sfx_value = item->data->globalpos.x - x_limit.x;
+				if (App->main_menu->sfx_value <= -1)
+				{
+					App->main_menu->sfx_value = 0;
+				}
+				else if (App->main_menu->sfx_value >= SDL_MIX_MAXVOLUME+1)
+				{
+					App->main_menu->sfx_value = SDL_MIX_MAXVOLUME;
+				}
+				item->data->DoLogic(item->data->action);
+			}
+
+			if (item->data->globalpos.x <= x_limit.x) //left limit
+			{
+				item->data->globalpos.x = x_limit.x;
+			}
+			else if (item->data->globalpos.x >= x_limit.y) //right limit
+			{
+				item->data->globalpos.x = x_limit.y;
+			}
+
+			App->gui->UpdateChildren();
+		}
+		else if (App->gui->CheckMousePos(item->data) == false && item->data->state != UI_Element::State::DRAG)
+		{
+			item->data->state = UI_Element::State::IDLE; //change to idle
+		}
+		UpdateState(item->data);
 		item = item->prev;
 	}
 	
@@ -233,6 +378,18 @@ bool j1Scene::Update(float dt)
 
 	UpdateSimpleUI();
 	App->gui->Draw();
+
+	if (pause == true) //draw settings slider bars and circles
+	{
+		//bars
+		App->render->Blit(App->gui->GetAtlas(), vol_slider_bar->globalpos.x, vol_slider_bar->globalpos.y, &vol_slider_bar->rect, SDL_FLIP_NONE, 0);
+		App->render->Blit(App->gui->GetAtlas(), sfx_slider_bar->globalpos.x, sfx_slider_bar->globalpos.y, &sfx_slider_bar->rect, SDL_FLIP_NONE, 0);
+
+		//circles
+		App->render->Blit(App->gui->GetAtlas(), vol_slider_circle->globalpos.x, vol_slider_circle->globalpos.y, &vol_slider_circle->rect, SDL_FLIP_NONE, 0);
+		App->render->Blit(App->gui->GetAtlas(), sfx_slider_circle->globalpos.x, sfx_slider_circle->globalpos.y, &sfx_slider_circle->rect, SDL_FLIP_NONE, 0);
+	}
+
 
 	return true;
 }
@@ -244,18 +401,18 @@ bool j1Scene::PostUpdate()
 
 	bool ret = true;
 
-	if (countdown <= 0)
+	if (countdown <= 0) //time up
 	{
 		player_lives = 0;
 	}
 	
-	if (end_game == true)
+	if (end_game == true) //win game
 	{
 		pause = true;
 		ui_game_win->visible = true;
 	}
 
-	if (player_lives <= 0)
+	if (player_lives <= 0) //game over
 	{
 		pause = true;
 		ui_game_over->visible = true;
@@ -263,6 +420,19 @@ bool j1Scene::PostUpdate()
 		pugi::xml_document data;
 		data.load_file("save_game");
 		data.reset();
+	}
+
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
+	{
+		p2List_item<UI_Element*>* item = App->gui->UI_elements.start;
+		while (item != nullptr)
+		{
+			if (item->data->dragging == false)
+			{
+				item->data->state = UI_Element::State::IDLE;
+			}
+			item = item->next;
+		}
 	}
 
 	if (change == true) //rotate map and change
@@ -494,43 +664,68 @@ void j1Scene::UpdateState(UI_Element* data)
 		switch (data->state)
 		{
 		case UI_Element::State::IDLE:
-			data->rect = { 642,170,230,64 };
+			data->rect = { 380,139,190,48 };
 			break;
 
 		case UI_Element::State::HOVER:
-			data->rect = { 0,114,230,64 };
+			data->rect = { 190,139,190,48 };
 			break;
 
 		case UI_Element::State::LOGIC:
-			data->rect = { 411,170,230,64 };
-			break;
-
-		case UI_Element::State::DRAG:
-			data->rect = { 411,170,230,64 };
+			data->rect = { 190,90,190,48 };
 			break;
 		}
 		break;
 
-	case UI_Element::UI_type::WINDOW: //window
-		switch (data->state)
+	case UI_Element::UI_type::SLIDER: //slider
+		if (data->action == UI_Element::Action::ADJUST_FX)
 		{
-		case UI_Element::State::IDLE:
-			data->rect = { 26,536,424,458 };
+			switch (data->state)
+			{
+			case UI_Element::State::IDLE:
+			{
+				data->rect = { 0,0,26,26 };
+			}
 			break;
 
-		case UI_Element::State::HOVER:
-			data->rect = { 26,536,424,458 };
+			case UI_Element::State::HOVER:
+			{
+				data->rect = { 52,0,26,26 };
+			}
 			break;
 
-		case UI_Element::State::LOGIC:
-			data->rect = { 26,536,424,458 };
+			case UI_Element::State::DRAG:
+			{
+				data->rect = { 104,0,26,26 };
+			}
 			break;
-
-		case UI_Element::State::DRAG:
-			data->rect = { 26,536,424,458 };
+			}
 			break;
 		}
-		break;
+		else if (data->action == UI_Element::Action::ADJUST_VOL)
+		{
+			switch (data->state)
+			{
+			case UI_Element::State::IDLE:
+			{
+				data->rect = { 26,0,26,26 };
+			}
+			break;
+
+			case UI_Element::State::HOVER:
+			{
+				data->rect = { 78,0,26,26 };
+			}
+			break;
+
+			case UI_Element::State::DRAG:
+			{
+				data->rect = { 130,0,26,26 };
+			}
+			break;
+			}
+			break;
+		}
 	}
 }
 
@@ -645,6 +840,18 @@ void j1Scene::UpdateSimpleUI()
 				}
 				sprintf_s(current_time, "TIME: %u", countdown);
 				item->data->label = current_time;
+				break;
+			}
+			else if (item->data == volume_text) //volume
+			{
+				sprintf_s(current_vol, "MUSIC: %d", App->main_menu->vol_value);
+				item->data->label = current_vol;
+				break;
+			}
+			else if (item->data == sfx_text) //sfx
+			{
+				sprintf_s(current_sfx, "SOUND: %d", App->main_menu->sfx_value);
+				item->data->label = current_sfx;
 				break;
 			}
 		}

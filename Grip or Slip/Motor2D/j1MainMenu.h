@@ -79,6 +79,13 @@ public:	//all gui elements
 	bool settings = false;
 
 	iPoint x_limit;
+	int vol_value = 0;
+	int sfx_value = 0;
+	p2List_item<p2SString>* current_track;
+	p2List_item<p2SString>* current_fx;
+	char current_vol[20] = "MUSIC: 0";
+	char current_sfx[20] = "SOUND: 0";
+
 };
 
 #endif // __j1MAIN_MENU_H__

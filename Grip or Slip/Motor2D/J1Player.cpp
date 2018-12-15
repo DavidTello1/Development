@@ -37,6 +37,7 @@ bool j1Player::Awake(pugi::xml_node & config)
 	gravity = config.child("gravity").attribute("value").as_int();
 	gravity_active = config.child("gravity_active").attribute("value").as_bool();
 
+	dead = false;
 	final_speed = { 0,0 };
 
 	return ret;
@@ -130,22 +131,24 @@ bool j1Player::Update(float dt)
 
 		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) //left
 		{
-			if (attack == false && gripped == false || App->scene->godmode == true)
+			if (attack == false  || App->scene->godmode == true)
 			{
 				flip = false;
-
-				if (grid == true)
+				if (gripped == false)
 				{
-					grid_moving = true;
-					final_speed.x -= speed.x / 2;
-				}
-				else
-				{
-					left = true;
-					final_speed.x -= speed.x;
-					if (wall_left == true && grounded == false)
+					if (grid == true)
 					{
-						sliding = true;
+						grid_moving = true;
+						final_speed.x -= speed.x / 2;
+					}
+					else
+					{
+						left = true;
+						final_speed.x -= speed.x;
+						if (wall_left == true && grounded == false)
+						{
+							sliding = true;
+						}
 					}
 				}
 			}
@@ -157,17 +160,20 @@ bool j1Player::Update(float dt)
 			{
 				flip = true;
 
-				if (grid == true) {
-					grid_moving = true;
-					final_speed.x += speed.x / 2;
-				}
-				else
+				if (gripped == false)
 				{
-					right = true;
-					final_speed.x += speed.x;
-					if (wall_right == true && grounded == false)
+					if (grid == true) {
+						grid_moving = true;
+						final_speed.x += speed.x / 2;
+					}
+					else
 					{
-						sliding = true;
+						right = true;
+						final_speed.x += speed.x;
+						if (wall_right == true && grounded == false)
+						{
+							sliding = true;
+						}
 					}
 				}
 			}

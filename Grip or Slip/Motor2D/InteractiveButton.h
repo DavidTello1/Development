@@ -66,13 +66,13 @@ public:
 
 			case UI_Element::Action::ADJUST_VOL:
 			{
-				//App->audio->AdjustMusicVol(music_vol);
+				App->audio->AdjustMusicVol(App->main_menu->vol_value);
 			}
 			break;
 
 			case UI_Element::Action::ADJUST_FX:
 			{
-				//App->audio->AdjustSoundVol(sfx_vol);
+				App->audio->AdjustSoundVol(App->main_menu->sfx_value);
 			}
 			break;
 
@@ -85,6 +85,12 @@ public:
 			case UI_Element::Action::RESUME:
 			{
 				App->scene->pause = false;
+			}
+			break;
+
+			case UI_Element::Action::MAIN_MENU:
+			{
+				App->scenechange->SwitchScene(App->main_menu, App->scene);
 			}
 			break;
 		}

@@ -50,6 +50,36 @@ bool j1Audio::Awake(pugi::xml_node& config)
 		ret = true;
 	}
 
+	//initialize music and fx
+	folder_music.create(config.child("music").child("folder").child_value());
+	folder_fx.create(config.child("fx").child("folder").child_value());
+	LOG("Folder music %s", folder_music.GetString());
+	LOG("Folder fx %s", folder_fx.GetString());
+
+	pugi::xml_node music_node = config.child("music").child("track");
+	int i = 0;
+	for (music_node; music_node; music_node = music_node.next_sibling("track")) 
+	{
+		tracks_path.add(music_node.child_value());
+		LOG("Loading paths %s", tracks_path[i++].GetString());
+	}
+
+	pugi::xml_node fx_node = config.child("fx").child("sound");
+	i = 0;
+	for (fx_node; fx_node; fx_node = fx_node.next_sibling("sound")) 
+	{
+		fx_path.add(fx_node.child_value());
+		LOG("Loading fx path %s  i: %d", fx_path[i].GetString(), i - 1);
+		i++;
+	}
+
+	p2List_item<p2SString>* item = fx_path.start; //load fx
+	while (item != nullptr)
+	{
+		LoadFx(PATH(folder_fx.GetString(), item->data.GetString()));
+		item = item->next;
+	}
+
 	return ret;
 }
 

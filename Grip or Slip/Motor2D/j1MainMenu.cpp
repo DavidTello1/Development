@@ -15,6 +15,8 @@
 #include "InteractiveButton.h"
 #include "JustSimpleUI.h"
 
+#include <stdio.h>
+
 j1MainMenu::j1MainMenu() : j1Module()
 {
 	name.create("main_menu");
@@ -32,6 +34,9 @@ bool j1MainMenu::Awake(pugi::xml_node& conf)
 
 	menu_bg_file_name = conf.child("menu_bg").attribute("file").as_string("");
 	credits_file_name = conf.child("credits").attribute("file").as_string("");
+
+	vol_value = conf.child("music").attribute("vol").as_int();
+	sfx_value = conf.child("music").attribute("sfx").as_int();
 
 	return ret;
 }
@@ -79,14 +84,14 @@ bool j1MainMenu::Start()
 	settings_window = App->gui->AddUIElement(UI_Element::UI_type::WINDOW, UI_Element::Action::NONE, { App->render->viewport.w / 2 - 40, App->render->viewport.h / 3 - 50 }, { 375,425 }, nullptr, false);
 	settings_window->rect = { 628,0,375,425 };
 	settings_window_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { App->render->viewport.w / 2 + 115, App->render->viewport.h / 3 - 20 }, { 0,0 }, nullptr, false, { false, false }, "*SETTINGS*");
-	vol_slider_bar = App->gui->AddUIElement(UI_Element::UI_type::BACKGROUND, UI_Element::Action::NONE, { App->render->viewport.w / 2 + 150, 130 }, { 190,18 }, settings_window, false);
-	sfx_slider_bar = App->gui->AddUIElement(UI_Element::UI_type::BACKGROUND, UI_Element::Action::NONE, { App->render->viewport.w / 2 + 150, 230 }, { 190,18 }, settings_window, false);
-	vol_slider_bar->rect = { 0,26,190,18 };
-	sfx_slider_bar->rect = { 0,44,190,18 };
+	vol_slider_bar = App->gui->AddUIElement(UI_Element::UI_type::BACKGROUND, UI_Element::Action::NONE, { App->render->viewport.w / 2 + 134, 130 }, { 158,18 }, settings_window, false);
+	sfx_slider_bar = App->gui->AddUIElement(UI_Element::UI_type::BACKGROUND, UI_Element::Action::NONE, { App->render->viewport.w / 2 + 134, 230 }, { 158,18 }, settings_window, false);
+	vol_slider_bar->rect = { 0,26,158,18 };
+	sfx_slider_bar->rect = { 0,44,158,18 };
 	volume_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0, 100 }, { 0,0 }, settings_window, false, { false, false }, "MUSIC: 0");
 	sfx_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0, 200 }, { 0,0 }, settings_window, false, { false, false }, "SOUND EFFECTS: 0");
-	vol_slider_circle = App->gui->AddUIElement(UI_Element::UI_type::SLIDER, UI_Element::Action::ADJUST_VOL, { App->render->viewport.w / 2 + 52, 312 }, { 26,26 }, nullptr, false, { true, false });
-	sfx_slider_circle = App->gui->AddUIElement(UI_Element::UI_type::SLIDER, UI_Element::Action::ADJUST_FX, { App->render->viewport.w / 2 + 52, 412 }, { 26,26 }, nullptr, false, { true, false });
+	vol_slider_circle = App->gui->AddUIElement(UI_Element::UI_type::SLIDER, UI_Element::Action::ADJUST_VOL, { App->render->viewport.w / 2 + 68, 312 }, { 26,26 }, nullptr, false, { true, false });
+	sfx_slider_circle = App->gui->AddUIElement(UI_Element::UI_type::SLIDER, UI_Element::Action::ADJUST_FX, { App->render->viewport.w / 2 + 68, 412 }, { 26,26 }, nullptr, false, { true, false });
 
 	//BACK
 	back_button = App->gui->AddUIElement(UI_Element::UI_type::PUSHBUTTON, UI_Element::Action::BACK, { App->render->viewport.w / 2 + 55, App->render->viewport.h / 3 + 352 }, { 190,48 }, nullptr, false);
@@ -120,6 +125,10 @@ bool j1MainMenu::PreUpdate()
 
 	x_limit.x = vol_slider_bar->globalpos.x;
 	x_limit.y = vol_slider_bar->globalpos.x + vol_slider_bar->size.x - vol_slider_circle->size.x;
+
+	vol_slider_circle->globalpos.x = vol_value + x_limit.x;
+	sfx_slider_circle->globalpos.x = sfx_value + x_limit.x;
+
 	return true;
 }
 
@@ -194,11 +203,38 @@ bool j1MainMenu::Update(float dt)
 			item->data->dragging = true;
 			item->data->Drag();
 
+			if (item->data->action == UI_Element::Action::ADJUST_VOL)
+			{
+				vol_value = item->data->globalpos.x - x_limit.x;
+				if (vol_value <= -1)
+				{
+					vol_value = 0;
+				}
+				else if (vol_value >= SDL_MIX_MAXVOLUME + 1)
+				{
+					vol_value = SDL_MIX_MAXVOLUME;
+				}
+				item->data->DoLogic(item->data->action);
+			}
+			else if (item->data->action == UI_Element::Action::ADJUST_FX)
+			{
+				sfx_value = item->data->globalpos.x - x_limit.x;
+				if (sfx_value <= -1)
+				{
+					sfx_value = 0;
+				}
+				else if (sfx_value >= SDL_MIX_MAXVOLUME + 1)
+				{
+					sfx_value = SDL_MIX_MAXVOLUME;
+				}
+				item->data->DoLogic(item->data->action);
+			}
+
 			if (item->data->globalpos.x <= x_limit.x) //left limit
 			{
 				item->data->globalpos.x = x_limit.x;
 			}
-			if (item->data->globalpos.x >= x_limit.y) //right limit
+			else if (item->data->globalpos.x >= x_limit.y) //right limit
 			{
 				item->data->globalpos.x = x_limit.y;
 			}
@@ -316,9 +352,7 @@ void j1MainMenu::UpdateState(UI_Element* data)
 		break;
 
 	case UI_Element::UI_type::TEXT: //web text
-		switch (data->action)
-		{
-		case UI_Element::Action::WEB:
+		if (data == web_page)
 		{
 			switch (data->state)
 			{
@@ -334,33 +368,70 @@ void j1MainMenu::UpdateState(UI_Element* data)
 			}
 			break;
 			}
-		}break;
+		}
+		else if (data == volume_text) //volume
+		{
+			sprintf_s(current_vol, "MUSIC: %d", vol_value);
+			data->label = current_vol;
+			break;
+		}
+		else if (data == sfx_text) //sfx
+		{
+			sprintf_s(current_sfx, "SOUND: %d", sfx_value);
+			data->label = current_sfx;
+			break;
 		}
 		break;
 
 	case UI_Element::UI_type::SLIDER: //slider
-		switch (data->state)
+		if (data->action == UI_Element::Action::ADJUST_FX)
 		{
-		case UI_Element::State::IDLE:
+			switch (data->state)
+			{
+			case UI_Element::State::IDLE:
 			{
 				data->rect = { 0,0,26,26 };
 			}
 			break;
 
-		case UI_Element::State::HOVER:
+			case UI_Element::State::HOVER:
 			{
 				data->rect = { 52,0,26,26 };
 			}
 			break;
 
-		case UI_Element::State::DRAG:
+			case UI_Element::State::DRAG:
 			{
-				data->rect = { 78,90,26,26 };
+				data->rect = { 104,0,26,26 };
+			}
+			break;
 			}
 			break;
 		}
-		break;
+		else if (data->action == UI_Element::Action::ADJUST_VOL)
+		{
+			switch (data->state)
+			{
+			case UI_Element::State::IDLE:
+			{
+				data->rect = { 26,0,26,26 };
+			}
+			break;
 
+			case UI_Element::State::HOVER:
+			{
+				data->rect = { 78,0,26,26 };
+			}
+			break;
+
+			case UI_Element::State::DRAG:
+			{
+				data->rect = { 130,0,26,26 };
+			}
+			break;
+			}
+			break;
+		}
 	}
 }
 

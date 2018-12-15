@@ -17,7 +17,17 @@
     <resizable value="true"/>
     <fullscreen_window value="false"/>
   </window>
-  
+
+  <audio>
+    <music>
+      <folder>audio/music</folder>
+      <track>music_sadpiano.ogg</track>
+    </music>
+    <fx>
+      <folder>audio/fx</folder>
+    </fx>
+  </audio>
+
   <gui>
     <atlas file="gui/atlas.png"/>
   </gui>
@@ -60,7 +70,7 @@
       <sightCollider width ="160" height="96"/>
       <gravity value="250"/>
       <dead value="false"/>
-      <lives value="3"/>
+      <lives value="2"/>
     </land_enemy>
     <box>
       <speed x="50" y="50"/>
@@ -76,6 +86,7 @@
   <main_menu>
     <menu_bg file="gui/title_bg.png"/>
     <credits file="gui/credits.png"/>
+    <music vol="75" sfx="40"/>
   </main_menu>
 
   </config>

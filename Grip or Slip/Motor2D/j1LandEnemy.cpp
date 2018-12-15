@@ -42,7 +42,7 @@ LandEnemy::LandEnemy(iPoint pos) : Entity(entityType::LAND_ENEMY)
 	dead = config.child("dead").attribute("value").as_bool();
 	lives = config.child("lives").attribute("value").as_int();
 	
-	gravity = 150;
+	gravity = 100;
 
 	entityPath.Clear();
 	LoadAnimations();
