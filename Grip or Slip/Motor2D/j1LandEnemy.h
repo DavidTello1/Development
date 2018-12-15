@@ -17,12 +17,12 @@ public:
 	void Save(pugi::xml_node&) const;
 
 	void followPath();
-	void standardPath();
 
 	void ChangeAnimation();
 	void LoadAnimations();
 
 public:
+	p2DynArray<iPoint> entityPath;
 
 	Animation		idle;
 	Animation		attacking;

@@ -42,7 +42,7 @@ LandEnemy::LandEnemy(iPoint pos) : Entity(entityType::LAND_ENEMY)
 	dead = config.child("dead").attribute("value").as_bool();
 	lives = config.child("lives").attribute("value").as_int();
 	
-	gravity = 8;
+	gravity = 150;
 
 	LoadAnimations();
 	Current_Animation = &idle;
@@ -102,12 +102,23 @@ bool LandEnemy::Update(float dt)
 			App->scene->score += 1000;
 		}
 
-		if (!chasing_player) {
-			//LOG("Doing standard path");
-			//standardPath();
+		if (App->entitycontroller->draw_path) //draw path
+		{
+			const p2DynArray<iPoint>* path = &entityPath;
+			for (uint i = 0; i < path->Count(); ++i)
+			{
+				iPoint pos = App->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+				App->render->Blit(App->entitycontroller->debug_tex, pos.x, pos.y);
+			}
 		}
-		else {
-			//followPath();
+
+		if (chasing_player) 
+		{
+			followPath();
+		}
+		else
+		{
+			entityPath.Clear();
 		}
 	}
 
@@ -120,6 +131,7 @@ bool LandEnemy::Update(float dt)
 void LandEnemy::CleanUp()
 {
 	LOG("---LandEnemy Deleted");
+	entityPath.Clear();
 }
 
 void LandEnemy::Load(pugi::xml_node& data)
@@ -167,22 +179,27 @@ void LandEnemy::followPath()
 			break;
 		}
 	}
-	if (&player->data->position != entityPath.At(entityPath.Count())) {
+	if (&player->data->position != entityPath.At(entityPath.Count())) 
+	{
 		entityPath.Clear();
 		App->pathfinding->CreatePath(App->map->WorldToMap(position.x, position.y),
 			App->map->WorldToMap(player->data->position.x + (player->data->Collider.w / 2), player->data->position.y + (player->data->Collider.w / 2)), entityPath);
 	}
+
 	iPoint curr_cell;
 	iPoint* next_cell = nullptr;
-	if (entityPath.Count() > 0) {
+	if (entityPath.Count() > 0)
+	{
 		if (App->map->WorldToMap(position.x, position.y) !=
-			App->map->WorldToMap(player->data->position.x + (player->data->Collider.w / 2), player->data->position.y + (player->data->Collider.w / 2))) {
+			App->map->WorldToMap(player->data->position.x + (player->data->Collider.w / 2), player->data->position.y + (player->data->Collider.w / 2)))
+		{
 			curr_cell = *entityPath.At(1);
 			if (entityPath.Count() > 1)
+			{
 				next_cell = entityPath.At(2);
-			iPoint map_pos = App->map->WorldToMap(position.x + rect.w / 2, position.y + rect.h / 2);
-			Collider_Overlay();
+			}
 
+			iPoint map_pos = App->map->WorldToMap(position.x + rect.w / 2, position.y + rect.h / 2);
 			if (curr_cell.x > map_pos.x) //going right
 			{
 				position.x += speed.x / 4;
@@ -191,35 +208,8 @@ void LandEnemy::followPath()
 			{
 				position.x -= speed.x / 4;
 			}
-
-
 		}
 	}
-}
-
-void LandEnemy::standardPath()
-{
-	//iPoint curr_pos = App->map->WorldToMap(position.x + collider_offset.x + collider->rect.w / 2, position.y + collider_offset.y + collider->rect.h / 2);
-	//iPoint rightCell(curr_pos.x - 1, curr_pos.y);
-	//iPoint leftCell(curr_pos.x + 1, curr_pos.y);
-	//entityPath.PushBack(curr_pos);
-
-	//if (moving_right && App->pathfinding->isWalkable(rightCell) && App->pathfinding->isTouchingGround(rightCell))
-	//	entityPath.PushBack(rightCell);
-	//else if (!moving_left)
-	//{
-	//	entityPath.PushBack(curr_pos);
-	//	moving_right = false;
-	//	moving_left = true;
-	//}
-	//if (moving_left && App->pathfinding->isWalkable(leftCell) && App->pathfinding->isTouchingGround(leftCell))
-	//	entityPath.PushBack(leftCell);
-	//else if (!moving_right)
-	//{
-	//	entityPath.PushBack(curr_pos);
-	//	moving_right = true;
-	//	moving_left = false;
-	//}
 }
 
 void LandEnemy::ChangeAnimation()

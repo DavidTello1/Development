@@ -62,8 +62,6 @@ public:
 	SDL_Rect Collider;
 	SDL_Rect SightCollider;
 	
-	p2DynArray<iPoint> entityPath;
-
 	bool flip = false;
 	bool chasing_player = false;
 	bool hurt = false;

@@ -17,11 +17,11 @@ public:
 	void Save(pugi::xml_node&) const;
 
 	void followPath();
-	void standardPath();
 
 public:
 
 	Animation		idle;
+	p2DynArray<iPoint> entityPath;
 };
 
 #endif // !__J1FLYING_ENEMY_H__

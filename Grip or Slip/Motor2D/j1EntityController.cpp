@@ -81,15 +81,6 @@ bool j1EntityController::PostUpdate()
 		while (tmp != nullptr)
 		{
 			tmp->data->PostUpdate();
-
-			if (App->entitycontroller->draw_path) {
-				const p2DynArray<iPoint>* path = &tmp->data->entityPath;
-				for (uint i = 0; i < path->Count(); ++i)
-				{
-					iPoint pos = App->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-					App->render->Blit(debug_tex, pos.x, pos.y);
-				}
-			}
 			tmp = tmp->next;
 		}
 	}
