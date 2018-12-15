@@ -4068,10 +4068,10 @@
  <objectgroup name="Enemies">
   <object id="108" name="FlyingEnemy" x="128" y="1088" width="32" height="32"/>
   <object id="109" name="LandEnemy" x="993" y="279" width="32" height="32"/>
-  <object id="110" name="LandEnemy" x="96" y="768" width="32" height="32"/>
+  <object id="110" name="LandEnemy" x="96" y="760" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="Collision">
-  <object id="1" name="StartPosition" x="64" y="1184" width="32" height="32"/>
+  <object id="1" name="StartPosition" x="65" y="1224" width="32" height="32"/>
   <object id="4" name="Floor" x="32" y="1312" width="160" height="32"/>
   <object id="7" name="Spikes" x="192" y="1320" width="256" height="24"/>
   <object id="10" name="Wall" type="Wall_left" x="512" y="1264" width="32" height="80"/>

@@ -48,6 +48,7 @@ FlyingEnemy::FlyingEnemy(iPoint pos) : Entity(entityType::FLYING_ENEMY)
 	idle.loop = true;
 	idle.speed = 0.15f;
 
+	entityPath.Clear();
 	Current_Animation = &idle;
 }
 

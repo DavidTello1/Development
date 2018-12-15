@@ -321,7 +321,10 @@ bool j1App::CleanUp()
 
 	while(item != NULL && ret == true)
 	{
-		ret = item->data->CleanUp();
+		if (item->data->active)
+		{
+			ret = item->data->CleanUp();
+		}
 		item = item->prev;
 	}
 

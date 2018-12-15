@@ -478,6 +478,10 @@ void j1EntityController::EnemyColliderCheck()
 			{
 				App->entitycontroller->DeleteEntity(tmp->data);
 				App->scene->coins++;
+				if (App->scene->coins == 10)
+				{
+					App->scene->score += 1000;
+				}
 				App->scene->score += 100;
 			}
 		}

@@ -44,6 +44,7 @@ LandEnemy::LandEnemy(iPoint pos) : Entity(entityType::LAND_ENEMY)
 	
 	gravity = 150;
 
+	entityPath.Clear();
 	LoadAnimations();
 	Current_Animation = &idle;
 }

@@ -7,14 +7,126 @@
 	<map />
 	<pathfinding />
 	<scene>
-		<currentMap num="1" />
+		<currentMap num="0" />
 		<player_lives value="6" />
-		<coins value="0" />
-		<score value="0" />
-		<countdown value="292" />
+		<coins value="7" />
+		<score value="700" />
+		<countdown value="261" />
 	</scene>
 	<scenechange />
 	<entitycontroller>
+		<map_1>
+			<flying_enemy>
+				<position x="128" y="1088" />
+				<size width="32" height="32" />
+				<speed x="8" y="8" />
+				<sightCollider width="160" height="160" />
+				<dead value="false" />
+				<lives value="1" />
+			</flying_enemy>
+			<land_enemy>
+				<position x="1120" y="1312" />
+				<size width="32" height="32" />
+				<speed x="5" y="5" />
+				<sightCollider width="160" height="96" />
+				<dead value="false" />
+				<lives value="3" />
+			</land_enemy>
+			<land_enemy>
+				<position x="1087" y="786" />
+				<size width="32" height="32" />
+				<speed x="5" y="5" />
+				<sightCollider width="160" height="96" />
+				<dead value="true" />
+				<lives value="3" />
+			</land_enemy>
+			<grid>
+				<position x="1237" y="736" />
+				<size width="107" height="96" />
+				<speed x="30" y="30" />
+				<type value="4" />
+			</grid>
+			<grid>
+				<position x="1311" y="992" />
+				<size width="33" height="96" />
+				<speed x="30" y="30" />
+				<type value="4" />
+			</grid>
+			<grid>
+				<position x="1152" y="480" />
+				<size width="96" height="129" />
+				<speed x="30" y="30" />
+				<type value="1" />
+			</grid>
+			<grid>
+				<position x="1047" y="384" />
+				<size width="73" height="96" />
+				<speed x="30" y="30" />
+				<type value="4" />
+			</grid>
+			<grid>
+				<position x="32" y="608" />
+				<size width="33" height="96" />
+				<speed x="30" y="30" />
+				<type value="3" />
+			</grid>
+			<grid>
+				<position x="32" y="768" />
+				<size width="73" height="96" />
+				<speed x="30" y="30" />
+				<type value="3" />
+			</grid>
+			<grid>
+				<position x="96" y="384" />
+				<size width="96" height="129" />
+				<speed x="30" y="30" />
+				<type value="1" />
+			</grid>
+			<box>
+				<position x="352" y="1248" />
+				<size width="32" height="32" />
+				<speed x="50" y="50" />
+				<Bounds x="192" y="1152" width="192" height="128" />
+				<side value="false" />
+				<box_moving value="false" />
+			</box>
+			<box>
+				<position x="928" y="736" />
+				<size width="32" height="32" />
+				<speed x="50" y="50" />
+				<Bounds x="768" y="672" width="192" height="96" />
+				<side value="false" />
+				<box_moving value="false" />
+			</box>
+			<box>
+				<position x="640" y="544" />
+				<size width="32" height="32" />
+				<speed x="50" y="50" />
+				<Bounds x="640" y="544" width="128" height="96" />
+				<side value="true" />
+				<box_moving value="false" />
+			</box>
+			<box>
+				<position x="544" y="768" />
+				<size width="32" height="32" />
+				<speed x="50" y="50" />
+				<Bounds x="320" y="608" width="256" height="192" />
+				<side value="false" />
+				<box_moving value="false" />
+			</box>
+			<player>
+				<size width="32" height="32" />
+				<position x="872" y="513" />
+				<gravity value="250" />
+				<speed x="150" y="500" />
+				<grounded value="false" />
+				<sliding value="false" />
+				<jumping value="false" />
+				<grid value="false" />
+				<gripped value="false" />
+				<gravity_active value="true" />
+			</player>
+		</map_1>
 		<map_2>
 			<flying_enemy>
 				<position x="128" y="1088" />
