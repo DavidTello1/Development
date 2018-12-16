@@ -3,6 +3,8 @@
 #include "j1App.h"
 #include "j1PathFinding.h"
 
+#include "Brofiler\Brofiler.h"
+
 j1PathFinding::j1PathFinding() : j1Module(), map(NULL), last_path(DEFAULT_PATH_LENGTH), width(0), height(0)
 {
 	name.create("pathfinding");
@@ -16,6 +18,8 @@ j1PathFinding::~j1PathFinding()
 // Called before quitting
 bool j1PathFinding::CleanUp()
 {
+	BROFILER_CATEGORY("Pathfinding CleanUp", Profiler::Color::Tomato)
+
 	LOG("Freeing pathfinding library");
 
 	last_path.Clear();
@@ -26,6 +30,8 @@ bool j1PathFinding::CleanUp()
 // Sets up the walkability map
 void j1PathFinding::SetMap(uint width, uint height, uchar* data)
 {
+	BROFILER_CATEGORY("Pathfinding SetMap", Profiler::Color::Tomato)
+
 	this->width = width;
 	this->height = height;
 
@@ -37,6 +43,8 @@ void j1PathFinding::SetMap(uint width, uint height, uchar* data)
 // Utility: return true if pos is inside the map boundaries
 bool j1PathFinding::CheckBoundaries(const iPoint& pos) const
 {
+	BROFILER_CATEGORY("Pathfinding CheckBoundaries", Profiler::Color::Tomato)
+
 	return (pos.x >= 0 && pos.x <= (int)width &&
 		pos.y >= 0 && pos.y <= (int)height);
 }
@@ -49,6 +57,8 @@ bool j1PathFinding::IsTouchingGround(iPoint coords) const
 // Utility: returns true is the tile is walkable
 bool j1PathFinding::IsWalkable(const iPoint& pos) const
 {
+	BROFILER_CATEGORY("Pathfinding IsWalkable", Profiler::Color::Tomato)
+
 	uchar t = GetTileAt(pos);
 	return t != INVALID_WALK_CODE && t > 0;
 }
@@ -56,6 +66,8 @@ bool j1PathFinding::IsWalkable(const iPoint& pos) const
 // Utility: return the walkability value of a tile
 uchar j1PathFinding::GetTileAt(const iPoint& pos) const
 {
+	BROFILER_CATEGORY("Pathfinding GetTileAt", Profiler::Color::Tomato)
+
 	if (CheckBoundaries(pos))
 		return map[(pos.y*width) + pos.x];
 
@@ -79,6 +91,8 @@ void j1PathFinding::ResetPath(p2DynArray<iPoint>& path_to_reset)
 // ---------------------------------------------------------------------------------
 p2List_item<PathNode>* PathList::Find(const iPoint& point) const
 {
+	BROFILER_CATEGORY("Pathfinding Find", Profiler::Color::Tomato)
+
 	p2List_item<PathNode>* item = list.start;
 	while (item)
 	{
@@ -94,6 +108,8 @@ p2List_item<PathNode>* PathList::Find(const iPoint& point) const
 // ---------------------------------------------------------------------------------
 p2List_item<PathNode>* PathList::GetNodeLowestScore() const
 {
+	BROFILER_CATEGORY("Pathfinding GetNodeLowestScore", Profiler::Color::Tomato)
+
 	p2List_item<PathNode>* ret = NULL;
 	int min = 65535;
 
@@ -127,6 +143,8 @@ PathNode::PathNode(const PathNode& node) : g(node.g), h(node.h), pos(node.pos), 
 // ----------------------------------------------------------------------------------
 uint PathNode::FindWalkableAdjacents(PathList& list_to_fill) const
 {
+	BROFILER_CATEGORY("Pathfinding FindWalkableAdjacents", Profiler::Color::Tomato)
+
 	iPoint cell;
 	uint before = list_to_fill.list.count();
 
@@ -177,6 +195,8 @@ int PathNode::CalculateF(const iPoint& destination)
 // ----------------------------------------------------------------------------------
 int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination, p2DynArray<iPoint>& path_to_fill)
 {
+	BROFILER_CATEGORY("Pathfinding CreatePath", Profiler::Color::Tomato)
+
 	// if origin or destination are not walkable, return -1
 	if (IsWalkable(origin) == false || IsWalkable(destination) == false) {
 		LOG("Not possible to create Path");

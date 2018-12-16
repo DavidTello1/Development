@@ -16,6 +16,7 @@
 #include "JustSimpleUI.h"
 
 #include <stdio.h>
+#include "Brofiler\Brofiler.h"
 
 j1MainMenu::j1MainMenu() : j1Module()
 {
@@ -114,6 +115,8 @@ bool j1MainMenu::Start()
 // Called each loop iteration
 bool j1MainMenu::PreUpdate()
 {
+	BROFILER_CATEGORY("Main Menu PreUpdate", Profiler::Color::AliceBlue);
+
 	pugi::xml_document data;
 	pugi::xml_node root;
 	data.load_file("save_game.xml");
@@ -140,6 +143,8 @@ bool j1MainMenu::PreUpdate()
 // Called each loop iteration
 bool j1MainMenu::Update(float dt)
 {
+	BROFILER_CATEGORY("Main Menu Update", Profiler::Color::AliceBlue);
+
 	// -------
 	if (App->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
 	{
@@ -307,6 +312,8 @@ bool j1MainMenu::Update(float dt)
 // Called each loop iteration
 bool j1MainMenu::PostUpdate()
 {
+	BROFILER_CATEGORY("Main Menu PostUpdate", Profiler::Color::AliceBlue);
+
 	bool ret = true;
 
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || quit_game == true)

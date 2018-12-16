@@ -13,8 +13,8 @@
 #include "j1Box.h"
 #include "j1Coins.h"
 #include "j1Textures.h"
-#include "Brofiler\Brofiler.h"
 
+#include "Brofiler\Brofiler.h"
 #include "PugiXml/src/pugixml.hpp"
 
 j1EntityController::j1EntityController()
