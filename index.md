@@ -56,7 +56,37 @@
 
 **CORE SUBSYSTEMS**
 
+This game has 5 main modules:
+
+**Entity System** keeps and manages all entities such as the player, the enemies and the objects. This module makes sure all entities do correctly their logic.
+
+The module **Pathfinding** is connected to the entity system module since it allows the entities to correctly create a path to their objective.
+
+The **Map** which reads .tmx files that hold all information of the tile based level (done in the Tiled map editor)such as position and texture of each tile, collisions and entities' position.
+
+The **UI** with a polymorphism system of UI elements that can be created and managed by the GUI module and executed from the scene module
+
+Last but not least there's the **Scene Module**, which is in charge of sending to the renderer the current level, menu and entities on screen as well as managing the transitions and some interactions between them.
+
 **INNOVATION**
+
+-Moving Grids that the player can grip to and move.
+
+-Static Boxes that the player can hop into and move following the box's path.
+
+-Land Enemy sprite stays in map after death.
+
+-Boxes opposite position to its relative in the other map.
+
+-Save both map entities at the same time.
+
+-Rotation of maps.
+
+-Wall Jumping.
+
+-Dash Attack.
+
+-Time color changes to red when there are 60 or less seconds remaining.
 
 **Grip or Slip's github [link](https://github.com/DavidTello1/Development)**
 
