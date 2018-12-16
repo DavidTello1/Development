@@ -2,7 +2,7 @@
 
 **TEAM MEMBERS**
 
-<img src="https://github.com/DavidTello1/Development/blob/progress/griporslipteamphoto.png" width="500"/>
+<img src="https://raw.githubusercontent.com/DavidTello1/Development/progress/griporslipteamphoto.png" width="500"/>
 
 [Marc Garcia](https://github.com/marcgreig) (left member)
 
