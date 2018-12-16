@@ -277,8 +277,8 @@ bool j1MainMenu::Update(float dt)
 				item->data->state = UI_Element::State::IDLE; //change to idle
 			}
 		}
-			UpdateState(item->data);
-			item = item->prev;
+		UpdateState(item->data);
+		item = item->prev;
 	}
 
 	App->render->Blit(menu_background->texture, 0,0, &menu_background->rect, SDL_FLIP_NONE, 0); //draw background first
@@ -349,13 +349,20 @@ void j1MainMenu::UpdateState(UI_Element* data)
 		switch (data->state)
 		{
 		case UI_Element::State::IDLE:
-			if (data->locked == true)
+			if (credits == true && data == credits_button || settings == true && data == settings_button)
 			{
-				data->rect = { 0,139,190,48 };
+				data->rect = { 190,139,190,48 };
 			}
 			else
 			{
-				data->rect = { 380,139,190,48 };
+				if (data->locked == true)
+				{
+					data->rect = { 0,139,190,48 };
+				}
+				else
+				{
+					data->rect = { 380,139,190,48 };
+				}
 			}
 			break;
 
