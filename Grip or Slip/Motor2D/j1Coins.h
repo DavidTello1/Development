@@ -9,6 +9,7 @@ public:
 	j1Coins(iPoint position, iPoint Size);
 	~j1Coins();
 
+	bool Update(float dt);
 	void CleanUp();
 
 	void Load(pugi::xml_node& file);

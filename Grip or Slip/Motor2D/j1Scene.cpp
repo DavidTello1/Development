@@ -513,6 +513,10 @@ bool j1Scene::Load(pugi::xml_node& data)
 	coins = data.child("coins").attribute("value").as_uint();
 	score = data.child("score").attribute("value").as_uint();
 	countdown = data.child("countdown").attribute("value").as_uint();
+	box_1_side = data.child("box_1_side").attribute("left").as_bool();
+	box_2_side = data.child("box_2_side").attribute("left").as_bool();
+	box_3_side = data.child("box_3_side").attribute("left").as_bool();
+	box_4_side = data.child("box_4_side").attribute("left").as_bool();
 
 	if (currentMap != data.child("currentMap").attribute("num").as_int())
 	{
@@ -531,6 +535,10 @@ bool j1Scene::Save(pugi::xml_node& data) const
 	data.append_child("coins").append_attribute("value") = coins;
 	data.append_child("score").append_attribute("value") = score;
 	data.append_child("countdown").append_attribute("value") = countdown;
+	data.append_child("box_1_side").append_attribute("left") = box_1_side;
+	data.append_child("box_2_side").append_attribute("left") = box_2_side;
+	data.append_child("box_3_side").append_attribute("left") = box_3_side;
+	data.append_child("box_4_side").append_attribute("left") = box_4_side;
 
 	return true;
 }

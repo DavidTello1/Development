@@ -46,7 +46,7 @@ FlyingEnemy::FlyingEnemy(iPoint pos) : Entity(entityType::FLYING_ENEMY)
 	idle.PushBack({ 512, 96, size.x, size.y });
 	idle.PushBack({ 544, 96, size.x, size.y });
 	idle.loop = true;
-	idle.speed = 0.15f;
+	idle.speed = 6.0f;
 
 	entityPath.Clear();
 	Current_Animation = &idle;

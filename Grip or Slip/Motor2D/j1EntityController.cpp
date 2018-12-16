@@ -477,15 +477,18 @@ void j1EntityController::EnemyColliderCheck()
 		{
 			if (SDL_HasIntersection(&tmp->data->Collider, &player->data->Collider))
 			{
-				App->entitycontroller->DeleteEntity(tmp->data);
-				App->audio->PlayFx(COIN);
-				App->scene->coins++;
-				if (App->scene->coins == 10)
+				if (tmp->data->dead == false)
 				{
-					App->scene->score += 1000;
+					tmp->data->dead = true;
 					App->audio->PlayFx(COIN);
+					App->scene->coins++;
+					if (App->scene->coins == 10)
+					{
+						App->scene->score += 1000;
+						App->audio->PlayFx(COIN);
+					}
+					App->scene->score += 100;
 				}
-				App->scene->score += 100;
 			}
 		}
 		tmp = tmp->next;
