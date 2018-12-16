@@ -147,7 +147,7 @@ public:
 	bool Awake(pugi::xml_node& conf);
 
 	// Called each loop iteration
-	void Draw();
+	void Draw(float dt);
 
 	// Called before quitting
 	bool CleanUp();
@@ -164,7 +164,7 @@ public:
 	iPoint MapToWorld(int x, int y) const;
 	iPoint WorldToMap(int x, int y) const;
 
-	void RotateMaps();
+	void RotateMaps(float dt);
 	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer) const;
 
 private:

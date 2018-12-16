@@ -176,7 +176,7 @@ bool j1Box::Update(float dt)
 		{
 			if (position.x + Collider.w < Bounds.x + Bounds.w)
 			{
-				final_speed.x += speed.x;
+				position.x += ceilf(speed.x*dt);
 			}
 			else
 			{
@@ -187,7 +187,7 @@ bool j1Box::Update(float dt)
 		{
 			if (position.x > Bounds.x)
 			{
-				final_speed.x -= speed.x;
+				position.x -= ceilf(speed.x*dt);
 			}
 			else
 			{
@@ -198,7 +198,7 @@ bool j1Box::Update(float dt)
 		{
 			if (position.y + Collider.h < Bounds.y + Bounds.h)
 			{
-				final_speed.y += speed.y;
+				position.y += ceilf(speed.y*dt);
 			}
 			else
 			{
@@ -218,7 +218,7 @@ bool j1Box::Update(float dt)
 		{
 			if (position.y > Bounds.y)
 			{
-				final_speed.y -= speed.y;
+				position.y -= ceilf(speed.y*dt);
 			}
 			else
 			{
@@ -233,24 +233,6 @@ bool j1Box::Update(float dt)
 				box_moving = false;
 				end_moving = true;
 			}
-		}
-
-		if (final_speed.x > 0) //going right
-		{
-			position.x += ceilf(final_speed.x*dt);
-		}
-		else if (final_speed.x < 0) //going left
-		{
-			position.x -= ceilf(abs(final_speed.x*dt));
-		}
-
-		if (final_speed.y > 0) //going down
-		{
-			position.y += ceilf(final_speed.y*dt);
-		}
-		else if (final_speed.y < 0) //going up
-		{
-			position.y -= ceilf(abs(final_speed.y*dt));
 		}
 	}
 

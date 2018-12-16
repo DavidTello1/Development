@@ -16,7 +16,7 @@ public:
 	void Load(pugi::xml_node&);
 	void Save(pugi::xml_node&) const;
 
-	void followPath();
+	void followPath(float dt);
 
 public:
 

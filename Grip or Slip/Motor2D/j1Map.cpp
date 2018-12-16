@@ -30,7 +30,7 @@ bool j1Map::Awake(pugi::xml_node& config)
 	return ret;
 }
 
-void j1Map::Draw()
+void j1Map::Draw(float dt)
 {
 	BROFILER_CATEGORY("Map Draw", Profiler::Color::Crimson);
 
@@ -39,7 +39,7 @@ void j1Map::Draw()
 
 	if (rotate == true || rotate_back == true || rotated == true) //rotate
 	{
-		RotateMaps();
+		RotateMaps(dt);
 	}
 
 	else //draw normal
@@ -581,7 +581,7 @@ bool j1Map::SwitchMaps2(p2SString* new_map)
 	return true;
 }
 
-void j1Map::RotateMaps()
+void j1Map::RotateMaps(float dt)
 {
 	BROFILER_CATEGORY("RotateMaps", Profiler::Color::Purple);
 
@@ -619,7 +619,7 @@ void j1Map::RotateMaps()
 					}
 				}
 			}
-			angle += 0.75;
+			angle += ceilf(50*dt);
 		}
 	}
 	else if (rotated == true)
@@ -661,7 +661,7 @@ void j1Map::RotateMaps()
 					}
 				}
 			}
-			angle += 0.75;
+			angle += ceilf(50 * dt);
 		}
 	}
 }

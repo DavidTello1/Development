@@ -259,7 +259,7 @@ bool j1Scene::Update(float dt)
 		}
 	}
 	//----
-	App->map->Draw();
+	App->map->Draw(dt);
 	if (change == false)
 	{
 		App->entitycontroller->Draw(dt);

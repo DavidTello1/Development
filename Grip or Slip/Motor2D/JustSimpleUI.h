@@ -16,7 +16,7 @@ public:
 		{
 		case UI_Element::Action::WEB:
 		{
-			ShellExecuteA(NULL, "open", "www.google.com", NULL, NULL, SW_SHOWNORMAL);
+			ShellExecuteA(NULL, "open", "https://davidtello1.github.io/Development", NULL, NULL, SW_SHOWNORMAL);
 		}
 		break;
 		}

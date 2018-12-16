@@ -54,7 +54,7 @@ bool j1MainMenu::Start()
 	SDL_RenderGetViewport(App->render->renderer, &App->render->viewport);
 	
 	//WEB
-	web_page = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::WEB, { 20, App->render->viewport.h - 40}, { 0,0 }, nullptr, true, { false, false }, "WEB PAGE - www.webpage.com");
+	web_page = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::WEB, { 20, App->render->viewport.h - 40}, { 0,0 }, nullptr, true, { false, false }, "Go to Web Page");
 
 	//BG
 	menu_background = App->gui->AddUIElement(UI_Element::UI_type::BACKGROUND, UI_Element::Action::NONE, { 0,0 }, { App->win->width, App->win->height }, nullptr, true);

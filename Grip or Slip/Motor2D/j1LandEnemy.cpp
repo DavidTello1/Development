@@ -43,6 +43,7 @@ LandEnemy::LandEnemy(iPoint pos) : Entity(entityType::LAND_ENEMY)
 	lives = config.child("lives").attribute("value").as_int();
 	
 	gravity = 100;
+	final_speed = { 0,0 };
 
 	entityPath.Clear();
 	LoadAnimations();
@@ -86,7 +87,7 @@ bool LandEnemy::Update(float dt)
 			}
 			else
 			{
-				position.y += gravity*dt;
+				position.y += floor(gravity*dt);
 			}
 		}
 
@@ -115,7 +116,7 @@ bool LandEnemy::Update(float dt)
 
 		if (chasing_player) 
 		{
-			followPath();
+			followPath(dt);
 		}
 		else
 		{
@@ -147,6 +148,7 @@ void LandEnemy::Load(pugi::xml_node& data)
 	SightCollider.h = data.child("sightCollider").attribute("height").as_int();
 	dead = data.child("dead").attribute("value").as_bool();
 	lives = data.child("lives").attribute("value").as_int();
+	final_speed = { 0,0 };
 
 	LOG("--- LandEnemy Loaded");
 }
@@ -169,7 +171,7 @@ void LandEnemy::Save(pugi::xml_node& data) const
 	LOG("--- LandEnemy Saved");
 }
 
-void LandEnemy::followPath()
+void LandEnemy::followPath(float dt)
 {
 	p2List_item<Entity*>* player = nullptr;
 	for (p2List_item<Entity*>* i = App->entitycontroller->Entities.start; i != nullptr; i = i->next)
@@ -180,7 +182,7 @@ void LandEnemy::followPath()
 			break;
 		}
 	}
-	if (&player->data->position != entityPath.At(entityPath.Count())) 
+	if (&player->data->position != entityPath.At(entityPath.Count()))
 	{
 		entityPath.Clear();
 		App->pathfinding->CreatePath(App->map->WorldToMap(position.x, position.y),
@@ -195,19 +197,22 @@ void LandEnemy::followPath()
 			App->map->WorldToMap(player->data->position.x + (player->data->Collider.w / 2), player->data->position.y + (player->data->Collider.w / 2)))
 		{
 			curr_cell = *entityPath.At(1);
+
 			if (entityPath.Count() > 1)
 			{
 				next_cell = entityPath.At(2);
 			}
 
-			iPoint map_pos = App->map->WorldToMap(position.x + rect.w / 2, position.y + rect.h / 2);
+			iPoint map_pos = App->map->WorldToMap(position.x, position.y);
 			if (curr_cell.x > map_pos.x) //going right
 			{
-				position.x += speed.x / 4;
+				position.x += floor(speed.x *dt);
+				flip = true;
 			}
 			else if (curr_cell.x < map_pos.x) //going left
 			{
-				position.x -= speed.x / 4;
+				position.x -= floor(speed.x *dt);
+				flip = false;
 			}
 		}
 	}

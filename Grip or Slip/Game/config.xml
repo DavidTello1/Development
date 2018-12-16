@@ -66,15 +66,15 @@
     </grid>
     <flying_enemy>
       <size width="32" height="32"/>
-      <speed x="8" y="8"/>
-      <sightCollider width ="160" height="160"/>
+      <speed x="80" y="80"/>
+      <sightCollider width ="192" height="192"/>
       <dead value="false"/>
       <lives value="1"/>
     </flying_enemy>
     <land_enemy>
       <size width="32" height="32"/>
-      <speed x="5" y="5"/>
-      <sightCollider width ="160" height="96"/>
+      <speed x="60" y="60"/>
+      <sightCollider width ="192" height="96"/>
       <gravity value="250"/>
       <dead value="false"/>
       <lives value="2"/>
@@ -93,7 +93,7 @@
   <main_menu>
     <menu_bg file="gui/title_bg.png"/>
     <credits file="gui/credits.png"/>
-    <music vol="50" sfx="100"/>
+    <music vol="40" sfx="100"/>
   </main_menu>
 
   </config>

@@ -79,7 +79,7 @@ bool FlyingEnemy::Update(float dt)
 
 		if (chasing_player) 
 		{
-			followPath();
+			followPath(dt);
 		}
 		else
 		{
@@ -138,7 +138,7 @@ void FlyingEnemy::Save(pugi::xml_node& data) const
 	LOG("--- FlyingEnemy Saved");
 }
 
-void FlyingEnemy::followPath()
+void FlyingEnemy::followPath(float dt)
 {
 	p2List_item<Entity*>* player = nullptr;
 	for (p2List_item<Entity*>* i = App->entitycontroller->Entities.start; i != nullptr; i = i->next)
@@ -170,22 +170,24 @@ void FlyingEnemy::followPath()
 				next_cell = entityPath.At(2);
 			}
 
-			iPoint map_pos = App->map->WorldToMap(position.x + rect.w / 2, position.y + rect.h / 2);
+			iPoint map_pos = App->map->WorldToMap(position.x, position.y);
 			if (curr_cell.x > map_pos.x) //going right
 			{
-				position.x += speed.x / 4;
+				position.x += floor(speed.x*dt);
+				flip = true;
 			}
 			else if (curr_cell.x < map_pos.x) //going left
 			{
-				position.x -= speed.x / 4;
+				position.x -= floor(speed.x*dt);
+				flip = false;
 			}
 			if (curr_cell.y > map_pos.y) //going up
 			{
-				position.y += speed.y / 4;
+				position.y += floor(speed.y*dt);
 			}
 			else if (curr_cell.y < map_pos.y)
 			{
-				position.y -= speed.y / 4;
+				position.y -= floor(speed.y*dt);
 			}
 		}
 	}
