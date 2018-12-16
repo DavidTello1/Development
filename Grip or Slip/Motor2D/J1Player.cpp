@@ -536,6 +536,7 @@ bool j1Player::PostUpdate()
 		{
 			App->audio->PlayFx(DEAD);
 			App->scene->ResetBoxPos();
+			App->scene->ResetEnemies();
 			App->scenechange->ChangeMap(App->scene->currentMap, App->scene->fade_time);
 		}
 		else

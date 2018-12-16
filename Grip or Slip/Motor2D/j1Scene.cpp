@@ -567,6 +567,19 @@ void j1Scene::SpawnEntities()
 	player->Start();
 }
 
+void j1Scene::ResetEnemies()
+{
+	p2List_item<Entity*>* tmp = App->entitycontroller->Entities.start;
+	while (tmp != nullptr)
+	{
+		if (tmp->data->type == Entity::entityType::FLYING_ENEMY || tmp->data->type == Entity::entityType::LAND_ENEMY)
+		{
+			tmp->data->position = tmp->data->initial_pos;
+		}
+		tmp = tmp->prev;
+	}
+}
+
 
 void j1Scene::SpawnEnemies()
 {

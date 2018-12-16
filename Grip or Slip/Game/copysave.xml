@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <game_state>
 	<flying_enemy>
-		<position x="128" y="1088" />
+		<initial_pos x="128" y="1088" />
+		<position x="62" y="1152" />
 		<size width="32" height="32" />
 		<speed x="8" y="8" />
 		<sightCollider width="160" height="160" />
@@ -9,7 +10,7 @@
 		<lives value="1" />
 	</flying_enemy>
 	<land_enemy>
-		<position x="993" y="289" />
+		<position x="1100" y="1312" />
 		<size width="32" height="32" />
 		<speed x="5" y="5" />
 		<sightCollider width="160" height="96" />
@@ -17,7 +18,7 @@
 		<lives value="2" />
 	</land_enemy>
 	<land_enemy>
-		<position x="96" y="769" />
+		<position x="1090" y="1217" />
 		<size width="32" height="32" />
 		<speed x="5" y="5" />
 		<sightCollider width="160" height="96" />
@@ -25,87 +26,57 @@
 		<lives value="2" />
 	</land_enemy>
 	<grid>
-		<position x="1120" y="896" />
-		<size width="33" height="96" />
+		<position x="1261" y="736" />
+		<size width="83" height="96" />
+		<speed x="30" y="30" />
+		<type value="4" />
+	</grid>
+	<grid>
+		<position x="1249" y="992" />
+		<size width="95" height="96" />
+		<speed x="30" y="30" />
+		<type value="4" />
+	</grid>
+	<grid>
+		<position x="1152" y="512" />
+		<size width="96" height="83" />
+		<speed x="30" y="30" />
+		<type value="1" />
+	</grid>
+	<grid>
+		<position x="975" y="384" />
+		<size width="145" height="96" />
+		<speed x="30" y="30" />
+		<type value="4" />
+	</grid>
+	<grid>
+		<position x="32" y="608" />
+		<size width="95" height="96" />
 		<speed x="30" y="30" />
 		<type value="3" />
 	</grid>
 	<grid>
-		<position x="1271" y="736" />
-		<size width="73" height="96" />
+		<position x="32" y="768" />
+		<size width="177" height="96" />
 		<speed x="30" y="30" />
-		<type value="4" />
-	</grid>
-	<grid>
-		<position x="1353" y="960" />
-		<size width="55" height="96" />
-		<speed x="30" y="30" />
-		<type value="4" />
-	</grid>
-	<grid>
-		<position x="1313" y="1120" />
-		<size width="191" height="96" />
-		<speed x="30" y="30" />
-		<type value="4" />
-	</grid>
-	<grid>
-		<position x="1184" y="480" />
-		<size width="96" height="33" />
-		<speed x="30" y="30" />
-		<type value="1" />
-	</grid>
-	<grid>
-		<position x="1056" y="416" />
-		<size width="96" height="33" />
-		<speed x="30" y="30" />
-		<type value="1" />
+		<type value="3" />
 	</grid>
 	<grid>
 		<position x="96" y="384" />
-		<size width="96" height="97" />
+		<size width="96" height="145" />
 		<speed x="30" y="30" />
 		<type value="1" />
-	</grid>
-	<grid>
-		<position x="32" y="544" />
-		<size width="97" height="96" />
-		<speed x="30" y="30" />
-		<type value="3" />
-	</grid>
-	<grid>
-		<position x="32" y="672" />
-		<size width="33" height="96" />
-		<speed x="30" y="30" />
-		<type value="3" />
-	</grid>
-	<grid>
-		<position x="256" y="384" />
-		<size width="96" height="97" />
-		<speed x="30" y="30" />
-		<type value="1" />
-	</grid>
-	<grid>
-		<position x="960" y="1311" />
-		<size width="96" height="33" />
-		<speed x="30" y="30" />
-		<type value="2" />
-	</grid>
-	<grid>
-		<position x="1152" y="1271" />
-		<size width="96" height="73" />
-		<speed x="30" y="30" />
-		<type value="2" />
 	</grid>
 	<box>
-		<position x="192" y="1184" />
+		<position x="352" y="1248" />
 		<size width="32" height="32" />
 		<speed x="50" y="50" />
-		<Bounds x="192" y="1184" width="192" height="96" />
+		<Bounds x="192" y="1152" width="192" height="128" />
 		<side value="false" />
 		<box_moving value="false" />
 	</box>
 	<box>
-		<position x="768" y="672" />
+		<position x="928" y="736" />
 		<size width="32" height="32" />
 		<speed x="50" y="50" />
 		<Bounds x="768" y="672" width="192" height="96" />
@@ -113,7 +84,7 @@
 		<box_moving value="false" />
 	</box>
 	<box>
-		<position x="736" y="608" />
+		<position x="640" y="544" />
 		<size width="32" height="32" />
 		<speed x="50" y="50" />
 		<Bounds x="640" y="544" width="128" height="96" />
@@ -121,7 +92,7 @@
 		<box_moving value="false" />
 	</box>
 	<box>
-		<position x="320" y="608" />
+		<position x="544" y="768" />
 		<size width="32" height="32" />
 		<speed x="50" y="50" />
 		<Bounds x="320" y="608" width="256" height="192" />
@@ -129,38 +100,43 @@
 		<box_moving value="false" />
 	</box>
 	<coin>
-		<position x="0" y="0" />
-		<size width="0" height="0" />
+		<position x="278" y="1258" />
+		<size width="16" height="16" />
 		<dead value="false" />
 	</coin>
 	<coin>
-		<position x="0" y="0" />
-		<size width="0" height="0" />
+		<position x="1482" y="1127" />
+		<size width="16" height="16" />
 		<dead value="false" />
 	</coin>
 	<coin>
-		<position x="0" y="0" />
-		<size width="0" height="0" />
+		<position x="870" y="488" />
+		<size width="16" height="16" />
 		<dead value="false" />
 	</coin>
 	<coin>
-		<position x="0" y="0" />
-		<size width="0" height="0" />
+		<position x="682" y="552" />
+		<size width="16" height="16" />
 		<dead value="false" />
 	</coin>
 	<coin>
-		<position x="0" y="0" />
-		<size width="0" height="0" />
+		<position x="41" y="423" />
+		<size width="16" height="16" />
 		<dead value="false" />
 	</coin>
 	<coin>
-		<position x="0" y="0" />
-		<size width="0" height="0" />
+		<position x="202" y="232" />
+		<size width="16" height="16" />
+		<dead value="false" />
+	</coin>
+	<coin>
+		<position x="872" y="260" />
+		<size width="16" height="16" />
 		<dead value="false" />
 	</coin>
 	<player>
 		<size width="32" height="32" />
-		<position x="696" y="265" />
+		<position x="58" y="1249" />
 		<gravity value="250" />
 		<speed x="150" y="500" />
 		<grounded value="false" />

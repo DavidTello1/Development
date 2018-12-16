@@ -51,6 +51,7 @@ public:
 	entityType type;
 	
 	iPoint position;
+	iPoint initial_pos;
 	iPoint size;
 	iPoint speed;
 	fPoint final_speed;

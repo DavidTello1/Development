@@ -42,10 +42,10 @@ public:
 	void SaveAndChange();
 	void ResetBoxPos();
 	void ResetIngameUI();
+	void ResetEnemies();
 
 	void UpdateState(UI_Element* data);
 	void UpdateSimpleUI();
-	void UpdatePauseMenu(UI_Element* data);
 
 public:
 

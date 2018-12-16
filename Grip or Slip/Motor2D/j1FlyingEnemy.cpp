@@ -30,6 +30,7 @@ FlyingEnemy::FlyingEnemy(iPoint pos) : Entity(entityType::FLYING_ENEMY)
 	config = App->LoadConfig(config_file);
 	config = config.child("entitycontroller").child("flying_enemy");
 
+	initial_pos = pos;
 	position.x = pos.x;
 	position.y = pos.y;
 	speed.x = config.child("speed").attribute("x").as_int();
@@ -101,6 +102,8 @@ void FlyingEnemy::CleanUp()
 
 void FlyingEnemy::Load(pugi::xml_node& data)
 {
+	initial_pos.x = data.child("initial_pos").attribute("x").as_int();
+	initial_pos.y = data.child("initial_pos").attribute("y").as_int();
 	position.x = data.child("position").attribute("x").as_int();
 	position.y = data.child("position").attribute("y").as_int();
 	speed.x = data.child("speed").attribute("x").as_int();
@@ -119,6 +122,8 @@ void FlyingEnemy::Save(pugi::xml_node& data) const
 {
 	pugi::xml_node flying_enemy = data.append_child("flying_enemy");
 
+	flying_enemy.append_child("initial_pos").append_attribute("x") = initial_pos.x;
+	flying_enemy.child("initial_pos").append_attribute("y") = initial_pos.y;
 	flying_enemy.append_child("position").append_attribute("x") = position.x;
 	flying_enemy.child("position").append_attribute("y") = position.y;
 	flying_enemy.append_child("size").append_attribute("width") = size.x;
