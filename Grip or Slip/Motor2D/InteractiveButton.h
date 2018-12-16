@@ -27,6 +27,11 @@ public:
 
 			case UI_Element::Action::NEW_GAME:
 			{
+				pugi::xml_document data; //delete save game
+				data.load_file("save_game.xml");
+				data.reset();
+				data.save_file("save_game.xml");
+
 				App->scenechange->ContinueGame = false;
 				App->scenechange->SwitchScene(App->scene, App->main_menu);
 				App->scene->ResetBoxPos();

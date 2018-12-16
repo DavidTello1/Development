@@ -112,14 +112,14 @@ bool j1Scene::Start()
 	resume_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0,0 }, { 0,0 }, resume_button, false, { false, false }, "RESUME");
 
 	//SETTINGS
-	vol_slider_bar = App->gui->AddUIElement(UI_Element::UI_type::BACKGROUND, UI_Element::Action::NONE, { 0, 240 }, { 158,18 }, pause_window, false);
-	sfx_slider_bar = App->gui->AddUIElement(UI_Element::UI_type::BACKGROUND, UI_Element::Action::NONE, { 0, 310 }, { 158,18 }, pause_window, false);
+	vol_slider_bar = App->gui->AddUIElement(UI_Element::UI_type::BACKGROUND, UI_Element::Action::NONE, { 0, 230 }, { 148,18 }, pause_window, false);
+	sfx_slider_bar = App->gui->AddUIElement(UI_Element::UI_type::BACKGROUND, UI_Element::Action::NONE, { 0, 300 }, { 148,18 }, pause_window, false);
 	vol_slider_bar->rect = { 0,26,158,18 };
 	sfx_slider_bar->rect = { 0,44,158,18 };
-	volume_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0, 210 }, { 0,0 }, pause_window, false, { false, false }, "MUSIC: 0");
-	sfx_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0, 280 }, { 0,0 }, pause_window, false, { false, false }, "SOUND EFFECTS: 0");
-	vol_slider_circle = App->gui->AddUIElement(UI_Element::UI_type::SLIDER, UI_Element::Action::ADJUST_VOL, { App->render->viewport.w / 2 - 79, 378 }, { 26,26 }, nullptr, false, { true, false });
-	sfx_slider_circle = App->gui->AddUIElement(UI_Element::UI_type::SLIDER, UI_Element::Action::ADJUST_FX, { App->render->viewport.w / 2 - 79, 448 }, { 26,26 }, nullptr, false, { true, false });
+	volume_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0, 200 }, { 0,0 }, pause_window, false, { false, false }, "MUSIC: 0");
+	sfx_text = App->gui->AddUIElement(UI_Element::UI_type::TEXT, UI_Element::Action::NONE, { 0, 270 }, { 0,0 }, pause_window, false, { false, false }, "SOUND EFFECTS: 0");
+	vol_slider_circle = App->gui->AddUIElement(UI_Element::UI_type::SLIDER, UI_Element::Action::ADJUST_VOL, { App->render->viewport.w / 2 - 79, 368 }, { 26,26 }, nullptr, false, { true, false });
+	sfx_slider_circle = App->gui->AddUIElement(UI_Element::UI_type::SLIDER, UI_Element::Action::ADJUST_FX, { App->render->viewport.w / 2 - 79, 438 }, { 26,26 }, nullptr, false, { true, false });
 
 	//SAVE
 	save_button = App->gui->AddUIElement(UI_Element::UI_type::PUSHBUTTON, UI_Element::Action::SAVE, { 0, 140 }, { 190,48 }, pause_window, false);
@@ -431,9 +431,10 @@ bool j1Scene::PostUpdate()
 		ui_game_over->visible = true;
 		App->audio->PauseMusic();
 
-		pugi::xml_document data;
-		data.load_file("save_game");
+		pugi::xml_document data; //delete save_game
+		data.load_file("save_game.xml");
 		data.reset();
+		data.save_file("save_game.xml");
 	}
 
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
