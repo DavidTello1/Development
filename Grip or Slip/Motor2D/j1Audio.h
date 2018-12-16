@@ -8,6 +8,16 @@
 struct _Mix_Music;
 struct Mix_Chunk;
 
+enum FX
+{
+	WIN = 1,
+	DEAD,
+	GAME_OVER,
+	COIN,
+	CLICK,
+	LOCKED
+};
+
 class j1Audio : public j1Module
 {
 public:
@@ -34,6 +44,7 @@ public:
 
 	void AdjustMusicVol(int value);
 	void AdjustSoundVol(int value);
+	void PauseMusic();
 
 public:
 	p2SString			folder_music;

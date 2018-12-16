@@ -36,8 +36,6 @@ bool j1Scene::Awake(pugi::xml_node& config)
 
 	LOG("Loading Scene");
 
-	current_track = App->audio->tracks_path.start;
-
 	fade_time = config.child("fade_time").attribute("value").as_float();
 
 	for (pugi::xml_node map = config.child("map_name"); map; map = map.next_sibling("map_name"))
@@ -56,7 +54,11 @@ bool j1Scene::Start()
 {
 	bool ret = false;
 
+	current_track = App->audio->tracks_path.start;
 	App->audio->PlayMusic(PATH(App->audio->folder_music.GetString(), current_track->data.GetString()));
+
+	App->audio->AdjustMusicVol(App->main_menu->vol_value);
+	App->audio->AdjustSoundVol(App->main_menu->sfx_value);
 
 	pause = false;
 	to_end = false;
@@ -149,7 +151,7 @@ bool j1Scene::PreUpdate()
 
 	//LOG("IsChanging: %i", App->scenechange->IsChanging());
 
-	if (pause == true && end_game == false)
+	if (pause == true && end_game == false && player_lives > 0)
 	{
 		resume_button->visible = true;
 		resume_text->visible = true;
@@ -248,10 +250,11 @@ bool j1Scene::Update(float dt)
 		App->fpsCapON = !App->fpsCapON;
 	}
 
-	else if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !App->scenechange->IsSwitching()) //Go to main menu after game over or win
+	else if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) //Go to main menu after game over or win
 	{
 		if (player_lives <= 0 || end_game == true)
 		{
+			App->audio->PauseMusic();
 			App->scenechange->SwitchScene(App->main_menu, App->scene);
 		}
 	}
@@ -301,72 +304,80 @@ bool j1Scene::Update(float dt)
 			}
 		}
 
-		if (App->gui->CheckMousePos(item->data) == true && item->data->dragging == false && App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) != KEY_REPEAT) //hovering
+		if (item->data->visible == true)
 		{
-			item->data->state = UI_Element::State::HOVER;
-		}
-		if (App->gui->CheckClick(item->data) == true && item->data->state == UI_Element::State::HOVER) //on-click
-		{
-			if (item->data->dragable.x == false && item->data->dragable.y == false)
+			if (App->gui->CheckMousePos(item->data) == true && item->data->dragging == false && App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) != KEY_REPEAT) //hovering
 			{
-				item->data->state = UI_Element::State::LOGIC;
-				if (item->data->locked == false)
+				item->data->state = UI_Element::State::HOVER;
+			}
+			if (App->gui->CheckClick(item->data) == true && item->data->state == UI_Element::State::HOVER && item->data->action != UI_Element::Action::NONE) //on-click
+			{
+				if (item->data->dragable.x == false && item->data->dragable.y == false)
 				{
+					item->data->state = UI_Element::State::LOGIC;
+					if (item->data->locked == false)
+					{
+						item->data->DoLogic(item->data->action);
+						App->audio->PlayFx(CLICK);
+					}
+					else
+					{
+						App->audio->PlayFx(LOCKED);
+					}
+				}
+				else
+				{
+					item->data->state = UI_Element::State::DRAG;
 					item->data->DoLogic(item->data->action);
 				}
 			}
-			else
+			if (item->data->state == UI_Element::State::DRAG && App->gui->CheckClick(item->data) == true)
 			{
-				item->data->state = UI_Element::State::DRAG;
-				item->data->DoLogic(item->data->action);
-			}
-		}
-		if (item->data->state == UI_Element::State::DRAG && App->gui->CheckClick(item->data) == true)
-		{
-			item->data->dragging = true;
-			item->data->Drag();
+				item->data->dragging = true;
+				item->data->Drag();
 
-			if (item->data->action == UI_Element::Action::ADJUST_VOL)
-			{
-				App->main_menu->vol_value = item->data->globalpos.x - x_limit.x;
-				if (App->main_menu->vol_value <= -1)
+				if (item->data->action == UI_Element::Action::ADJUST_VOL)
 				{
-					App->main_menu->vol_value = 0;
+					App->main_menu->vol_value = item->data->globalpos.x - x_limit.x;
+					if (App->main_menu->vol_value <= -1)
+					{
+						App->main_menu->vol_value = 0;
+					}
+					else if (App->main_menu->vol_value >= SDL_MIX_MAXVOLUME + 1)
+					{
+						App->main_menu->vol_value = SDL_MIX_MAXVOLUME;
+					}
+					item->data->DoLogic(item->data->action);
 				}
-				else if (App->main_menu->vol_value >= SDL_MIX_MAXVOLUME + 1)
+				else if (item->data->action == UI_Element::Action::ADJUST_FX)
 				{
-					App->main_menu->vol_value = SDL_MIX_MAXVOLUME;
+					App->main_menu->sfx_value = item->data->globalpos.x - x_limit.x;
+					if (App->main_menu->sfx_value <= -1)
+					{
+						App->main_menu->sfx_value = 0;
+					}
+					else if (App->main_menu->sfx_value >= SDL_MIX_MAXVOLUME + 1)
+					{
+						App->main_menu->sfx_value = SDL_MIX_MAXVOLUME;
+					}
+					item->data->DoLogic(item->data->action);
 				}
-				item->data->DoLogic(item->data->action);
-			}
-			else if (item->data->action == UI_Element::Action::ADJUST_FX)
-			{
-				App->main_menu->sfx_value = item->data->globalpos.x - x_limit.x;
-				if (App->main_menu->sfx_value <= -1)
-				{
-					App->main_menu->sfx_value = 0;
-				}
-				else if (App->main_menu->sfx_value >= SDL_MIX_MAXVOLUME+1)
-				{
-					App->main_menu->sfx_value = SDL_MIX_MAXVOLUME;
-				}
-				item->data->DoLogic(item->data->action);
-			}
 
-			if (item->data->globalpos.x <= x_limit.x) //left limit
-			{
-				item->data->globalpos.x = x_limit.x;
-			}
-			else if (item->data->globalpos.x >= x_limit.y) //right limit
-			{
-				item->data->globalpos.x = x_limit.y;
-			}
+				if (item->data->globalpos.x <= x_limit.x) //left limit
+				{
+					item->data->globalpos.x = x_limit.x;
+				}
+				else if (item->data->globalpos.x >= x_limit.y) //right limit
+				{
+					item->data->globalpos.x = x_limit.y;
+				}
 
-			App->gui->UpdateChildren();
-		}
-		else if (App->gui->CheckMousePos(item->data) == false && item->data->state != UI_Element::State::DRAG)
-		{
-			item->data->state = UI_Element::State::IDLE; //change to idle
+				App->gui->UpdateChildren();
+			}
+			else if (App->gui->CheckMousePos(item->data) == false && item->data->state != UI_Element::State::DRAG)
+			{
+				item->data->state = UI_Element::State::IDLE; //change to idle
+			}
 		}
 		UpdateState(item->data);
 		item = item->prev;
@@ -379,7 +390,7 @@ bool j1Scene::Update(float dt)
 	UpdateSimpleUI();
 	App->gui->Draw();
 
-	if (pause == true && end_game == false) //draw settings slider bars and circles
+	if (pause == true && end_game == false && player_lives > 0) //draw settings slider bars and circles
 	{
 		//bars
 		App->render->Blit(App->gui->GetAtlas(), vol_slider_bar->globalpos.x, vol_slider_bar->globalpos.y, &vol_slider_bar->rect, SDL_FLIP_NONE, 0);
@@ -406,16 +417,19 @@ bool j1Scene::PostUpdate()
 		player_lives = 0;
 	}
 	
-	if (end_game == true) //win game
+	if (end_game == true && ui_game_win->visible == false) //win game
 	{
 		pause = true;
 		ui_game_win->visible = true;
+		App->audio->PauseMusic();
+		App->audio->PlayFx(WIN);
 	}
 
-	if (player_lives <= 0) //game over
+	if (player_lives <= 0 && ui_game_over->visible == false) //game over
 	{
 		pause = true;
 		ui_game_over->visible = true;
+		App->audio->PauseMusic();
 
 		pugi::xml_document data;
 		data.load_file("save_game");
@@ -466,7 +480,7 @@ bool j1Scene::PostUpdate()
 
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 	{
-		if (player_lives > 0)
+		if (player_lives > 0 && end_game == false)
 		{
 			pause = !pause;
 			timer.Start();

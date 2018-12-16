@@ -1,5 +1,6 @@
 #include "j1EntityController.h"
 #include "j1App.h"
+#include "j1Audio.h"
 #include "j1Render.h"
 #include "j1Pathfinding.h"
 #include "j1Scene.h"
@@ -477,10 +478,12 @@ void j1EntityController::EnemyColliderCheck()
 			if (SDL_HasIntersection(&tmp->data->Collider, &player->data->Collider))
 			{
 				App->entitycontroller->DeleteEntity(tmp->data);
+				App->audio->PlayFx(COIN);
 				App->scene->coins++;
 				if (App->scene->coins == 10)
 				{
 					App->scene->score += 1000;
+					App->audio->PlayFx(COIN);
 				}
 				App->scene->score += 100;
 			}

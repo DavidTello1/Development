@@ -40,13 +40,15 @@ bool j1MainMenu::Awake(pugi::xml_node& conf)
 
 	current_track = App->audio->tracks_path.start->next;
 
+	App->audio->AdjustMusicVol(vol_value);
+	App->audio->AdjustSoundVol(sfx_value);
+
 	return ret;
 }
 
 // Called before the first frame
 bool j1MainMenu::Start()
 {
-
 	App->audio->PlayMusic(PATH(App->audio->folder_music.GetString(), current_track->data.GetString()));
 	SDL_RenderGetViewport(App->render->renderer, &App->render->viewport);
 	
@@ -174,7 +176,7 @@ bool j1MainMenu::Update(float dt)
 					p2List_item<UI_Element*>* tmp = item->data->children.start;
 					while (tmp != nullptr)
 					{
-						tmp->data->Center(true,false); //center X
+						tmp->data->Center(true, false); //center X
 						tmp = tmp->next;
 					}
 				}
@@ -184,7 +186,7 @@ bool j1MainMenu::Update(float dt)
 					while (tmp != nullptr)
 					{
 						if (tmp->data->type == UI_Element::UI_type::SLIDER)
-						tmp->data->Center(false, true); //center Y
+							tmp->data->Center(false, true); //center Y
 						tmp = tmp->next;
 					}
 				}
@@ -200,75 +202,83 @@ bool j1MainMenu::Update(float dt)
 			}
 		}
 
-		if (App->gui->CheckMousePos(item->data) == true && item->data->dragging == false && App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) != KEY_REPEAT) //hovering
+		if (item->data->visible == true)
 		{
-			item->data->state = UI_Element::State::HOVER;
-		}
-		if (App->gui->CheckClick(item->data) == true && item->data->state == UI_Element::State::HOVER) //on-click
-		{
-			if (item->data->dragable.x == false && item->data->dragable.y == false)
+			if (App->gui->CheckMousePos(item->data) == true && item->data->dragging == false && App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) != KEY_REPEAT) //hovering
 			{
-				item->data->state = UI_Element::State::LOGIC;
-				if (item->data->locked == false)
+				item->data->state = UI_Element::State::HOVER;
+			}
+			if (App->gui->CheckClick(item->data) == true && item->data->state == UI_Element::State::HOVER && item->data->action != UI_Element::Action::NONE) //on-click
+			{
+				if (item->data->dragable.x == false && item->data->dragable.y == false)
 				{
+					item->data->state = UI_Element::State::LOGIC;
+					if (item->data->locked == false)
+					{
+						App->audio->PlayFx(CLICK);
+						item->data->DoLogic(item->data->action);
+					}
+					else
+					{
+						App->audio->PlayFx(LOCKED);
+					}
+				}
+				else
+				{
+					item->data->state = UI_Element::State::DRAG;
 					item->data->DoLogic(item->data->action);
 				}
 			}
-			else
+			if (item->data->state == UI_Element::State::DRAG && App->gui->CheckClick(item->data) == true)
 			{
-				item->data->state = UI_Element::State::DRAG;
-				item->data->DoLogic(item->data->action);
+				item->data->dragging = true;
+				item->data->Drag();
+
+				if (item->data->action == UI_Element::Action::ADJUST_VOL)
+				{
+					vol_value = item->data->globalpos.x - x_limit.x;
+					if (vol_value <= -1)
+					{
+						vol_value = 0;
+					}
+					else if (vol_value >= SDL_MIX_MAXVOLUME + 1)
+					{
+						vol_value = SDL_MIX_MAXVOLUME;
+					}
+					item->data->DoLogic(item->data->action);
+				}
+				else if (item->data->action == UI_Element::Action::ADJUST_FX)
+				{
+					sfx_value = item->data->globalpos.x - x_limit.x;
+					if (sfx_value <= -1)
+					{
+						sfx_value = 0;
+					}
+					else if (sfx_value >= SDL_MIX_MAXVOLUME + 1)
+					{
+						sfx_value = SDL_MIX_MAXVOLUME;
+					}
+					item->data->DoLogic(item->data->action);
+				}
+
+				if (item->data->globalpos.x <= x_limit.x) //left limit
+				{
+					item->data->globalpos.x = x_limit.x;
+				}
+				else if (item->data->globalpos.x >= x_limit.y) //right limit
+				{
+					item->data->globalpos.x = x_limit.y;
+				}
+
+				App->gui->UpdateChildren();
+			}
+			else if (App->gui->CheckMousePos(item->data) == false && item->data->state != UI_Element::State::DRAG)
+			{
+				item->data->state = UI_Element::State::IDLE; //change to idle
 			}
 		}
-		if (item->data->state == UI_Element::State::DRAG && App->gui->CheckClick(item->data) == true)
-		{
-			item->data->dragging = true;
-			item->data->Drag();
-
-			if (item->data->action == UI_Element::Action::ADJUST_VOL)
-			{
-				vol_value = item->data->globalpos.x - x_limit.x;
-				if (vol_value <= -1)
-				{
-					vol_value = 0;
-				}
-				else if (vol_value >= SDL_MIX_MAXVOLUME + 1)
-				{
-					vol_value = SDL_MIX_MAXVOLUME;
-				}
-				item->data->DoLogic(item->data->action);
-			}
-			else if (item->data->action == UI_Element::Action::ADJUST_FX)
-			{
-				sfx_value = item->data->globalpos.x - x_limit.x;
-				if (sfx_value <= -1)
-				{
-					sfx_value = 0;
-				}
-				else if (sfx_value >= SDL_MIX_MAXVOLUME + 1)
-				{
-					sfx_value = SDL_MIX_MAXVOLUME;
-				}
-				item->data->DoLogic(item->data->action);
-			}
-
-			if (item->data->globalpos.x <= x_limit.x) //left limit
-			{
-				item->data->globalpos.x = x_limit.x;
-			}
-			else if (item->data->globalpos.x >= x_limit.y) //right limit
-			{
-				item->data->globalpos.x = x_limit.y;
-			}
-
-			App->gui->UpdateChildren();
-		}
-		else if (App->gui->CheckMousePos(item->data) == false && item->data->state != UI_Element::State::DRAG)
-		{
-			item->data->state = UI_Element::State::IDLE; //change to idle
-		}
-		UpdateState(item->data);
-		item = item->prev;
+			UpdateState(item->data);
+			item = item->prev;
 	}
 
 	App->render->Blit(menu_background->texture, 0,0, &menu_background->rect, SDL_FLIP_NONE, 0); //draw background first

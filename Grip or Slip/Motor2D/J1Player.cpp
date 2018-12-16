@@ -1,5 +1,6 @@
 #include "j1App.h"
 #include "j1Player.h"
+#include "j1Audio.h"
 #include "j1Render.h"
 #include "j1Map.h"
 #include "j1Window.h"
@@ -533,12 +534,14 @@ bool j1Player::PostUpdate()
 		App->scene->player_lives--;
 		if (App->scene->player_lives > 0)
 		{
+			App->audio->PlayFx(DEAD);
 			App->scene->ResetBoxPos();
 			App->scenechange->ChangeMap(App->scene->currentMap, App->scene->fade_time);
 		}
 		else
 		{
 			App->scene->delay.Start();
+			App->audio->PlayFx(GAME_OVER);
 		}
 	}
 

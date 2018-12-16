@@ -211,3 +211,15 @@ void j1Audio::AdjustSoundVol(int value)
 {
 	Mix_Volume(-1, value);
 }
+
+void j1Audio::PauseMusic()
+{
+	if (Mix_PausedMusic() > 0)
+	{
+		Mix_ResumeMusic();
+	}
+	else
+	{
+		Mix_PauseMusic();
+	}
+}

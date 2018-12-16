@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <game_state>
 	<flying_enemy>
-		<position x="136" y="1072" />
+		<position x="128" y="1088" />
 		<size width="32" height="32" />
 		<speed x="8" y="8" />
 		<sightCollider width="160" height="160" />
@@ -9,7 +9,7 @@
 		<lives value="1" />
 	</flying_enemy>
 	<land_enemy>
-		<position x="1100" y="1217" />
+		<position x="1100" y="1312" />
 		<size width="32" height="32" />
 		<speed x="5" y="5" />
 		<sightCollider width="160" height="96" />
@@ -17,7 +17,7 @@
 		<lives value="2" />
 	</land_enemy>
 	<land_enemy>
-		<position x="1090" y="737" />
+		<position x="1090" y="952" />
 		<size width="32" height="32" />
 		<speed x="5" y="5" />
 		<sightCollider width="160" height="96" />
@@ -25,44 +25,44 @@
 		<lives value="2" />
 	</land_enemy>
 	<grid>
-		<position x="1279" y="736" />
-		<size width="65" height="96" />
+		<position x="1236" y="736" />
+		<size width="108" height="96" />
 		<speed x="30" y="30" />
 		<type value="4" />
 	</grid>
 	<grid>
-		<position x="1251" y="992" />
-		<size width="93" height="96" />
+		<position x="1268" y="992" />
+		<size width="76" height="96" />
 		<speed x="30" y="30" />
 		<type value="4" />
 	</grid>
 	<grid>
 		<position x="1152" y="512" />
-		<size width="96" height="65" />
+		<size width="96" height="108" />
 		<speed x="30" y="30" />
 		<type value="1" />
 	</grid>
 	<grid>
-		<position x="959" y="384" />
-		<size width="161" height="96" />
+		<position x="980" y="384" />
+		<size width="140" height="96" />
 		<speed x="30" y="30" />
 		<type value="4" />
 	</grid>
 	<grid>
 		<position x="32" y="608" />
-		<size width="93" height="96" />
+		<size width="76" height="96" />
 		<speed x="30" y="30" />
 		<type value="3" />
 	</grid>
 	<grid>
 		<position x="32" y="768" />
-		<size width="101" height="96" />
+		<size width="204" height="96" />
 		<speed x="30" y="30" />
 		<type value="3" />
 	</grid>
 	<grid>
 		<position x="96" y="384" />
-		<size width="96" height="161" />
+		<size width="96" height="140" />
 		<speed x="30" y="30" />
 		<type value="1" />
 	</grid>
@@ -107,6 +107,10 @@
 		<size width="16" height="16" />
 	</coin>
 	<coin>
+		<position x="870" y="488" />
+		<size width="16" height="16" />
+	</coin>
+	<coin>
 		<position x="682" y="552" />
 		<size width="16" height="16" />
 	</coin>
@@ -122,20 +126,16 @@
 		<position x="872" y="260" />
 		<size width="16" height="16" />
 	</coin>
-	<coin>
-		<position x="0" y="0" />
-		<size width="0" height="0" />
-	</coin>
 	<player>
 		<size width="32" height="32" />
-		<position x="1384" y="323" />
+		<position x="64" y="1249" />
 		<gravity value="250" />
 		<speed x="150" y="500" />
 		<grounded value="false" />
 		<sliding value="false" />
-		<jumping value="true" />
+		<jumping value="false" />
 		<grid value="false" />
 		<gripped value="false" />
-		<gravity_active value="false" />
+		<gravity_active value="true" />
 	</player>
 </game_state>

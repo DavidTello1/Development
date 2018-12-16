@@ -84,6 +84,12 @@ We do not own any of the sprites or tilesets presented in this game.
 
 -Title made with Font-Generator.com
 
+-Title Theme: https://www.youtube.com/watch?v=y_XlP1Wcjgc
+
+-Main Theme: https://www.youtube.com/watch?v=42Yw2Llnwzw
+
+-Sound Effects:http://soundbible.com/tags-game.html , https://freesound.org/search/?q=game
+
 ###Accomplishments
 
 - David Tello: EntitySystem, Player(Attack, animations, godmode), Grid, Enemies (without pathfinding), Brofiler, UML, Map Rotation
