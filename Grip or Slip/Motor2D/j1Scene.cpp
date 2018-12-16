@@ -415,6 +415,7 @@ bool j1Scene::PostUpdate()
 	if (countdown <= 0) //time up
 	{
 		player_lives = 0;
+		App->audio->PlayFx(GAME_OVER);
 	}
 	
 	if (end_game == true && ui_game_win->visible == false) //win game
