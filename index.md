@@ -117,7 +117,7 @@ Last but not least there's the *Scene Module*, which is in charge of sending to 
 
 **Grip or Slip's github [link](https://github.com/DavidTello1/Development)**
 
-**Download last version of [Grip or Slip](https://github.com/DavidTello1/Development/releases/tag/v3.0)**
+**Download last version of [Grip or Slip]()**
 
 **MIT License**
 
