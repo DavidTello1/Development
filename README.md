@@ -31,6 +31,8 @@ Boxes have opposite positions in each map so, if you think you can't continue, t
 
 While gripped to a box you can only jump and only after it has stopped moving.
 
+If you start a New Game the previous saved file will be deleted.
+
 
 ### Debug Controls
 F1: Load the first level. F2: Restart the current level. F3: Load the second level. F5: Load the saved game. F6: Save the current game. F8: Debug UI. F9: View collider logic. F10: Activate/Deactivate God Mode. F11:Activate/Deactivate FrameCap.
@@ -63,6 +65,7 @@ F1: Load the first level. F2: Restart the current level. F3: Load the second lev
 ### Webpage
 https://davidtello1.github.io/Development/
 
+
 ### Disclosure
 We do not own any of the sprites or tilesets presented in this game.
 
@@ -90,11 +93,12 @@ We do not own any of the sprites or tilesets presented in this game.
 
 -Sound Effects:http://soundbible.com/tags-game.html , https://freesound.org/search/?q=game
 
+
 ### Accomplishments
 
-- David Tello: EntitySystem, Player(Attack, animations, godmode), Grid, Enemies (without pathfinding), Brofiler, UML, Map Rotation
+Marc García : First player versions, Primitive Save & Load modules, Pathfinding module, Timers and framecap ,Webpage.
 
-- Marc Garcia: FrameCap, Pathfinding, Enemies pathfinding, Normalized movement.
+David Tello : Responsible of the rest of the features including: Entity system, UI Module, Scene and map modules, Innovations.
 
 
 ## License

@@ -98,6 +98,7 @@ public:
 	bool attack_able = false;
 	bool box_collision = false;
 	bool gripped = false;
+	bool first_ground = false;
 
 	p2SString grid_type;
 	iPoint initial_size;

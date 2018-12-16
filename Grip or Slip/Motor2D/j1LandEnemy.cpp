@@ -30,7 +30,8 @@ LandEnemy::LandEnemy(iPoint pos) : Entity(entityType::LAND_ENEMY)
 	pugi::xml_node		config;
 	config = App->LoadConfig(config_file);
 	config = config.child("entitycontroller").child("land_enemy");
-
+	
+	initial_pos = pos;
 	position.x = pos.x;
 	position.y = pos.y;
 	speed.x = config.child("speed").attribute("x").as_int();
@@ -69,58 +70,60 @@ bool LandEnemy::Update(float dt)
 				break;
 			}
 		}
-
-		if (grounded == true)
+		if (player->data->first_ground == true)
 		{
-			gravity_active = false;
-		}
-		else
-		{
-			gravity_active = true;
-		}
-
-		if (gravity_active == true)
-		{
-			if (position.y + gravity*dt >= (App->map->data.height - 1) * App->map->data.tile_height)
+			if (grounded == true)
 			{
-				position.y = (App->map->data.height - 1) * App->map->data.tile_height;
+				gravity_active = false;
 			}
 			else
 			{
-				position.y += floor(gravity*dt);
+				gravity_active = true;
 			}
-		}
 
-		if (hurt == true)
-		{
-			if (player->data->attack == false)
+			if (gravity_active == true)
 			{
-				hurt = false;
+				if (position.y + gravity*dt >= (App->map->data.height - 1) * App->map->data.tile_height)
+				{
+					position.y = (App->map->data.height - 1) * App->map->data.tile_height;
+				}
+				else
+				{
+					position.y += floor(gravity*dt);
+				}
 			}
-		}
-		if (lives <= 0)
-		{
-			dead = true;
-			App->scene->score += 1000;
-		}
 
-		if (App->entitycontroller->draw_path) //draw path
-		{
-			const p2DynArray<iPoint>* path = &entityPath;
-			for (uint i = 0; i < path->Count(); ++i)
+			if (hurt == true)
 			{
-				iPoint pos = App->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-				App->render->Blit(App->entitycontroller->debug_tex, pos.x, pos.y);
+				if (player->data->attack == false)
+				{
+					hurt = false;
+				}
 			}
-		}
+			if (lives <= 0)
+			{
+				dead = true;
+				App->scene->score += 1000;
+			}
 
-		if (chasing_player) 
-		{
-			followPath(dt);
-		}
-		else
-		{
-			entityPath.Clear();
+			if (App->entitycontroller->draw_path) //draw path
+			{
+				const p2DynArray<iPoint>* path = &entityPath;
+				for (uint i = 0; i < path->Count(); ++i)
+				{
+					iPoint pos = App->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+					App->render->Blit(App->entitycontroller->debug_tex, pos.x, pos.y);
+				}
+			}
+
+			if (chasing_player && Current_Animation != &damage)
+			{
+				followPath(dt);
+			}
+			else
+			{
+				entityPath.Clear();
+			}
 		}
 	}
 
@@ -138,6 +141,8 @@ void LandEnemy::CleanUp()
 
 void LandEnemy::Load(pugi::xml_node& data)
 {
+	initial_pos.x = data.child("initial_pos").attribute("x").as_int();
+	initial_pos.y = data.child("initial_pos").attribute("y").as_int();
 	position.x = data.child("position").attribute("x").as_int();
 	position.y = data.child("position").attribute("y").as_int();
 	speed.x = data.child("speed").attribute("x").as_int();
@@ -155,18 +160,20 @@ void LandEnemy::Load(pugi::xml_node& data)
 
 void LandEnemy::Save(pugi::xml_node& data) const
 {
-	pugi::xml_node flying_enemy = data.append_child("land_enemy");
+	pugi::xml_node land_enemy = data.append_child("land_enemy");
 
-	flying_enemy.append_child("position").append_attribute("x") = position.x;
-	flying_enemy.child("position").append_attribute("y") = position.y;
-	flying_enemy.append_child("size").append_attribute("width") = size.x;
-	flying_enemy.child("size").append_attribute("height") = size.y;
-	flying_enemy.append_child("speed").append_attribute("x") = speed.x;
-	flying_enemy.child("speed").append_attribute("y") = speed.y;
-	flying_enemy.append_child("sightCollider").append_attribute("width") = SightCollider.w;
-	flying_enemy.child("sightCollider").append_attribute("height") = SightCollider.h;
-	flying_enemy.append_child("dead").append_attribute("value") = dead;
-	flying_enemy.append_child("lives").append_attribute("value") = lives;
+	land_enemy.append_child("initial_pos").append_attribute("x") = initial_pos.x;
+	land_enemy.child("initial_pos").append_attribute("y") = initial_pos.y;
+	land_enemy.append_child("position").append_attribute("x") = position.x;
+	land_enemy.child("position").append_attribute("y") = position.y;
+	land_enemy.append_child("size").append_attribute("width") = size.x;
+	land_enemy.child("size").append_attribute("height") = size.y;
+	land_enemy.append_child("speed").append_attribute("x") = speed.x;
+	land_enemy.child("speed").append_attribute("y") = speed.y;
+	land_enemy.append_child("sightCollider").append_attribute("width") = SightCollider.w;
+	land_enemy.child("sightCollider").append_attribute("height") = SightCollider.h;
+	land_enemy.append_child("dead").append_attribute("value") = dead;
+	land_enemy.append_child("lives").append_attribute("value") = lives;
 
 	LOG("--- LandEnemy Saved");
 }

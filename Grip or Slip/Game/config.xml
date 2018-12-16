@@ -69,7 +69,6 @@
       <speed x="80" y="80"/>
       <sightCollider width ="192" height="192"/>
       <dead value="false"/>
-      <lives value="1"/>
     </flying_enemy>
     <land_enemy>
       <size width="32" height="32"/>

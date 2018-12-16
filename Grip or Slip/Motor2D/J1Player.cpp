@@ -40,6 +40,7 @@ bool j1Player::Awake(pugi::xml_node & config)
 
 	dead = false;
 	final_speed = { 0,0 };
+	first_ground = false;
 
 	return ret;
 }

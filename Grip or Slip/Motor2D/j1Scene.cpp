@@ -573,11 +573,11 @@ void j1Scene::ResetEnemies()
 	p2List_item<Entity*>* tmp = App->entitycontroller->Entities.start;
 	while (tmp != nullptr)
 	{
-		if (tmp->data->type == Entity::entityType::FLYING_ENEMY || tmp->data->type == Entity::entityType::LAND_ENEMY)
+		if (tmp->data->type == Entity::entityType::FLYING_ENEMY || tmp->data->type == Entity::entityType::LAND_ENEMY && tmp->data->dead == false)
 		{
 			tmp->data->position = tmp->data->initial_pos;
 		}
-		tmp = tmp->prev;
+		tmp = tmp->next;
 	}
 }
 

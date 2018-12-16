@@ -155,6 +155,10 @@ void Entity::Collider_Overlay()
 									{
 										landing = true;
 									}
+									if (first_ground == false)
+									{
+										first_ground = true;
+									}
 									grounded = true;
 								}
 							}

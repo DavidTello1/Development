@@ -40,7 +40,6 @@ FlyingEnemy::FlyingEnemy(iPoint pos) : Entity(entityType::FLYING_ENEMY)
 	SightCollider.w = config.child("sightCollider").attribute("width").as_int();
 	SightCollider.h = config.child("sightCollider").attribute("height").as_int();
 	dead = config.child("dead").attribute("value").as_bool();
-	lives = config.child("lives").attribute("value").as_int();
 
 	idle.PushBack({ 448, 96, size.x, size.y });
 	idle.PushBack({ 480, 96, size.x, size.y });
@@ -62,28 +61,34 @@ bool FlyingEnemy::Update(float dt)
 		PositionCollider();
 		App->entitycontroller->EnemyColliderCheck();
 
-		if (lives <= 0)
+		p2List_item<Entity*>* player = nullptr;
+		for (p2List_item<Entity*>* i = App->entitycontroller->Entities.start; i != nullptr; i = i->next)
 		{
-			dead = true;
-		}
-
-		if (App->entitycontroller->draw_path) //draw path
-		{
-			const p2DynArray<iPoint>* path = &entityPath;
-			for (uint i = 0; i < path->Count(); ++i)
+			if (i->data->type == Entity::entityType::PLAYER)
 			{
-				iPoint pos = App->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-				App->render->Blit(App->entitycontroller->debug_tex, pos.x, pos.y);
+				player = i;
+				break;
 			}
 		}
-
-		if (chasing_player) 
+		if (player->data->first_ground == true)
 		{
-			followPath(dt);
-		}
-		else
-		{
-			entityPath.Clear();
+			if (App->entitycontroller->draw_path) //draw path
+			{
+				const p2DynArray<iPoint>* path = &entityPath;
+				for (uint i = 0; i < path->Count(); ++i)
+				{
+					iPoint pos = App->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+					App->render->Blit(App->entitycontroller->debug_tex, pos.x, pos.y);
+				}
+			}
+			if (chasing_player)
+			{
+				followPath(dt);
+			}
+			else
+			{
+				entityPath.Clear();
+			}
 		}
 	}
 	else
@@ -113,7 +118,6 @@ void FlyingEnemy::Load(pugi::xml_node& data)
 	SightCollider.w = data.child("sightCollider").attribute("width").as_int();
 	SightCollider.h = data.child("sightCollider").attribute("height").as_int();
 	dead = data.child("dead").attribute("value").as_bool();
-	lives = data.child("lives").attribute("value").as_int();
 
 	LOG("--- FlyingEnemy Loaded");
 }
@@ -133,7 +137,6 @@ void FlyingEnemy::Save(pugi::xml_node& data) const
 	flying_enemy.append_child("sightCollider").append_attribute("width") = SightCollider.w;
 	flying_enemy.child("sightCollider").append_attribute("height") = SightCollider.h;
 	flying_enemy.append_child("dead").append_attribute("value") = dead;
-	flying_enemy.append_child("lives").append_attribute("value") = lives;
 
 	LOG("--- FlyingEnemy Saved");
 }

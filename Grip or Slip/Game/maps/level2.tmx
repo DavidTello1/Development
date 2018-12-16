@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="48" height="42" tilewidth="32" tileheight="32" nextobjectid="151">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="48" height="42" tilewidth="32" tileheight="32" nextobjectid="155">
  <properties>
   <property name="Terrain" value="Non-Walkable"/>
  </properties>
@@ -3250,8 +3250,8 @@
    <tile gid="26"/>
    <tile gid="14"/>
    <tile gid="14"/>
-   <tile gid="14"/>
    <tile gid="15"/>
+   <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -3298,8 +3298,8 @@
    <tile gid="24"/>
    <tile gid="24"/>
    <tile gid="24"/>
-   <tile gid="24"/>
    <tile gid="25"/>
+   <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -3338,7 +3338,6 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="23"/>
-   <tile gid="24"/>
    <tile gid="24"/>
    <tile gid="24"/>
    <tile gid="24"/>
@@ -3348,6 +3347,7 @@
    <tile gid="24"/>
    <tile gid="24"/>
    <tile gid="26"/>
+   <tile gid="14"/>
    <tile gid="14"/>
    <tile gid="14"/>
    <tile gid="14"/>
@@ -4067,8 +4067,12 @@
  </layer>
  <objectgroup name="Enemies">
   <object id="108" name="FlyingEnemy" x="128" y="1088" width="32" height="32"/>
-  <object id="109" name="LandEnemy" x="993" y="194" width="32" height="32"/>
-  <object id="110" name="LandEnemy" x="96" y="704" width="32" height="32"/>
+  <object id="109" name="LandEnemy" x="993" y="282" width="32" height="32"/>
+  <object id="110" name="LandEnemy" x="65" y="762" width="32" height="32"/>
+  <object id="151" name="FlyingEnemy" x="289" y="191" width="32" height="32"/>
+  <object id="152" name="FlyingEnemy" x="1219" y="190" width="32" height="32"/>
+  <object id="153" name="FlyingEnemy" x="896" y="159" width="32" height="32"/>
+  <object id="154" name="FlyingEnemy" x="736" y="250" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="Collision">
   <object id="1" name="StartPosition" x="65" y="1224" width="32" height="32"/>
@@ -4110,7 +4114,7 @@
   <object id="46" name="Floor" x="448" y="1248" width="96" height="16"/>
   <object id="47" name="Floor" x="608" y="1120" width="96" height="16"/>
   <object id="48" name="Floor" x="800" y="1248" width="96" height="16"/>
-  <object id="49" name="Floor" x="160" y="864" width="128" height="16"/>
+  <object id="49" name="Floor" x="128" y="864" width="160" height="16"/>
   <object id="50" name="Floor" x="640" y="1312" width="96" height="16"/>
   <object id="52" name="Floor" x="1408" y="1248" width="96" height="16"/>
   <object id="54" name="Floor" x="1088" y="800" width="96" height="32"/>
@@ -4150,8 +4154,8 @@
   <object id="105" name="Finish" x="1408" y="224" width="32" height="32"/>
   <object id="106" name="Wall" type="Wall_left" x="256" y="304" width="32" height="32"/>
   <object id="107" name="Wall" type="Wall_right" x="128" y="304" width="32" height="32"/>
-  <object id="112" name="Floor" x="32" y="800" width="128" height="16"/>
-  <object id="113" name="Wall" type="Wall_left" x="128" y="816" width="32" height="64"/>
+  <object id="112" name="Floor" x="32" y="800" width="96" height="16"/>
+  <object id="113" name="Wall" type="Wall_left" x="96" y="816" width="32" height="64"/>
   <object id="114" name="Floor" x="1280" y="672" width="64" height="32"/>
   <object id="115" name="Box1" type="left" x="192" y="1184" width="32" height="32"/>
   <object id="117" name="Box2" type="left" x="768" y="672" width="32" height="32"/>
