@@ -140,7 +140,26 @@ bool j1MainMenu::Update(float dt)
 {
 	// -------
 	if (App->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
+	{
 		App->gui->UI_Debug = !App->gui->UI_Debug;
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	{
+		if (continue_button->locked == false) //if there is a saved game Continue
+		{
+			App->scenechange->ContinueGame = true;
+			App->scenechange->SwitchScene(App->scene, App->main_menu);
+		}
+		else //New game
+		{
+			App->scenechange->ContinueGame = false;
+			App->scenechange->SwitchScene(App->scene, App->main_menu);
+			App->scene->ResetBoxPos();
+			App->scene->ResetIngameUI();
+			App->scene->Load_level(0);
+			App->scene->currentMap = 0;
+		}
+	}
 
 	// gui update
 	p2List_item<UI_Element*>* item = App->gui->UI_elements.end;

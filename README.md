@@ -20,6 +20,8 @@ https://github.com/DavidTello1/Development
 
 -Quit Game after Game Over with ESC.
 
+-Continue Game or start a New Game with Space while on the Main Menu.
+
 ### Tips
 You can jump after attacking or falling from a grid, box or the ground.
 
