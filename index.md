@@ -2,7 +2,7 @@
 
 **TEAM MEMBERS**
 
-<img src="https://drive.google.com/open?id=1SwIo5wclkMEWYVq_dS7QHXGA_UmMk6Nw">
+<img src="https://github.com/DavidTello1/Development/blob/progress/griporslipteamphoto.png" width="500"/>
 
 [Marc Garcia](https://github.com/marcgreig) (left member)
 
@@ -13,6 +13,8 @@ Responsible of:
 -Primitive Save & Load modules.
 
 -Pathfinding module.
+
+-Timers and framecap.
 
 -Webpage.
 
@@ -78,15 +80,15 @@ Responsible of the rest of the features including:
 
 This game has 5 main modules:
 
-**Entity System** keeps and manages all entities such as the player, the enemies and the objects. This module makes sure all entities do correctly their logic.
+*Entity System* keeps and manages all entities such as the player, the enemies and the objects. This module makes sure all entities do correctly their logic.
 
-The module **Pathfinding** is connected to the entity system module since it allows the entities to correctly create a path to their objective.
+The module *Pathfinding* is connected to the entity system module since it allows the entities to correctly create a path to their objective.
 
-The **Map** which reads .tmx files that hold all information of the tile based level (done in the Tiled map editor)such as position and texture of each tile, collisions and entities' position.
+The *Map* which reads .tmx files that hold all information of the tile based level (done in the Tiled map editor)such as position and texture of each tile, collisions and entities' position.
 
-The **UI** with a polymorphism system of UI elements that can be created and managed by the GUI module and executed from the scene module
+The *UI* with a polymorphism system of UI elements that can be created and managed by the GUI module and executed from the scene module
 
-Last but not least there's the **Scene Module**, which is in charge of sending to the renderer the current level, menu and entities on screen as well as managing the transitions and some interactions between them.
+Last but not least there's the *Scene Module*, which is in charge of sending to the renderer the current level, menu and entities on screen as well as managing the transitions and some interactions between them.
 
 **INNOVATION**
 
