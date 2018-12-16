@@ -6092,9 +6092,8 @@
   </data>
  </layer>
  <objectgroup name="Enemies">
-  <object id="97" name="FlyingEnemy" x="128" y="1088" width="32" height="32"/>
-  <object id="99" name="LandEnemy" x="1109" y="1212" width="32" height="32"/>
-  <object id="100" name="LandEnemy" x="1089" y="729" width="32" height="32"/>
+  <object id="97" name="FlyingEnemy" x="704" y="1088" width="32" height="32"/>
+  <object id="100" name="LandEnemy" x="1017" y="732" width="32" height="32"/>
   <object id="129" name="LandEnemy" x="864" y="282" width="32" height="32"/>
   <object id="130" name="LandEnemy" x="1282" y="281" width="32" height="32"/>
   <object id="131" name="FlyingEnemy" x="192" y="160" width="32" height="32"/>

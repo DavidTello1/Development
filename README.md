@@ -35,7 +35,7 @@ If you start a New Game the previous saved file will be deleted.
 
 
 ### Debug Controls
-F1: Load the first level. F2: Restart the current level. F3: Load the second level. F5: Load the saved game. F6: Save the current game. F8: Debug UI. F9: View collider logic. F10: Activate/Deactivate God Mode. F11:Activate/Deactivate FrameCap.
+F1: Load the first level. F2: Restart the current level. F3: Load the second level. F4: Go to Main Menu. F5: Load the saved game. F6: Save the current game. F8: Debug UI. F9: View collider logic. F10: Activate/Deactivate God Mode. F11:Activate/Deactivate FrameCap.
 
 
 ### Innovation Features
