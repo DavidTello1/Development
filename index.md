@@ -1,5 +1,7 @@
 *Grip or Slip* is a little game made by two second year students of the **Videogame Design and Development** degree during the *Videogame Development* subject. It's a 2D platformer with two levels where the player must change between maps to complete the game. It has been made using C++, SDL and pugi libraries. The maps have been made using Tiled.
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/5kGt-fx4ABg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 **TEAM MEMBERS**
 
 <img src="https://raw.githubusercontent.com/DavidTello1/Development/progress/griporslipteamphoto.png" width="500"/>
