@@ -4,9 +4,29 @@
 
 <img src="https://drive.google.com/open?id=1SwIo5wclkMEWYVq_dS7QHXGA_UmMk6Nw">
 
-[David Tello](https://github.com/DavidTello1)
+[Marc Garcia](https://github.com/marcgreig) (left member)
 
-[Marc Garcia](https://github.com/marcgreig)
+Responsible of:
+
+-First player versions.
+
+-Primitive Save & Load modules.
+
+-Pathfinding module.
+
+-Webpage.
+
+[David Tello](https://github.com/DavidTello1) (right member)
+
+Responsible of the rest of the features including:
+
+-Entity system.
+
+-UI Module.
+
+-Scene and map modules.
+
+-Innovations.
 
 **INSTRUCTIONS TO PLAY**
 
