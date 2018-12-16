@@ -395,6 +395,12 @@ bool j1Player::Update(float dt)
 			final_speed.y -= jumpSpeed;
 		}
 
+		if (sliding == true && left == true && wall_left == false ||
+			sliding == true && right == true && wall_right == false)
+		{
+			sliding = false;
+		}
+
 		if (sliding == true) //sliding
 		{
 			grounded = false;

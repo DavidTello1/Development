@@ -2757,14 +2757,14 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="33"/>
-   <tile gid="34"/>
-   <tile gid="34"/>
-   <tile gid="34"/>
-   <tile gid="34"/>
-   <tile gid="34"/>
-   <tile gid="34"/>
-   <tile gid="17"/>
+   <tile gid="23"/>
+   <tile gid="24"/>
+   <tile gid="24"/>
+   <tile gid="24"/>
+   <tile gid="24"/>
+   <tile gid="24"/>
+   <tile gid="24"/>
+   <tile gid="24"/>
    <tile gid="24"/>
    <tile gid="24"/>
    <tile gid="24"/>
@@ -2805,14 +2805,14 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="23"/>
+   <tile gid="33"/>
+   <tile gid="34"/>
+   <tile gid="34"/>
+   <tile gid="34"/>
+   <tile gid="34"/>
+   <tile gid="34"/>
+   <tile gid="34"/>
+   <tile gid="17"/>
    <tile gid="24"/>
    <tile gid="24"/>
    <tile gid="24"/>
@@ -6114,7 +6114,7 @@
   <object id="21" name="Wall" type="Wall_right" x="1344" y="480" width="16" height="592"/>
   <object id="22" name="Wall" type="Wall_left" x="1152" y="1264" width="32" height="80"/>
   <object id="23" name="Wall" type="Wall_right" x="960" y="1296" width="32" height="48"/>
-  <object id="25" name="Wall" type="Wall_right" x="1120" y="384" width="32" height="80"/>
+  <object id="25" name="Wall" type="Wall_right" x="1120" y="384" width="32" height="112"/>
   <object id="26" name="Wall" type="Wall_right" x="576" y="992" width="32" height="32"/>
   <object id="27" name="Wall" type="Wall_left" x="640" y="992" width="32" height="32"/>
   <object id="29" name="Wall" type="Wall_left" x="320" y="336" width="32" height="32"/>
@@ -6153,7 +6153,7 @@
   <object id="64" name="Wall" type="Wall_left" x="944" y="528" width="16" height="48"/>
   <object id="65" name="Ceiling" x="32" y="960" width="896" height="32"/>
   <object id="67" name="Ceiling" x="1344" y="1056" width="176" height="32"/>
-  <object id="68" name="Ceiling" x="1120" y="448" width="224" height="32"/>
+  <object id="68" name="Ceiling" x="1120" y="480" width="224" height="32"/>
   <object id="69" name="Ceiling" x="768" y="352" width="352" height="32"/>
   <object id="70" name="Ceiling" x="32" y="352" width="320" height="32"/>
   <object id="71" name="Ceiling" x="32" y="0" width="1472" height="8"/>
@@ -6162,8 +6162,8 @@
   <object id="75" name="Grid" type="Hide_right" x="1216" y="736" width="128" height="96"/>
   <object id="76" name="Grid" type="Hide_right" x="1248" y="992" width="96" height="96"/>
   <object id="78" name="Grid" type="Static" x="1376" y="1088" width="96" height="96"/>
-  <object id="79" name="Grid" type="Hide_up" x="1152" y="480" width="96" height="160"/>
-  <object id="81" name="Grid" type="Hide_right" x="896" y="384" width="224" height="96"/>
+  <object id="79" name="Grid" type="Hide_up" x="1152" y="512" width="96" height="128"/>
+  <object id="81" name="Grid" type="Hide_right" x="960" y="384" width="160" height="96"/>
   <object id="82" name="Grid" type="Static" x="256" y="384" width="96" height="96"/>
   <object id="83" name="Grid" type="Hide_left" x="32" y="608" width="96" height="96"/>
   <object id="84" name="Grid" type="Hide_left" x="32" y="768" width="224" height="96"/>

@@ -38,13 +38,16 @@ bool j1MainMenu::Awake(pugi::xml_node& conf)
 	vol_value = conf.child("music").attribute("vol").as_int();
 	sfx_value = conf.child("music").attribute("sfx").as_int();
 
+	current_track = App->audio->tracks_path.start->next;
+
 	return ret;
 }
 
 // Called before the first frame
 bool j1MainMenu::Start()
 {
-	
+
+	App->audio->PlayMusic(PATH(App->audio->folder_music.GetString(), current_track->data.GetString()));
 	SDL_RenderGetViewport(App->render->renderer, &App->render->viewport);
 	
 	//WEB

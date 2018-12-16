@@ -149,7 +149,7 @@ bool j1Scene::PreUpdate()
 
 	//LOG("IsChanging: %i", App->scenechange->IsChanging());
 
-	if (pause == true)
+	if (pause == true && end_game == false)
 	{
 		resume_button->visible = true;
 		resume_text->visible = true;
@@ -379,7 +379,7 @@ bool j1Scene::Update(float dt)
 	UpdateSimpleUI();
 	App->gui->Draw();
 
-	if (pause == true) //draw settings slider bars and circles
+	if (pause == true && end_game == false) //draw settings slider bars and circles
 	{
 		//bars
 		App->render->Blit(App->gui->GetAtlas(), vol_slider_bar->globalpos.x, vol_slider_bar->globalpos.y, &vol_slider_bar->rect, SDL_FLIP_NONE, 0);
