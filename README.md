@@ -90,7 +90,7 @@ We do not own any of the sprites or tilesets presented in this game.
 
 -Sound Effects:http://soundbible.com/tags-game.html , https://freesound.org/search/?q=game
 
-###Accomplishments
+### Accomplishments
 
 - David Tello: EntitySystem, Player(Attack, animations, godmode), Grid, Enemies (without pathfinding), Brofiler, UML, Map Rotation
 
