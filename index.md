@@ -1,12 +1,14 @@
 *Grip or Slip* is a little game made by two second year students of the **Videogame Design and Development** degree during the *Videogame Development* subject. It's a 2D platformer with two levels where the player must change between maps to complete the game. It has been made using C++, SDL and pugi libraries. The maps have been made using Tiled.
 
-##TEAM MEMBERS
+**TEAM MEMBERS**
+
+<img src="https://drive.google.com/open?id=1SwIo5wclkMEWYVq_dS7QHXGA_UmMk6Nw">
 
 [David Tello](https://github.com/DavidTello1)
 
 [Marc Garcia](https://github.com/marcgreig)
 
-##INSTRUCTIONS TO PLAY
+**INSTRUCTIONS TO PLAY**
 
 -Movement with WASD keys: A (left), D (right), W (up & grip), S (down)
 
@@ -22,7 +24,7 @@
 
 -Quit Game after Game Over with ESC.
 
-#TIPS & TRICKS
+**TIPS & TRICKS**
 
 -You can jump after attacking or falling from a grid, box or the ground.
 
@@ -32,7 +34,7 @@
 
 -While gripped to a box you can only jump and only after it has stopped moving.
 
-#DEBUG KEYS
+**DEBUG KEYS**
 
 -F1: Load the first level.
 
@@ -52,15 +54,15 @@
 
 -F11:Activate/Deactivate FrameCap.
 
-##CORE SUBSYSTEMS
+**CORE SUBSYSTEMS**
 
-#INNOVATION
+**INNOVATION**
 
-##Grip or Slip's github [link](https://github.com/DavidTello1/Development)
+**Grip or Slip's github [link](https://github.com/DavidTello1/Development)**
 
-##Download last version of [Grip or Slip]()
+**Download last version of [Grip or Slip]()** //Needs link to latest release
 
-#MIT License
+**MIT License**
 
 Copyright (c) 2018 DavidTello1
 
